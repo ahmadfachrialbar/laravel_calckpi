@@ -14,13 +14,14 @@ class KpiMetrics extends Model
     protected $guarded = []; 
     
     // protected $primaryKey = 'metric_id'; 
-    // protected $fillable = [
-    //     'nama_kpi',
-    //     'penjelasan_sederhana',
-    //     'cara_ukur',
-    //     'target',
-    //     'bobot',
-    // ];
+    protected $fillable = [
+        'nama_kpi',
+        'penjelasan_sederhana',
+        'cara_ukur',
+        'target',
+        'bobot',
+    ];
+    
 
     // public function kpiRecords()
     // {

@@ -10,112 +10,69 @@ class KpimetricController extends Controller
 {
     public function index()
     {
-        // Mengambil semua data dari model Kpimetric
-        $kpimetrics = Kpimetrics::all();
-
-        // Mengembalikan view dengan data yang diambil
-        return view('pages.kpi.index', compact('kpimetrics'));
+        $kpiMetrics = Kpimetrics::all();
+        return view('pages.kpimetrics.index', [
+            'kpiMetrics' => $kpiMetrics,
+        ]);
     }
 
     public function create()
     {
-        // Mengembalikan view untuk form tambah data
-        return view('pages.kpi.create');
-    }   
+        return view('pages.kpimetrics.create');
+    }
 
     public function store(Request $request)
     {
-        // Validasi data yang diterima
-        $request->validate([
+        $validated = $request->validate([
             'nama_kpi' => 'required|string|max:255',
-            'penjelasan_sederhana' => 'required|string',
-            'cara_ukur' => 'required|string',
+            'penjelasan_sederhana' => 'required|string|max:500',
+            'cara_ukur' => 'required|string|max:500',
             'target' => 'required|numeric',
             'bobot' => 'required|numeric',
         ]);
 
-        // Membuat instance baru dari model Kpimetric
-        $kpiMetric = new Kpimetrics();
-        $kpiMetric->nama_kpi = $request->nama_kpi;
-        $kpiMetric->penjelasan_sederhana = $request->penjelasan_sederhana;
-        $kpiMetric->cara_ukur = $request->cara_ukur;
-        $kpiMetric->target = $request->target;
-        $kpiMetric->bobot = $request->bobot;
-
-        // Menyimpan data ke database
-        $kpiMetric->save();
-
-        // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('kpi.index')->with('success', 'KPI Metric created successfully.');
+        Kpimetrics::create($validated);
+        return redirect('/kpiMetrics')->with('success', 'Data KPI Metrics berhasil ditambahkan');
     }
 
     public function edit($id)
     {
-        // Mengambil data berdasarkan ID
         $kpiMetric = Kpimetrics::findOrFail($id);
-
-        // Mengembalikan view untuk form edit dengan data yang diambil
-        return view('pages.kpi.edit', compact('kpiMetric'));
+        return view('pages.kpimetrics.edit', [
+            'kpiMetric' => $kpiMetric,
+        ]);
     }
 
     public function update(Request $request, $id)
     {
-        // Validasi data yang diterima
+        $kpiMetric = Kpimetrics::findOrFail($id);
+
         $request->validate([
             'nama_kpi' => 'required|string|max:255',
-            'penjelasan_sederhana' => 'required|string',
-            'cara_ukur' => 'required|string',
+            'penjelasan_sederhana' => 'required|string|max:500',
+            'cara_ukur' => 'required|string|max:500',
             'target' => 'required|numeric',
             'bobot' => 'required|numeric',
         ]);
 
-        // Mengambil data berdasarkan ID
-        $kpiMetric = Kpimetrics::findOrFail($id);
-        $kpiMetric->nama_kpi = $request->nama_kpi;
-        $kpiMetric->penjelasan_sederhana = $request->penjelasan_sederhana;
-        $kpiMetric->cara_ukur = $request->cara_ukur;
-        $kpiMetric->target = $request->target;
-        $kpiMetric->bobot = $request->bobot;
-
-        // Menyimpan perubahan ke database
-        $kpiMetric->save();
-
-        // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('kpi.index')->with('success', 'KPI Metric updated successfully.');
-    }
-
-    public function destroy($id)
-    {
-        // Mengambil data berdasarkan ID
-        $kpiMetric = Kpimetrics::findOrFail($id);
-
-        // Menghapus data dari database
-        $kpiMetric->delete();
-
-        // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('kpi.index')->with('success', 'KPI Metric deleted successfully.');
+        $kpiMetric->update($request->all());
+        return redirect()->route('kpimetrics.index')->with('success', 'Data KPI Metrics berhasil diperbarui');
     }
 
     public function show($id)
     {
-        // Mengambil data berdasarkan ID
         $kpiMetric = Kpimetrics::findOrFail($id);
-
-        // Mengembalikan view untuk menampilkan detail KPI Metric
-        return view('pages.kpi.show', compact('kpiMetric'));
+        return view('pages.kpimetrics.show', [
+            'kpiMetric' => $kpiMetric,
+        ]);
+        
     }
 
-    public function search(Request $request)
+    public function destroy($id)
     {
-        // Mengambil query pencarian dari input
-        $query = $request->input('query');
-
-        // Mencari KPI Metrics berdasarkan nama_kpi
-        $kpimetrics = Kpimetrics::where('nama_kpi', 'like', '%' . $query . '%')->get();
-
-        // Mengembalikan view dengan hasil pencarian
-        return view('pages.kpi.index', compact('kpimetrics'));
+        $kpiMetric = Kpimetrics::findOrFail($id);
+        $kpiMetric->delete();
+        return redirect()->route('/kpiMetrics')->route('kpimetrics')->with('success', 'Data KPI Metrics berhasil dihapus');
     }
-
 
 }

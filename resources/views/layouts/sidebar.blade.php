@@ -30,4 +30,10 @@
             <span>Data Karyawan</span>
         </a>
     </li>
+    <li class="nav-item {{ request()->is('kpimetrics*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('kpimetrics.index') }}">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Data KPI</span>
+        </a>
+    </li>
 </ul>

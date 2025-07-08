@@ -49,6 +49,7 @@
                 <input type="date" class="form-control" id="join_date" name="join_date" required>
             </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
+            <button type="button" class="btn btn-secondary" href="{{ route('user.index') }}">Kembali</button>
         </form>
     </div>
 </div>

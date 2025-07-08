@@ -28,7 +28,7 @@ class UserController extends Controller
             'nip' => 'required|string|max:20|unique:users',
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:8|',
             'jabatan' => 'required|string|max:100',
             'departemen' => 'required|string|max:100',
             'role' => 'required|string|max:50',
@@ -48,24 +48,31 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request)
-    {
-        $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'nik' => 'required|string|max:20|unique:users',
-            'email' => 'required|email|unique:users',
-            'no_telp' => 'nullable|string|max:15',
-            'alamat' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:L,P',
-            'jabatan' => 'required|string|max:100',
-            'tanggal_masuk' => 'required|date',
-            'gaji_pokok' => 'required|numeric|min:0',
 
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'nip' => 'required|string|max:20|unique:users,nip,' . $user->id,
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'jabatan' => 'required|string|max:100',
+            'departemen' => 'required|string|max:100',
+            'role' => 'required|in:admin,karyawan',
+            'join_date' => 'required|date',
+            // password tidak wajib
         ]);
 
-        User::create($request->validate());
-        return redirect('/user')->with('success', 'Data user berhasil diubah');
+        $data = $request->only(['nip', 'name', 'email', 'jabatan', 'departemen', 'role', 'join_date']);
+
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+
+        $user->update($data);
+
+        return redirect()->route('user.index')->with('success', 'Data berhasil diperbarui');
     }
 
 
