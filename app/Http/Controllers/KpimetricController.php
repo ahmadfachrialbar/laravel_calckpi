@@ -89,6 +89,6 @@ class KpimetricController extends Controller
     {
         $kpiMetric = Kpimetrics::findOrFail($id);
         $kpiMetric->delete();
-        return redirect()->route('/kpiMetrics')->route('kpimetrics')->with('success', 'Data KPI Metrics berhasil dihapus');
+        return redirect()->route('kpimetrics.index')->with('success', 'Data KPI Metrics berhasil dihapus');
     }
 }
