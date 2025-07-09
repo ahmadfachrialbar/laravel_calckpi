@@ -26,13 +26,13 @@
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item {{ request()->is('user') ? 'active' : '' }}">
         <a class="nav-link" href="/user">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-user"></i>
             <span>Data Karyawan</span>
         </a>
     </li>
     <li class="nav-item {{ request()->is('kpimetrics*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('kpimetrics.index') }}">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-key"></i>
             <span>Data KPI</span>
         </a>
     </li>
