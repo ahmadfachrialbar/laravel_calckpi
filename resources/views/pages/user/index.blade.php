@@ -16,7 +16,7 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>ID</th>
                         <th>NIP</th>
                         <th>Nama</th>
                         <th>Password</th>

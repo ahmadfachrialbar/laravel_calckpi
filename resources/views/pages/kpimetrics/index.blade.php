@@ -16,6 +16,7 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Nama KPI</th>
                         <th>Deskripsi</th>
                         <th>Cara Ukur</th>
@@ -37,17 +38,17 @@
                             <!-- Aksi -->
                             <div class="d-flex justify-content-center" style="gap: 0.5rem;">
                                 <!-- Tombol Lihat -->
-                                <a href="{{ route('kpimetric.show', ['id' => $kpimetric->id]) }}" class="btn btn-link p-0 text-info" title="Lihat KPI">
+                                <a href="{{ route('kpimetrics.show', ['id' => $kpimetric->id]) }}" class="btn btn-link p-0 text-info" title="Lihat KPI">
                                     <i class="fas fa-eye"></i>
                                 </a>
 
                                 <!-- Tombol Edit -->
-                                <a href="{{ route('kpimetric.edit', ['id' => $kpimetric->id]) }}" class="btn btn-link p-0 text-primary" title="Edit">
+                                <a href="{{ route('kpimetrics.edit', ['id' => $kpimetric->id]) }}" class="btn btn-link p-0 text-primary" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
                                 <!-- Tombol Hapus -->
-                                <form action="{{ route('kpimetric.destroy', $kpimetric->id) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('kpimetrics.destroy', $kpimetric->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-link p-0 text-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus?')">
