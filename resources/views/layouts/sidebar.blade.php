@@ -2,7 +2,12 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-text mx-3">Calculating kpi</div>
+        <div class="sidebar-brand-icon">
+            <img src="{{ asset('template/img/logo.png') }}" style="height: 25px; width: auto;">
+        </div>
+        <div class="sidebar-brand-text mx-3" style="white-space: nowrap; font-size: 1.5rem; max-width: 120px; overflow: hidden; text-overflow: ellipsis; font-family: 'Segoe UI', 'Arial', 'sans-serif'; font-weight: 700;">
+            KPI
+        </div>
     </a>
 
     <!-- Divider -->

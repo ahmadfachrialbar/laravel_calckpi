@@ -48,10 +48,10 @@
                                 </a>
 
                                 <!-- Tombol Hapus -->
-                                <form action="{{ route('kpimetrics.destroy', $kpimetric->id) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('kpimetrics.destroy', $kpimetric->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-link p-0 text-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus?')">
+                                    <button type="submit" class="btn btn-link p-0 text-danger" title="Hapus">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>

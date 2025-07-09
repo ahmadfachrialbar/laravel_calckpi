@@ -4,12 +4,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KpimetricController;
 use App\Http\Controllers\UserController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+// Route untuk auth
+Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [App\Http\Controllers\AuthController::class, 'authenticate'])->name('login.post');
+Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout.post');
 
 Route::get('/dashboard', function () {
     return view('pages.dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+Route::get('/register', function () {
+    return view('pages.auth.register');
 });
 
 // route untuk halaman user
