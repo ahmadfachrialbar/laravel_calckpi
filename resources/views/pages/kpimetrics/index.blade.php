@@ -3,8 +3,10 @@
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Manajemen Data KPI</h1>
+    @can('kpimetrics-create')
     <a href="{{route('kpimetrics.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
             class="fas fa-plus fa-sm text-white-50"></i> Tambah Data</a>
+            @endcan
 </div>
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -22,7 +24,9 @@
                         <th>Cara Ukur</th>
                         <th>Target</th>
                         <th>Bobot</th>
+                        @can('kpimetrics-edit')
                         <th>Aksi</th>
+                        @endcan
                     </tr>
                 </thead>
                 <tbody>
@@ -34,6 +38,7 @@
                         <td>{{ $kpimetric->cara_ukur }}</td>
                         <td>{{ $kpimetric->target }}</td>
                         <td>{{ $kpimetric->bobot }}</td>
+                        @can('kpimetrics-edit')
                         <td>
                             <!-- Aksi -->
                             <div class="d-flex justify-content-center" style="gap: 0.5rem;">
@@ -57,6 +62,7 @@
                                 </form>
                             </div>
                         </td>
+                        @endcan
 
                     </tr>
                     @endforeach

@@ -14,11 +14,13 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
+    @can('dashboard-view')
     <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
         <a class="nav-link" href="/dashboard">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>My Dashboard</span></a>
     </li>
+    @endcan
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -29,16 +31,29 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
+    @can('users-view')
     <li class="nav-item {{ request()->is('user') ? 'active' : '' }}">
         <a class="nav-link" href="/user">
             <i class="fas fa-fw fa-user"></i>
             <span>Data Karyawan</span>
         </a>
     </li>
+    @endcan
+
+    @can('kpimetrics-view')
     <li class="nav-item {{ request()->is('kpimetrics*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('kpimetrics.index') }}">
             <i class="fas fa-fw fa-key"></i>
             <span>Data KPI</span>
         </a>
     </li>
+    @endcan
+    @can('hitungkpi-index')
+    <li class="nav-item {{ request()->is('hitungkpi*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('hitungkpi.index') }}">
+            <i class="fas fa-fw fa-calculator"></i>
+            <span>Hitung KPI</span>
+        </a>
+    </li>
+    @endcan
 </ul>

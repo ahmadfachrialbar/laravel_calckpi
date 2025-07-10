@@ -58,6 +58,7 @@ class AuthController extends Controller
         $user->join_date = $request->input('join_date');
         
         $user->saveOrFail();
+        $user->assignRole('karyawan');
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan masuk.');
     }

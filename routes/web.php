@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KpimetricController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HitungkpiController;
 
 
 // Route untuk auth
@@ -16,27 +18,46 @@ Route::post('/register', [App\Http\Controllers\AuthController::class, 'register'
 
 Route::get('/dashboard', function () {
     return view('pages.dashboard');
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'role:admin|karyawan', 'permission:dashboard-view'])->name('dashboard');
 
 
-// route untuk halaman user
 
-Route::get('/user', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
-Route::get('/user/create', [App\Http\Controllers\UserController::class, 'create'])->name('user.create');
-Route::post('/user/store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
-Route::post('/user/store-multiple', [UserController::class, 'storeMultiple'])->name('user.storeMultiple');
-Route::get('/user/edit/{id}', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
-Route::put('/user/update/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
-Route::delete('/user/delete/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
-Route::get('/user/show{id}', [App\Http\Controllers\UserController::class, 'show'])->name('user.show');
 
-// route untuk halaman kpi metrics
-Route::get('/kpimetrics', [App\Http\Controllers\KpimetricController::class, 'index'])->name('kpimetrics.index');
-Route::get('/kpimetrics/create', [App\Http\Controllers\KpimetricController::class, 'create'])->name('kpimetrics.create');
-Route::post('/kpimetrics/store', [App\Http\Controllers\KpimetricController::class, 'store'])->name('kpimetrics.store');
-Route::post('/kpimetrics/store-multiple', [KpimetricController::class, 'storeMultiple'])->name('kpimetrics.storeMultiple');
-Route::get('/kpimetrics/edit/{id}', [App\Http\Controllers\KpimetricController::class, 'edit'])->name('kpimetrics.edit');
-Route::put('/kpimetrics/update/{id}', [App\Http\Controllers\KpimetricController::class, 'update'])->name('kpimetrics.update');
-Route::get('/kpimetrics/show/{id}', [App\Http\Controllers\KpimetricController::class, 'show'])->name('kpimetrics.show');
-Route::delete('/kpimetrics/delete/{id}', [App\Http\Controllers\KpimetricController::class, 'destroy'])->name('kpimetrics.destroy');    
-// route untuk halaman kpi records
+// Route untuk halaman yang bisa di akses admin
+Route::middleware(['role:admin'])->group(function () {
+    Route::get('/user', [UserController::class, 'index'])->name('user.index')->middleware('permission:users-view');
+    Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
+    Route::post('/user/store-multiple', [UserController::class, 'storeMultiple'])->name('user.storeMultiple');
+    Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+});
+
+
+Route::middleware(['role:admin|karyawan'])->group(function () {
+    Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show');
+    Route::get('/kpimetrics', [KpimetricController::class, 'index'])->name('kpimetrics.index');
+    Route::get('/kpimetrics/show/{id}', [KpimetricController::class, 'show'])->name('kpimetrics.show');
+    Route::get('/kpimetrics/create', [KpimetricController::class, 'create'])->name('kpimetrics.create');
+    Route::post('/kpimetrics/store', [KpimetricController::class, 'store'])->name('kpimetrics.store');
+});
+
+// Khusus admin
+Route::middleware(['role:admin'])->group(function () {
+    Route::get('/kpimetrics/create', [KpimetricController::class, 'create'])->name('kpimetrics.create');
+    Route::post('/kpimetrics/store', [KpimetricController::class, 'store'])->name('kpimetrics.store');
+    Route::post('/kpimetrics/store-multiple', [KpimetricController::class, 'storeMultiple'])->name('kpimetrics.storeMultiple');
+    Route::get('/kpimetrics/edit/{id}', [KpimetricController::class, 'edit'])->name('kpimetrics.edit');
+    Route::put('/kpimetrics/update/{id}', [KpimetricController::class, 'update'])->name('kpimetrics.update');
+    Route::delete('/kpimetrics/delete/{id}', [KpimetricController::class, 'destroy'])->name('kpimetrics.destroy');
+});
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/hitungkpi', [HitungKpiController::class, 'index'])
+        ->name('hitungkpi.index');
+    Route::post('/hitungkpi', [HitungKpiController::class, 'store'])
+        ->name('hitungkpi.store');
+});
+
