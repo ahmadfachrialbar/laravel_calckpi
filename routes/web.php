@@ -10,17 +10,14 @@ Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'authenticate'])->name('login.post');
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout.post');
-
 Route::get('/register', [App\Http\Controllers\AuthController::class, 'registerView'])->name('register');
 Route::post('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register.post');
+
 
 Route::get('/dashboard', function () {
     return view('pages.dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-/* Route::get('/register', function () {
-    return view('pages.auth.register');
-}); */
 
 // route untuk halaman user
 

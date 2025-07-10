@@ -18,6 +18,7 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">Registrasi!</h1>
                         </div>
+
                         <form class="user" method="POST" action="{{ route('register') }}">
                             @csrf
                             <div class="form-group">
@@ -44,6 +45,7 @@
                             <button type="submit" class="btn btn-primary btn-user btn-block">
                                 Daftar
                             </button>
+
                         </form>
                         <hr />
                         <div class="text-center">

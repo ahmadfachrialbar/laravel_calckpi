@@ -42,6 +42,7 @@
                         </form>
                         <hr />
                         <div class="text-center">
+
                             <a class="small" href="/register"> Belum Punya Account? daftar</a>
                         </div>
                     </div>

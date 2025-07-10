@@ -169,15 +169,9 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-<<<<<<< Updated upstream
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="{{ asset('template/img/undraw_profile.svg') }}">
-=======
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ auth()->check() ? auth()->user()->name : 'Guest' }}</span>
-
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ auth()->user()->name }}</span>
                                 <i class="fas fa-fw fa-user-circle fa-lg"></i>
->>>>>>> Stashed changes
+
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
