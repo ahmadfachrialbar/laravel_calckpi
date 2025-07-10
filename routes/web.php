@@ -4,13 +4,23 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KpimetricController;
 use App\Http\Controllers\UserController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+// Route untuk auth
+Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [App\Http\Controllers\AuthController::class, 'authenticate'])->name('login.post');
+Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout.post');
+
+Route::get('/register', [App\Http\Controllers\AuthController::class, 'registerView'])->name('register');
+Route::post('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register.post');
 
 Route::get('/dashboard', function () {
     return view('pages.dashboard');
-});
+})->middleware(['auth'])->name('dashboard');
+
+/* Route::get('/register', function () {
+    return view('pages.auth.register');
+}); */
 
 // route untuk halaman user
 
@@ -33,5 +43,3 @@ Route::put('/kpimetrics/update/{id}', [App\Http\Controllers\KpimetricController:
 Route::get('/kpimetrics/show/{id}', [App\Http\Controllers\KpimetricController::class, 'show'])->name('kpimetrics.show');
 Route::delete('/kpimetrics/delete/{id}', [App\Http\Controllers\KpimetricController::class, 'destroy'])->name('kpimetrics.destroy');    
 // route untuk halaman kpi records
-
-
