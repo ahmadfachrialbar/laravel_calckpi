@@ -18,19 +18,34 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">Registrasi!</h1>
                         </div>
-                        <form class="user">
+
+                        <form class="user" method="POST" action="{{ route('register') }}">
+                            @csrf
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" placeholder="Nama Lengkap">
+                                <input type="text" name="nip" class="form-control form-control-user" placeholder="NIP" required>
                             </div>
                             <div class="form-group">
-                                <input type="email" class="form-control form-control-user" placeholder="Email">
+                                <input type="text" name="name" class="form-control form-control-user" placeholder="Nama Lengkap" required>
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control form-control-user" placeholder="Password">
+                                <input type="email" name="email" class="form-control form-control-user" placeholder="Email" required>
                             </div>
-                            <a href="#" class="btn btn-primary btn-user btn-block">
+                            <div class="form-group">
+                                <input type="password" name="password" class="form-control form-control-user" placeholder="Password" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="jabatan" class="form-control form-control-user" placeholder="Jabatan" required>        
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="departemen" class="form-control form-control-user" placeholder="Departemen" required>  
+                            </div>
+                            <div class="form-group">
+                                <input type="date" name="join_date" class="form-control form-control-user" placeholder="Tanggal Bergabung" required>    
+                            </div>    
+                            <button type="submit" class="btn btn-primary btn-user btn-block">
                                 Daftar
-                            </a>
+                            </button>
+
                         </form>
                         <hr />
                         <div class="text-center">
