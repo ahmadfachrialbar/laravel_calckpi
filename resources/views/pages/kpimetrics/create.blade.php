@@ -9,7 +9,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Form Tambah Data KPI</h6>
     </div>
     <!-- form -->
-    <form action="{{ route('kpimetrics.storeMultiple') }}" method="POST">
+    <form action="{{ route('kpimetrics.store') }}" method="POST">
         @csrf
         <div id="form-kpi-wrapper">
             <div class="form-kpi border rounded p-3 mb-3">

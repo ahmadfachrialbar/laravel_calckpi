@@ -13,11 +13,13 @@ class HitungkpiController extends Controller
     {
         $user = Auth::user();
 
-        // Ambil semua KPI Metrics
-        $kpis = KpiMetrics::all();
+        // Ambil KPI berdasarkan job position (bukan KPI khusus user)
+        $kpis = $user->jobPosition?->kpiMetrics ?? collect(); // safe default
 
-        // Ambil data record KPI user saat ini
-        $records = KpiRecord::where('user_id', $user->id)->with('kpiMetric')->get();
+        // Ambil record KPI milik user untuk ditampilkan
+        $records = KpiRecord::where('user_id', $user->id)
+                    ->with('kpiMetric')
+                    ->get();
 
         return view('pages.hitungkpi.index', compact('kpis', 'records', 'user'));
     }
@@ -26,16 +28,24 @@ class HitungkpiController extends Controller
     {
         $user = Auth::user();
 
-        foreach ($request->kpi as $index => $item) {
+        if (!is_array($request->kpi)) {
+            return back()->withErrors(['error' => 'Data KPI tidak valid.']);
+        }
+
+        foreach ($request->kpi as $item) {
             $kpiMetric = KpiMetrics::find($item['metric_id']);
 
-            if ($kpiMetric) {
-                $score = ($item['realization'] / $kpiMetric->target) * $kpiMetric->bobot;
+            if ($kpiMetric && $user->jobPosition && $kpiMetric->job_position_id == $user->job_position_id) {
+                $realization = floatval($item['realization']);
+                $target = floatval($kpiMetric->target) ?: 1; // Hindari bagi 0
+                $bobot = floatval($kpiMetric->bobot);
+
+                $score = ($realization / $target) * $bobot;
 
                 KpiRecord::create([
                     'user_id' => $user->id,
                     'kpimetrics_id' => $kpiMetric->id,
-                    'realization' => $item['realization'],
+                    'realization' => $realization,
                     'score' => number_format($score, 2),
                 ]);
             }

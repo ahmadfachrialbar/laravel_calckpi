@@ -6,26 +6,39 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\kpi_records; // Assuming this is the correct namespace for kpi_recordsiRecord
+use App\Models\kpi_records;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\JobPosition;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
+    
     protected $table = 'users';
-    protected $guarded = []; 
+    protected $guarded = [];
 
     protected $fillable = [
-        'nip', 
-        'name', 
-        'email', 
-        'password', 
-        'jabatan', 
-        'departemen', 
-        'role', 
+        'nip',
+        'name',
+        'email',
+        'password',
+        'job_position_id',
+        'departemen',
+        'role',
         'join_date',
     ];
+
+    public function jobPosition()
+    {
+        return $this->belongsTo(JobPosition::class);
+    }
+
+    public function kpiMetrics()
+    {
+        return $this->hasMany(KpiMetrics::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -42,10 +55,6 @@ class User extends Authenticatable
         'password',
     ];
 
-    // public function kpiRecords()
-    // {
-    //     return $this->hasMany(kpi_records::class, 'user_id');
-    // }
 
     /**
      * Get the attributes that should be cast.

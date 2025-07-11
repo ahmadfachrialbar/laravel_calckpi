@@ -1,4 +1,4 @@
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -31,14 +31,15 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    @can('users-view')
+    @role('admin')
     <li class="nav-item {{ request()->is('user') ? 'active' : '' }}">
         <a class="nav-link" href="/user">
             <i class="fas fa-fw fa-user"></i>
             <span>Data Karyawan</span>
         </a>
     </li>
-    @endcan
+    @endrole
+
 
     @can('kpimetrics-view')
     <li class="nav-item {{ request()->is('kpimetrics*') ? 'active' : '' }}">
@@ -48,7 +49,8 @@
         </a>
     </li>
     @endcan
-    @can('hitungkpi-index')
+
+    @can('hitungkpi-view')
     <li class="nav-item {{ request()->is('hitungkpi*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('hitungkpi.index') }}">
             <i class="fas fa-fw fa-calculator"></i>

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\JobPosition;
 
 
 class AuthController extends Controller
@@ -36,7 +37,8 @@ class AuthController extends Controller
 
     public function RegisterView()
     {
-        return view('pages.auth.register');
+        $jobPositions = JobPosition::all();
+        return view('pages.auth.register', compact('jobPositions'));
     }
 
     public function register(Request $request)
@@ -48,19 +50,23 @@ class AuthController extends Controller
         ]);
 
         $user = new User();
-        $user->nip = $request->input('nip'); 
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->password = Hash::make($request->input('password'));
-        $user->jabatan = $request->input('jabatan');
-        $user->departemen = $request->input('departemen');
-        $user->role = 'karyawan'; // Default role
-        $user->join_date = $request->input('join_date');
+        $user->nip = $request->nip;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->job_position_id = $request->job_position_id;
+        $user->role = 'karyawan';
+        $user->join_date = $request->join_date;
+
+        // Tambahkan logika ini untuk mengisi kolom jabatan
+        $jabatan = JobPosition::find($request->job_position_id);
         
-        $user->saveOrFail();
+        
+
+        $user->save();
         $user->assignRole('karyawan');
 
-        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan masuk.');
+        return redirect('/')->with('success', 'Registrasi berhasil, silakan masuk.');
     }
 
     public function logout(Request $request)

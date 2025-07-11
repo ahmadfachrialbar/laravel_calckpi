@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User; // Pastikan model User sudah dibuat
+use Illuminate\Support\Facades\Auth;
+use App\Models\JobPosition; // Pastikan model JobPosition sudah dibuat
 
 
 
@@ -63,7 +65,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $users = user::findOrFail($id);
-        return view('pages.user.edit', [
+        $jobPositions = \App\Models\JobPosition::all(); // Ambil semua jabatan
+        return view('pages.user.edit', compact('users', 'jobPositions'), [
             'user' => $users,
         ]);
     }
@@ -77,14 +80,21 @@ class UserController extends Controller
             'nip' => 'required|string|max:20|unique:users,nip,' . $user->id,
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'jabatan' => 'required|string|max:100',
+            'job_position_id' => 'required|exists:job_positions,id', // validasi relasi
             'departemen' => 'required|string|max:100',
             'role' => 'required|in:admin,karyawan',
             'join_date' => 'required|date',
-            // password tidak wajib
         ]);
 
-        $data = $request->only(['nip', 'name', 'email', 'jabatan', 'departemen', 'role', 'join_date']);
+        $data = $request->only([
+            'nip',
+            'name',
+            'email',
+            'job_position_id',
+            'departemen',
+            'role',
+            'join_date'
+        ]);
 
         if ($request->filled('password')) {
             $data['password'] = bcrypt($request->password);
@@ -94,6 +104,7 @@ class UserController extends Controller
 
         return redirect()->route('user.index')->with('success', 'Data berhasil diperbarui');
     }
+
 
 
     public function show($id)

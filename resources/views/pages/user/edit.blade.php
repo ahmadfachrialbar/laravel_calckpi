@@ -23,14 +23,18 @@
         <label for="password">Password</label>
         <input type="password" class="form-control" id="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah password">
     </div>
-    <div class="form-group">
-        <label for="jabatan">Jabatan</label>
-        <input type="text" class="form-control" id="jabatan" name="jabatan" value="{{ $user->jabatan }}" required>
+    <div>
+        <label for="job_position_id">Jabatan</label>
+        <select name="job_position_id" class="form-control" required>
+            <option value="">Pilih Jabatan</option>
+            @foreach($jobPositions as $job)
+            <option value="{{ $job->id }}" {{ $user->job_position_id == $job->id ? 'selected' : '' }}>
+                {{ $job->name }}
+            </option>
+            @endforeach
+        </select>
     </div>
-    <div class="form-group">
-        <label for="departemen">Departemen</label>
-        <input type="text" class="form-control" id="departemen" name="departemen" value="{{ $user->departemen }}" required>
-    </div>
+    
     <div class="form-group">
         <label for="role">Role</label>
         <select class="form-control" id="role" name="role" required>

@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Models\User;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -25,6 +26,9 @@ class RolePermissionSeeder extends Seeder
             'edit',
             'delete'
         ],
+        'hitungkpi' => [
+            'view',
+        ],
     ];
 
     /**
@@ -43,7 +47,9 @@ class RolePermissionSeeder extends Seeder
         Role::firstOrCreate([
             'name' => 'admin',
             'guard_name' => 'web',
+
         ])->givePermissionTo(Permission::all());
+
 
         Role::firstOrCreate([
             'name' => 'karyawan'
@@ -53,6 +59,12 @@ class RolePermissionSeeder extends Seeder
                 'dashboard-view',
                 'users-view',
                 'kpimetrics-view',
+                'hitungkpi-view',
             ]);
+            
+        $user = User::first();
+        if ($user && !$user->hasRole('admin')) {
+            $user->assignRole('admin');
+        }
     }
 }

@@ -3,7 +3,7 @@
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Manajemen Data</h1>
-    <a href="{{route('user.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+    <a href="{{route('user.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm"><i
             class="fas fa-plus fa-sm text-white-50"></i> Tambah Data</a>
 </div>
 <!-- DataTales Example -->
@@ -14,14 +14,13 @@
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
+                <thead class="thead-light">
                     <tr>
                         <th>ID</th>
                         <th>NIP</th>
                         <th>Nama</th>
                         <th>Password</th>
-                        <th>Jabatan</th>
-                        <th>Departemen</th>
+                        <th>Jabatan/Departemen</th>
                         <th>Tanggal Bergabung</th>
                         <th>Aksi</th>
                     </tr>
@@ -33,8 +32,7 @@
                         <td>{{ $user->nip }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ Str::limit($user->password, 10, '...') }}</td>
-                        <td>{{ $user->jabatan }}</td>
-                        <td>{{ $user->departemen }}</td>
+                        <td>{{ $user->jobPosition->name ?? '-' }}</td>
                         <td>{{ $user->join_date }}</td>
                         <td>
                             <!-- Aksi -->

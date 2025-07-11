@@ -5,6 +5,7 @@ use App\Http\Controllers\KpimetricController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HitungkpiController;
+use App\Http\Controllers\DashboardController;
 
 
 // Route untuk auth
@@ -20,6 +21,7 @@ Route::get('/dashboard', function () {
     return view('pages.dashboard');
 })->middleware(['auth', 'role:admin|karyawan', 'permission:dashboard-view'])->name('dashboard');
 
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
 
@@ -47,7 +49,7 @@ Route::middleware(['role:admin|karyawan'])->group(function () {
 Route::middleware(['role:admin'])->group(function () {
     Route::get('/kpimetrics/create', [KpimetricController::class, 'create'])->name('kpimetrics.create');
     Route::post('/kpimetrics/store', [KpimetricController::class, 'store'])->name('kpimetrics.store');
-    Route::post('/kpimetrics/store-multiple', [KpimetricController::class, 'storeMultiple'])->name('kpimetrics.storeMultiple');
+    Route::post('/kpimetrics/store', [KpimetricController::class, 'store'])->name('kpimetrics.store');
     Route::get('/kpimetrics/edit/{id}', [KpimetricController::class, 'edit'])->name('kpimetrics.edit');
     Route::put('/kpimetrics/update/{id}', [KpimetricController::class, 'update'])->name('kpimetrics.update');
     Route::delete('/kpimetrics/delete/{id}', [KpimetricController::class, 'destroy'])->name('kpimetrics.destroy');

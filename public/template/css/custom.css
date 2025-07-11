@@ -1,0 +1,7 @@
+.bg-login {
+    height: 100vh;
+    background-image: url('../img/bg-loginRegister.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

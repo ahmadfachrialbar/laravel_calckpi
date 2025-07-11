@@ -4,22 +4,50 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Kpimetrics;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use App\Models\JobPosition;
 
 class KpimetricController extends Controller
 {
+    // public function index()
+    // {
+    //     $kpiMetrics = Kpimetrics::all();
+    //     return view('pages.kpimetrics.index', [
+    //         'kpiMetrics' => $kpiMetrics,
+    //     ]);
+    // }
+
     public function index()
     {
-        $kpiMetrics = Kpimetrics::all();
-        return view('pages.kpimetrics.index', [
-            'kpiMetrics' => $kpiMetrics,
-        ]);
+        $user = Auth()->user();
+
+        if ($user->hasRole('admin')) {
+            $karyawan = User::role('karyawan')
+                ->with('jobPosition.kpiMetrics')
+                ->get();
+
+            return view('pages.kpimetrics.index', compact('karyawan'));
+        }
+
+        if ($user->hasRole('karyawan')) {
+            $kpiMetrics = $user->jobPosition?->kpiMetrics ?? [];
+
+            return view('pages.kpimetrics.index', compact('kpiMetrics'));
+        }
+
+        abort(403);
     }
+
 
     public function create()
     {
-        return view('pages.kpimetrics.create');
+        $jobPositions = JobPosition::all();
+        $users = User::role('karyawan')->get();
+
+        return view('pages.kpimetrics.create', compact('jobPositions', 'users'));
     }
+
 
     // public function store(Request $request)
     // {
@@ -35,22 +63,21 @@ class KpimetricController extends Controller
     //     return redirect('/kpiMetrics')->with('success', 'Data KPI Metrics berhasil ditambahkan');
     // }
 
-    // fungsi store multiple agar bisa tambah banyak data sekaligus
-    public function storeMultiple(Request $request)
+    // fungsi store  agar bisa tambah banyak data sekaligus
+    public function store(Request $request)
     {
-        $data = $request->input('kpi');
+        $validated = $request->validate([
+            'nama_kpi' => 'required',
+            'penjelasan_sederhana' => 'required',
+            'cara_ukur' => 'required',
+            'target' => 'required|numeric',
+            'bobot' => 'required|numeric',
+            'job_position_id' => 'nullable|exists:job_positions,id',
+            'user_id' => 'nullable|exists:users,id',
+        ]);
 
-        foreach ($data as $item) {
-            Kpimetrics::create([
-                'nama_kpi' => $item['nama_kpi'],
-                'penjelasan_sederhana' => $item['penjelasan_sederhana'],
-                'cara_ukur' => $item['cara_ukur'],
-                'target' => $item['target'],
-                'bobot' => $item['bobot'],
-            ]);
-        }
-
-        return redirect()->route('kpimetrics.index')->with('success', 'Data KPI berhasil disimpan.');
+        KpiMetrics::create($validated);
+        return redirect()->route('kpimetrics.index')->with('success', 'Data KPI berhasil ditambahkan');
     }
 
     public function edit($id)

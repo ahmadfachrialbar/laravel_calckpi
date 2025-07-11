@@ -10,7 +10,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Form Tambah Data Karyawan</h6>
     </div>
     <div class="card-body">
-        <form action="{{ route('user.storeMultiple') }}" method="POST">
+        <form action="{{ route('user.store') }}" method="POST">
             @csrf
             <div id="form-user-wrapper">
                 <div class="form-user border rounded p-3 mb-3">
@@ -34,10 +34,7 @@
                         <label>Jabatan</label>
                         <input type="text" name="users[0][jabatan]" class="form-control" required>
                     </div>
-                    <div class="form-group">
-                        <label>Departemen</label>
-                        <input type="text" name="users[0][departemen]" class="form-control" required>
-                    </div>
+                    
                     <div class="form-group">
                         <label>Role</label>
                         <select name="users[0][role]" class="form-control" required>

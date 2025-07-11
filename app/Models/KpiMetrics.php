@@ -10,9 +10,9 @@ class KpiMetrics extends Model
 
     use HasFactory;
 
-    protected $table = 'KpiMetrics'; 
-    protected $guarded = []; 
-    
+    protected $table = 'KpiMetrics';
+    protected $guarded = [];
+
     // protected $primaryKey = 'metric_id'; 
     protected $fillable = [
         'nama_kpi',
@@ -21,10 +21,14 @@ class KpiMetrics extends Model
         'target',
         'bobot',
     ];
-    
 
-    // public function kpiRecords()
-    // {
-    //     return $this->hasMany(kpi_records::class, 'metric_id');
-    // }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function jobPosition()
+    {
+        return $this->belongsTo(JobPosition::class);
+    }
 }
