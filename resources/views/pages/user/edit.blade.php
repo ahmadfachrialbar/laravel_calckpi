@@ -4,6 +4,15 @@
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Edit data</h1>
 </div>
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul class="mb-0">
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
 <form action="{{ route('user.update', $user->id) }}" method="POST">
     @csrf
     @method('PUT')
@@ -47,6 +56,6 @@
         <input type="date" class="form-control" id="join_date" name="join_date" value="{{ $user->join_date }}" required>
     </div>
     <button type="submit" class="btn btn-primary">Simpan</button>
-    <button type="/user" class="btn btn-secondary" href="">Kembali</button>
+    <a href="{{ route('user.index') }}" class="btn btn-secondary">Kembali</a>
 </form>
 @endsection

@@ -10,29 +10,25 @@ use App\Models\JobPosition;
 
 class KpimetricController extends Controller
 {
-    // public function index()
-    // {
-    //     $kpiMetrics = Kpimetrics::all();
-    //     return view('pages.kpimetrics.index', [
-    //         'kpiMetrics' => $kpiMetrics,
-    //     ]);
-    // }
-
     public function index()
     {
         $user = Auth()->user();
 
         if ($user->hasRole('admin')) {
             $karyawan = User::role('karyawan')
-                ->with('jobPosition.kpiMetrics')
+                ->with('jobPosition.kpiMetrics', 'kpiMetrics')
                 ->get();
 
-            return view('pages.kpimetrics.index', compact('karyawan'));
+            // Ambil KPI yang tidak punya relasi user maupun job_position (orphan data)
+            $kpiOrphan = Kpimetrics::whereNull('user_id')
+                ->whereNull('job_position_id')
+                ->get();
+
+            return view('pages.kpimetrics.index', compact('karyawan', 'kpiOrphan'));
         }
 
         if ($user->hasRole('karyawan')) {
-            $kpiMetrics = $user->jobPosition?->kpiMetrics ?? [];
-
+            $kpiMetrics = $user->jobPosition?->kpiMetrics ?? collect();
             return view('pages.kpimetrics.index', compact('kpiMetrics'));
         }
 
@@ -40,11 +36,12 @@ class KpimetricController extends Controller
     }
 
 
+
+
     public function create()
     {
-        $jobPositions = JobPosition::all();
-        $users = User::role('karyawan')->get();
-
+        $jobPositions = JobPosition::where('id', '!=', 9)->get();
+        $users = User::role('karyawan')->get(); // ambil user yang role-nya karyawan
         return view('pages.kpimetrics.create', compact('jobPositions', 'users'));
     }
 
@@ -67,18 +64,25 @@ class KpimetricController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama_kpi' => 'required',
-            'penjelasan_sederhana' => 'required',
-            'cara_ukur' => 'required',
+            'nama_kpi' => 'required|string|max:255',
+            'penjelasan_sederhana' => 'required|string|max:500',
+            'cara_ukur' => 'required|string|max:500',
             'target' => 'required|numeric',
             'bobot' => 'required|numeric',
             'job_position_id' => 'nullable|exists:job_positions,id',
             'user_id' => 'nullable|exists:users,id',
         ]);
 
+        // Pastikan minimal satu dari job_position_id atau user_id diisi
+        if (!$validated['job_position_id'] && !$validated['user_id']) {
+            return back()->withErrors('Pilih salah satu: jabatan atau user.');
+        }
+
         KpiMetrics::create($validated);
+
         return redirect()->route('kpimetrics.index')->with('success', 'Data KPI berhasil ditambahkan');
     }
+
 
     public function edit($id)
     {
@@ -104,12 +108,29 @@ class KpimetricController extends Controller
         return redirect()->route('kpimetrics.index')->with('success', 'Data KPI Metrics berhasil diperbarui');
     }
 
-    public function show($id)
+    public function show()
     {
-        $kpiMetric = Kpimetrics::findOrFail($id);
-        return view('pages.kpimetrics.show', [
-            'kpiMetric' => $kpiMetric,
-        ]);
+        $user = Auth()->user();
+
+        if ($user->hasRole('admin')) {
+            $karyawan = User::role('karyawan')
+                ->with('jobPosition.kpiMetrics', 'kpiMetrics')
+                ->get();
+
+            // Ambil KPI yang tidak punya relasi user maupun job_position (orphan data)
+            $kpiOrphan = Kpimetrics::whereNull('user_id')
+                ->whereNull('job_position_id')
+                ->get();
+
+            return view('pages.kpimetrics.show', compact('karyawan', 'kpiOrphan'));
+        }
+
+        if ($user->hasRole('karyawan')) {
+            $kpiMetrics = $user->jobPosition?->kpiMetrics ?? collect();
+            return view('pages.kpimetrics.show', compact('kpiMetrics'));
+        }
+
+        abort(403);
     }
 
     public function destroy($id)

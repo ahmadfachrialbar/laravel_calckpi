@@ -7,19 +7,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class KpiMetrics extends Model
 {
-
     use HasFactory;
 
     protected $table = 'KpiMetrics';
     protected $guarded = [];
 
-    // protected $primaryKey = 'metric_id'; 
     protected $fillable = [
         'nama_kpi',
         'penjelasan_sederhana',
         'cara_ukur',
         'target',
         'bobot',
+        'user_id',             
+        'job_position_id',
     ];
 
     public function user()

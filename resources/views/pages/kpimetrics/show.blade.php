@@ -5,10 +5,7 @@
 @role('admin')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Data KPI</h1>
-    <a href="{{ route('kpimetrics.create') }}" class="btn btn-sm btn-secondary shadow-sm">
-        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
-    </a>
+    <h1 class="h3 mb-0 text-gray-800">Detail Data KPI</h1>
 </div>
 
 <div class="table-responsive">
@@ -22,7 +19,11 @@
                 <th>Cara Ukur</th>
                 <th>Target</th>
                 <th>Bobot</th>
-                <th>Aksi</th>
+                <th>Actual</th>
+                <th>Achievement</th>
+                <th>Wheightages</th>
+                <th>Score</th>
+
             </tr>
         </thead>
         <tbody>
@@ -55,28 +56,6 @@
                 <td>{{ $kpi->cara_ukur }}</td>
                 <td>{{ $kpi->target }}</td>
                 <td>{{ $kpi->bobot }}</td>
-                <td>
-                    <div class="d-flex justify-content-center" style="gap: 0.5rem;">
-                        <!-- Tombol Lihat -->
-                        <a href="{{ route('kpimetrics.show', $kpi->id) }}" class="btn btn-link p-0 text-info" title="Lihat KPI">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <!-- Tombol Edit -->
-                        <a href="{{ route('kpimetrics.edit', $kpi->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </a>
-
-                        <!-- Tombol Hapus -->
-                        <form action="{{ route('kpimetrics.destroy', $kpi->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-link p-0 text-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus KPI ini?')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-
-                    </div>
-                </td>
 
             </tr>
             @endforeach

@@ -1,82 +1,75 @@
 @extends('layouts.app')
+
 @section('content')
-<!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Tambah data</h1>
-</div>
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Form Tambah Data KPI</h6>
-    </div>
-    <!-- form -->
+<div class="container">
+    <h1 class="h3 mb-4 text-gray-800">Tambah Data KPI</h1>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('kpimetrics.store') }}" method="POST">
         @csrf
-        <div id="form-kpi-wrapper">
-            <div class="form-kpi border rounded p-3 mb-3">
-                <div class="form-group">
-                    <label>Nama KPI</label>
-                    <input type="text" name="kpi[0][nama_kpi]" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Deskripsi</label>
-                    <input type="text" name="kpi[0][penjelasan_sederhana]" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Cara Ukur</label>
-                    <input type="text" name="kpi[0][cara_ukur]" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Target</label>
-                    <input type="number" name="kpi[0][target]" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Bobot</label>
-                    <input type="number" name="kpi[0][bobot]" class="form-control" required>
-                </div>
-            </div>
+
+        <div class="form-group">
+            <label for="job_position_id">Jabatan</label>
+            <select name="job_position_id" id="job_position_id" class="form-control">
+                <option value="">-- Pilih Jabatan --</option>
+                @foreach ($jobPositions as $position)
+                    <option value="{{ $position->id }}" {{ old('job_position_id') == $position->id ? 'selected' : '' }}>
+                        {{ $position->name }}
+                    </option>
+                @endforeach
+            </select>
+            <!-- <small class="text-muted">Kosongkan jika KPI khusus user</small> -->
         </div>
 
-        <button type="button" class="btn btn-secondary" id="add-form">Next</button>
+        <div class="form-group">
+            <label for="user_id">Nama Karyawan</label>
+            <select name="user_id" id="user_id" class="form-control">
+                <option value="">-- Pilih Karyawan --</option>
+                @foreach ($users as $user)
+                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                        {{ $user->name }}
+                    </option>
+                @endforeach
+            </select>
+            <!-- <small class="text-muted">Kosongkan jika KPI berlaku untuk jabatan</small> -->
+        </div>
+
+        <div class="form-group">
+            <label for="nama_kpi">Nama KPI</label>
+            <input type="text" name="nama_kpi" id="nama_kpi" class="form-control" value="{{ old('nama_kpi') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="penjelasan_sederhana">Penjelasan Sederhana</label>
+            <textarea name="penjelasan_sederhana" id="penjelasan_sederhana" class="form-control" rows="3" required>{{ old('penjelasan_sederhana') }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="cara_ukur">Cara Ukur</label>
+            <textarea name="cara_ukur" id="cara_ukur" class="form-control" rows="2" required>{{ old('cara_ukur') }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="target">Target</label>
+            <input type="number" name="target" id="target" class="form-control" value="{{ old('target') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="bobot">Bobot (%)</label>
+            <input type="number" name="bobot" id="bobot" class="form-control" value="{{ old('bobot') }}" required>
+        </div>
+
         <button type="submit" class="btn btn-primary">Simpan</button>
-        <button type="/kpimetrics" class="btn btn-secondary" href="">Kembali</button>
+        <a href="{{ route('kpimetrics.index') }}" class="btn btn-secondary">Batal</a>
     </form>
-    <!-- JavaScript langsung di Blade -->
-    <script>
-        let index = 0;
-
-        document.getElementById('add-form').addEventListener('click', function() {
-            const wrapper = document.getElementById('form-kpi-wrapper');
-            const newForm = `
-            <div class="form-kpi border rounded p-3 mb-3">
-                <div class="form-group">
-                    <label>Nama KPI</label>
-                    <input type="text" name="kpi[${index}][nama_kpi]" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Deskripsi</label>
-                    <input type="text" name="kpi[${index}][penjelasan_sederhana]" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Cara Ukur</label>
-                    <input type="text" name="kpi[${index}][cara_ukur]" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Target</label>
-                    <input type="number" name="kpi[${index}][target]" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Bobot</label>
-                    <input type="number" name="kpi[${index}][bobot]" class="form-control" required>
-                </div>
-            </div>
-        `;
-            wrapper.insertAdjacentHTML('beforeend', newForm);
-            index++;
-        });
-
-    </script>
 </div>
-
-<!-- End of Main Content -->
-
 @endsection

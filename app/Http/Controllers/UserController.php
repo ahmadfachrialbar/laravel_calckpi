@@ -53,7 +53,6 @@ class UserController extends Controller
                 'email' => $userData['email'],
                 'password' => bcrypt($userData['password']),
                 'job_position_id' => $request->job_position_id,
-                'departemen' => $userData['departemen'],
                 'role' => $userData['role'],
                 'join_date' => $userData['join_date'],
             ]);
@@ -81,7 +80,6 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'job_position_id' => 'required|exists:job_positions,id', // validasi relasi
-            'departemen' => 'required|string|max:100',
             'role' => 'required|in:admin,karyawan',
             'join_date' => 'required|date',
         ]);
@@ -91,7 +89,6 @@ class UserController extends Controller
             'name',
             'email',
             'job_position_id',
-            'departemen',
             'role',
             'join_date'
         ]);
@@ -101,6 +98,11 @@ class UserController extends Controller
         }
 
         $user->update($data);
+
+        // Debug: cek apakah berhasil
+        if (!$user->wasChanged()) {
+            return back()->with('error', 'Tidak ada data yang diubah.');
+        }
 
         return redirect()->route('user.index')->with('success', 'Data berhasil diperbarui');
     }
