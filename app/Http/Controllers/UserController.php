@@ -52,7 +52,7 @@ class UserController extends Controller
                 'name' => $userData['name'],
                 'email' => $userData['email'],
                 'password' => bcrypt($userData['password']),
-                'jabatan' => $userData['jabatan'],
+                'job_position_id' => $request->job_position_id,
                 'departemen' => $userData['departemen'],
                 'role' => $userData['role'],
                 'join_date' => $userData['join_date'],

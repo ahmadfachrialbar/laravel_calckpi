@@ -18,9 +18,8 @@ class Adminseeder extends Seeder
         'nip' => '1234567890', 
         'name' => 'Admin',
         'email' => 'admin@gmail.com',
-        'password' => Hash::make('password'), // Gunakan Hash untuk password
-        'jabatan' => 'Administrator',  
-        'departemen' => 'IT',
+        'password' => Hash::make('password'), // Gunakan Hash untuk password 
+        'job_position_id' => 9, 
         'role' => 'admin',
         'join_date' => now(), 
     ])->assignRole('admin'); // Assign role admin ke user ini

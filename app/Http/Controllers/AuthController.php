@@ -37,7 +37,7 @@ class AuthController extends Controller
 
     public function RegisterView()
     {
-        $jobPositions = JobPosition::all();
+        $jobPositions = JobPosition::where('id', '!=', 9)->get(); // Ambil semua jabatan kecuali jabatan admin
         return view('pages.auth.register', compact('jobPositions'));
     }
 
