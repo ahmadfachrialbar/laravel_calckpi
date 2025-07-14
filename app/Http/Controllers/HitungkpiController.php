@@ -13,13 +13,13 @@ class HitungkpiController extends Controller
     {
         $user = Auth::user();
 
-        // Ambil KPI berdasarkan job position (bukan KPI khusus user)
-        $kpis = $user->jobPosition?->kpiMetrics ?? collect(); // safe default
+        // Ambil KPI dari jabatan user
+        $kpis = $user->jobPosition?->kpiMetrics ?? collect();
 
-        // Ambil record KPI milik user untuk ditampilkan
+        // Ambil riwayat perhitungan KPI milik user
         $records = KpiRecord::where('user_id', $user->id)
-                    ->with('kpiMetric')
-                    ->get();
+            ->with('kpiMetric')
+            ->get();
 
         return view('pages.hitungkpi.index', compact('kpis', 'records', 'user'));
     }
@@ -28,29 +28,39 @@ class HitungkpiController extends Controller
     {
         $user = Auth::user();
 
+        // Validasi struktur input
         if (!is_array($request->kpi)) {
-            return back()->withErrors(['error' => 'Data KPI tidak valid.']);
+            return back()->withErrors(['error' => 'Format data KPI tidak valid.']);
         }
 
         foreach ($request->kpi as $item) {
             $kpiMetric = KpiMetrics::find($item['metric_id']);
 
-            if ($kpiMetric && $user->jobPosition && $kpiMetric->job_position_id == $user->job_position_id) {
-                $realization = floatval($item['realization']);
-                $target = floatval($kpiMetric->target) ?: 1; // Hindari bagi 0
+            // Pastikan KPI valid & sesuai jabatan user
+            if ($kpiMetric && $user->job_position_id == $kpiMetric->job_position_id) {
+                $simulasi = floatval($item['simulasi_penambahan']);
+                $target = floatval($kpiMetric->target) ?: 1; // Hindari pembagian 0
                 $bobot = floatval($kpiMetric->bobot);
+                $weightages = floatval($kpiMetric->weightages); // ambil dari tabel KPI Metrics
 
-                $score = ($realization / $target) * $bobot;
+                // Hitung nilai KPI
+                $weightages = floatval($kpiMetric->weightages);
+                $achievement = $simulasi / $target;
+                $score = $achievement * $weightages;
 
+
+                // Simpan ke kpi_records
                 KpiRecord::create([
                     'user_id' => $user->id,
                     'kpimetrics_id' => $kpiMetric->id,
-                    'realization' => $realization,
+                    'simulasi_penambahan' => $simulasi,
+                    'achievement' => number_format($achievement, 2),
                     'score' => number_format($score, 2),
                 ]);
             }
         }
 
-        return redirect()->back()->with('success', 'Data KPI berhasil dihitung.');
+        return redirect()->back()->with('success', 'Perhitungan KPI berhasil disimpan.');
+        
     }
 }

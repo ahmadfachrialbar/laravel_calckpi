@@ -19,6 +19,9 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('template/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link rel="stylesheet" href="{{ asset('template/css/custom.css') }}">
+
 
 </head>
 
@@ -43,9 +46,9 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                    
+                    
                     @yield('content')
-
-
                 </div>
                 <!-- /.container-fluid -->
 

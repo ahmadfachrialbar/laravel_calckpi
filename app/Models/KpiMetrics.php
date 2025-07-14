@@ -18,6 +18,7 @@ class KpiMetrics extends Model
         'cara_ukur',
         'target',
         'bobot',
+        'weightages', 
         'user_id',             
         'job_position_id',
     ];

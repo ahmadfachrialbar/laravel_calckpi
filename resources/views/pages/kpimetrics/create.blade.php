@@ -2,16 +2,16 @@
 
 @section('content')
 <div class="container">
-    <h1 class="h3 mb-4 text-gray-800">Tambah Data KPI</h1>
+    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Tambah Data KPI</h1>
 
     @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
 
     <form action="{{ route('kpimetrics.store') }}" method="POST">
@@ -22,9 +22,9 @@
             <select name="job_position_id" id="job_position_id" class="form-control">
                 <option value="">-- Pilih Jabatan --</option>
                 @foreach ($jobPositions as $position)
-                    <option value="{{ $position->id }}" {{ old('job_position_id') == $position->id ? 'selected' : '' }}>
-                        {{ $position->name }}
-                    </option>
+                <option value="{{ $position->id }}" {{ old('job_position_id') == $position->id ? 'selected' : '' }}>
+                    {{ $position->name }}
+                </option>
                 @endforeach
             </select>
             <!-- <small class="text-muted">Kosongkan jika KPI khusus user</small> -->
@@ -35,9 +35,9 @@
             <select name="user_id" id="user_id" class="form-control">
                 <option value="">-- Pilih Karyawan --</option>
                 @foreach ($users as $user)
-                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                        {{ $user->name }}
-                    </option>
+                <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                    {{ $user->name }}
+                </option>
                 @endforeach
             </select>
             <!-- <small class="text-muted">Kosongkan jika KPI berlaku untuk jabatan</small> -->
@@ -66,6 +66,11 @@
         <div class="form-group">
             <label for="bobot">Bobot (%)</label>
             <input type="number" name="bobot" id="bobot" class="form-control" value="{{ old('bobot') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="weightages">Weightages (%)</label>
+            <input type="number" name="weightages" id="weightages" class="form-control" value="{{ old('weightages', $kpiMetric->weightages ?? '') }}" step="0.01" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Simpan</button>

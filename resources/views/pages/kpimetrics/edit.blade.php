@@ -2,7 +2,7 @@
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Edit data</h1>
+    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Edit data</h1>
 </div>
 <!-- form -->
 <form action="{{ route('kpimetrics.update', $kpiMetric->id) }}" method="POST">
@@ -30,6 +30,11 @@
                 <label>Bobot</label>
                 <input type="text" class="form-control" id="bobot" name="bobot" value="{{ $kpiMetric->bobot }}" required>
             </div>
+            <div class="form-group">
+                <label for="weightages">Weightages (%)</label>
+                <input type="number" name="weightages" id="weightages" class="form-control" value="{{ old('weightages', $kpiMetric->weightages ?? '') }}" step="0.01" required>
+            </div>
+
         </div>
     </div>
 

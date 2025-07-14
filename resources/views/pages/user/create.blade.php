@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Tambah Data Karyawan</h1>
+    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Tambah Data Karyawan</h1>
 </div>
 
 <div class="card shadow mb-4">

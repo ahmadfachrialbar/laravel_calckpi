@@ -6,6 +6,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HitungkpiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KpiRecordController;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\ProfileController;
 
 
 // Route untuk auth
@@ -22,7 +25,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'role:admin|karyawan', 'permission:dashboard-view'])->name('dashboard');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
 
 
 // Route untuk halaman yang bisa di akses admin
@@ -43,6 +45,7 @@ Route::middleware(['role:admin|karyawan'])->group(function () {
     Route::get('/kpimetrics/show/{id}', [KpimetricController::class, 'show'])->name('kpimetrics.show');
     Route::get('/kpimetrics/create', [KpimetricController::class, 'create'])->name('kpimetrics.create');
     Route::post('/kpimetrics/store', [KpimetricController::class, 'store'])->name('kpimetrics.store');
+
 });
 
 // Khusus admin
@@ -63,3 +66,26 @@ Route::middleware(['auth'])->group(function () {
         ->name('hitungkpi.store');
 });
 
+// Route kpirecords
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/kpirecords', [KpiRecordController::class, 'index'])->name('kpirecords.index');
+    Route::get('/kpirecords/{id}/edit', [KpiRecordController::class, 'edit'])->name('kpirecords.edit');
+    Route::put('/kpirecords/{id}', [KpiRecordController::class, 'update'])->name('kpirecords.update');
+    Route::delete('/kpirecords/{id}', [KpiRecordController::class, 'destroy'])->name('kpirecords.destroy');
+    
+});
+
+// Route untuk FAQ
+Route::get('/panduan', [FaqController::class, 'index'])->name('faq.index');
+Route::get('/panduan/create', [FaqController::class, 'create'])->name('faq.create'); // opsional, untuk admin
+Route::post('/panduan', [FaqController::class, 'store'])->name('faq.store');
+Route::get('/panduan/download/{id}', [FaqController::class, 'download'])->name('faq.download');
+
+//route untuk profile
+Route::middleware(['auth', 'role:admin|karyawan'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+});

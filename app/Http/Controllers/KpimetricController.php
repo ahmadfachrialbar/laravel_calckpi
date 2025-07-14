@@ -71,6 +71,7 @@ class KpimetricController extends Controller
             'bobot' => 'required|numeric',
             'job_position_id' => 'nullable|exists:job_positions,id',
             'user_id' => 'nullable|exists:users,id',
+            'weightages' => 'required|numeric|min:0',
         ]);
 
         // Pastikan minimal satu dari job_position_id atau user_id diisi
@@ -102,6 +103,7 @@ class KpimetricController extends Controller
             'cara_ukur' => 'required|string|max:500',
             'target' => 'required|numeric',
             'bobot' => 'required|numeric',
+            'weightages' => 'required|numeric|min:0',
         ]);
 
         $kpiMetric->update($request->all());
@@ -110,6 +112,7 @@ class KpimetricController extends Controller
 
     public function show()
     {
+        
         $user = Auth()->user();
 
         if ($user->hasRole('admin')) {

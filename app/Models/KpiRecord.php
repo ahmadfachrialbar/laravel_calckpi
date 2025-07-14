@@ -12,6 +12,16 @@ class KpiRecord extends Model
     protected $table = 'kpi_records';
     protected $guarded = [];
 
+    protected $fillable = [
+        'user_id',
+        'kpimetrics_id',
+        'simulasi_penambahan',
+        'achievement',
+        'weightages',
+        'score',
+    ];
+
+
     public function User()
     {
         return $this->belongsTo(User::class, 'user_id');

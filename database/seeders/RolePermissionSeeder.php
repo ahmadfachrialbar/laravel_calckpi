@@ -29,6 +29,11 @@ class RolePermissionSeeder extends Seeder
         'hitungkpi' => [
             'view',
         ],
+        'kpirecords' => [
+            'view',
+            'edit',
+            'update'
+        ],
     ];
 
     /**

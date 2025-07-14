@@ -22,16 +22,17 @@
     </li>
     @endcan
 
+    
+    @role('admin')
     <!-- Divider -->
     <hr class="sidebar-divider">
-
     <!-- Heading -->
     <div class="sidebar-heading">
-        Manajemen Data
+        Kelola Karyawan
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    @role('admin')
+    
     <li class="nav-item {{ request()->is('user') ? 'active' : '' }}">
         <a class="nav-link" href="/user">
             <i class="fas fa-fw fa-user"></i>
@@ -40,6 +41,13 @@
     </li>
     @endrole
 
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Kelola KPI
+    </div>
 
     @can('kpimetrics-view')
     <li class="nav-item {{ request()->is('kpimetrics*') ? 'active' : '' }}">
@@ -50,12 +58,37 @@
     </li>
     @endcan
 
-    @can('hitungkpi-view')
+    @role('karyawan')
     <li class="nav-item {{ request()->is('hitungkpi*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('hitungkpi.index') }}">
             <i class="fas fa-fw fa-calculator"></i>
             <span>Hitung KPI</span>
         </a>
     </li>
-    @endcan
+    @endrole
+    @role('admin')
+    <li class="nav-item {{ request()->is('kpirecords*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('kpirecords.index') }}">
+            <i class="fas fa-fw fa-calculator"></i>
+            <span>KPI Record</span>
+        </a>
+    </li>
+    @endrole
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        FAQ
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('faq.index') }}">
+            <i class="fas fa-fw fa-book-open"></i>
+            <span>Panduan</span>
+        </a>
+    </li>
+    
+
 </ul>

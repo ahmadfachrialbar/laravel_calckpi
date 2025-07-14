@@ -2,7 +2,7 @@
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Edit data</h1>
+    <h1 class="h3 mb-0 text-gray-800">Edit Profile</h1>
 </div>
 @if ($errors->any())
 <div class="alert alert-danger">
@@ -13,7 +13,7 @@
     </ul>
 </div>
 @endif
-<form action="{{ route('user.update', $user->id) }}" method="POST">
+<form action="{{ route('profile.update', $user->id) }}" method="POST">
     @csrf
     @method('PUT')
     <div class="form-group">
@@ -44,18 +44,18 @@
         </select>
     </div>
     
-    <div class="form-group">
+    <!-- <div class="form-group">
         <label for="role">Role</label>
         <select class="form-control" id="role" name="role" required>
             <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
             <option value="karyawan" {{ $user->role == 'karyawan' ? 'selected' : '' }}>Karyawan</option>
         </select>
-    </div>
+    </div> -->
     <div class="form-group">
         <label for="join_date">Tanggal Bergabung</label>
         <input type="date" class="form-control" id="join_date" name="join_date" value="{{ $user->join_date }}" required>
     </div>
     <button type="submit" class="btn btn-primary">Simpan</button>
-    <a href="{{ route('user.index') }}" class="btn btn-secondary">Kembali</a>
+    <a href="{{ route('profile.index') }}" class="btn btn-secondary">Kembali</a>
 </form>
 @endsection
