@@ -27,16 +27,15 @@ Route::get('/dashboard', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
-// Route untuk halaman yang bisa di akses admin
 Route::middleware(['role:admin'])->group(function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.index')->middleware('permission:users-view');
     Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
-    Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
     Route::post('/user/store-multiple', [UserController::class, 'storeMultiple'])->name('user.storeMultiple');
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
     Route::delete('/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 });
+
 
 
 Route::middleware(['role:admin|karyawan'])->group(function () {
@@ -88,4 +87,9 @@ Route::middleware(['auth', 'role:admin|karyawan'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
+});
+
+Route::middleware(['role:karyawan'])->group(function () {
+    Route::get('/laporan', [HitungkpiController::class, 'laporan'])->name('laporan.index');
+    Route::get('/laporan/download', [HitungkpiController::class, 'download'])->name('laporan.download');
 });

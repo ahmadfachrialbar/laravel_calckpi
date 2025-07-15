@@ -1,7 +1,7 @@
 <footer class="sticky-footer bg-white">
     <div class="container my-auto">
         <div class="copyright text-center my-auto">
-        <span>Copyright &copy; Calculating KPI 2025</span>
+            <span>Copyright &copy; Anugrah Beton Calculating KPI {{ date('Y') }}</span>
         </div>
     </div>
 </footer>

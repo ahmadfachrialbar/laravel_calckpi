@@ -60,9 +60,10 @@
                         <td>{{ $kpi->nama_kpi }}</td>
                         <td>{{ $kpi->penjelasan_sederhana }}</td>
                         <td>{{ $kpi->cara_ukur }}</td>
-                        <td>{{ $kpi->target }}</td>
-                        <td>{{ $kpi->bobot }}</td>
-                        <td>{{ $kpi->weightages }}</td>
+                        <td>{{ $kpi->target }}%</td>
+                        <td>{{ $kpi->bobot }}%</td>
+                        <td>{{ $kpi->weightages }}%</td>
+
                         <td>
                             <div class="d-flex justify-content-center" style="gap: 0.5rem;">
                                 <!-- Tombol Lihat -->

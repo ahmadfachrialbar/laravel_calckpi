@@ -5,6 +5,7 @@ use App\Models\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+
 class FaqController extends Controller
 {
     public function index()
@@ -34,8 +35,8 @@ class FaqController extends Controller
         }
 
         Faq::create($data);
-
-        return redirect()->route('faq.index')->with('success', 'Panduan berhasil ditambahkan.');
+        notify()->success('Data Panduan berhasil ditambahkan', 'Sukses');
+        return redirect()->route('faq.index');
     }
 
     public function download($id)
@@ -45,7 +46,7 @@ class FaqController extends Controller
         if (!$faq->pdf_path || !Storage::disk('public')->exists($faq->pdf_path)) {
             abort(404, 'File tidak ditemukan.');
         }
-
+        
         return Storage::disk('public')->download($faq->pdf_path);
     }
 }

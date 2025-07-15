@@ -11,6 +11,9 @@
 
     <title>Calculating KPI - Dashboard</title>
 
+    <!-- Untuk notifikasi -->
+    @notifyCss
+    
     <!-- Custom fonts for this template-->
     <link href="{{ asset('template/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link
@@ -21,7 +24,6 @@
     <link href="{{ asset('template/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <!-- Custom styles for this page -->
     <link rel="stylesheet" href="{{ asset('template/css/custom.css') }}">
-
 
 </head>
 
@@ -46,9 +48,8 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    
-                    
                     @yield('content')
+                    @include('notify::components.notify')
                 </div>
                 <!-- /.container-fluid -->
 
@@ -76,7 +77,7 @@
         <div class="modal-dialog" role="document">
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                
+
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Konfirmasi Logout</h5>
@@ -110,6 +111,11 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('template/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('template/js/demo/chart-pie-demo.js') }}"></script>
+
+    <!-- untuk notifikasi -->
+    @notifyJs
+
+    @yield('scripts')
 
 </body>
 

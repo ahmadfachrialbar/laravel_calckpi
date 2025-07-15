@@ -81,7 +81,9 @@ class KpimetricController extends Controller
 
         KpiMetrics::create($validated);
 
-        return redirect()->route('kpimetrics.index')->with('success', 'Data KPI berhasil ditambahkan');
+        notify()->success('Data KPI berhasil ditambahkan', 'Sukses');
+
+        return redirect()->route('kpimetrics.index');
     }
 
 
@@ -107,7 +109,8 @@ class KpimetricController extends Controller
         ]);
 
         $kpiMetric->update($request->all());
-        return redirect()->route('kpimetrics.index')->with('success', 'Data KPI Metrics berhasil diperbarui');
+        notify()->success('Data KPI berhasil Diperbarui', 'Sukses');
+        return redirect()->route('kpimetrics.index');
     }
 
     public function show()
@@ -140,6 +143,7 @@ class KpimetricController extends Controller
     {
         $kpiMetric = Kpimetrics::findOrFail($id);
         $kpiMetric->delete();
-        return redirect()->route('kpimetrics.index')->with('success', 'Data KPI Metrics berhasil dihapus');
+        notify()->success('Data KPI berhasil dihapus', 'Sukses');
+        return redirect()->route('kpimetrics.index');
     }
 }

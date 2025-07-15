@@ -21,9 +21,7 @@
                         <th>ID</th>
                         <th>NIP</th>
                         <th>Nama</th>
-                        <th>Password</th>
                         <th>Jabatan/Departemen</th>
-                        <th>Tanggal Bergabung</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -33,9 +31,7 @@
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->nip }}</td>
                         <td>{{ $user->name }}</td>
-                        <td>{{ Str::limit($user->password, 10, '...') }}</td>
                         <td>{{ $user->jobPosition->name ?? '-' }}</td>
-                        <td>{{ $user->join_date }}</td>
                         <td>
                             <!-- Aksi -->
                             <div class="d-flex justify-content-center" style="gap: 0.5rem;">

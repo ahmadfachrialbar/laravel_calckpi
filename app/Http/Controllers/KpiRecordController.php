@@ -38,7 +38,8 @@ class KpiRecordController extends Controller
 
         $record->save();
 
-        return redirect()->route('kpi-records.index')->with('success', 'Berhasil diperbarui.');
+        notify()->success('Data KPI Record berhasil diperbarui', 'Sukses');
+        return redirect()->route('kpirecords.index');
     }
 
     public function destroy($id)
@@ -46,6 +47,7 @@ class KpiRecordController extends Controller
         $record = KpiRecord::findOrFail($id);
         $record->delete();
 
-        return redirect()->route('kpi-records.index')->with('success', 'Riwayat KPI berhasil dihapus.');
+        notify()->success('Data KPI Record berhasil dihapus', 'Sukses');
+        return redirect()->route('kpirecords.index');
     }
 }

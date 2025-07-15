@@ -89,6 +89,25 @@
             <span>Panduan</span>
         </a>
     </li>
+
+    @role('karyawan')
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Reports
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('laporan.index') }}">
+            <i class="fas fa-fw fa-book-open"></i>
+            <span>Laporan</span>
+        </a>
+    </li>
+    @endrole
+
+    
     
 
 </ul>

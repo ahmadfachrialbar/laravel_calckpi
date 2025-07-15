@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="dashboard-bg">
-    <div class="container dashboard-content py-5">
+    <div class="container dashboard-content py-6">
         {{-- Header --}}
         <div class="d-flex flex-column flex-md-row align-items-start justify-content-between mb-4">
             <div>
@@ -107,7 +107,10 @@
                             <i class="fas fa-chart-bar mr-2"></i> Data KPI
                         </a>
                         <a href="{{ route('hitungkpi.index') }}" class="d-block text-decoration-none text-info">
-                            <i class="fas fa-calculator mr-2"></i> Hitung KPI
+                            <i class="fas fa-calculator mr-2"></i> Data Record
+                        </a>
+                        <a href="{{ route('hitungkpi.index') }}" class="d-block text-decoration-none text-info">
+                            <i class="fas fa-calculator mr-2"></i> Data Panduan
                         </a>
                         @endrole
                         @role('karyawan')

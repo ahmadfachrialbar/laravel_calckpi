@@ -13,9 +13,17 @@
     </ul>
 </div>
 @endif
-<form action="{{ route('profile.update', $user->id) }}" method="POST">
+<form action="{{ route('profile.update', $user->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
+    <!-- Upload Foto -->
+    <div class="form-group">
+        <label for="photo">Foto Profil</label><br>
+        @if($user->photo)
+            <img src="{{ asset('uploads/profile/'.$user->photo) }}" alt="Foto Profil" width="150" class="mb-2">
+        @endif
+        <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
+    </div>
     <div class="form-group">
         <label for="nip">NIP</label>
         <input type="text" class="form-control" id="nip" name="nip" value="{{ $user->nip }}" required>

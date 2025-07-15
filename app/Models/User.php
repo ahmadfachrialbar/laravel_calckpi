@@ -27,6 +27,7 @@ class User extends Authenticatable
         'departemen',
         'role',
         'join_date',
+        'photo'
     ];
 
     public function jobPosition()

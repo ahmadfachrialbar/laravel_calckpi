@@ -2,37 +2,50 @@
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Profile</h1>
+    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Profile</h1>
 </div>
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Informasi Akun</h6>
     </div>
+
     <div class="card-body">
-        <table class="table table-borderless mb-0">
-            <tr>
-                <th style="width: 180px;">NIP</th>
-                <td>: {{ Auth::user()->nip }}</td>
-            </tr>
-            <tr>
-                <th>Nama</th>
-                <td>: {{ Auth::user()->name }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>: {{ Auth::user()->email }}</td>
-            </tr>
-            <tr>
-                <th>Jabatan/Departemen</th>
-                <td>: {{ Auth::user()->jobPosition->name ?? '-' }}</td>
-            </tr>
-            <tr>
-                <th>Tanggal Bergabung</th>
-                <td>: {{ Auth::user()->join_date }}</td>
-            </tr>
-        </table>
+    <div class="row">
+        <div class="col-md-3 text-center">
+            @if(Auth::user()->photo)
+                <img src="{{ asset('uploads/profile/' . Auth::user()->photo) }}" alt="Foto Profil" class="img-fluid profile-picture mb-2">
+            @else
+                <img src="{{ asset('uploads/profile/defaultProfile.png') }}" alt="Default Foto" class="img-fluid rounded-circle mb-2" width="230">
+            @endif
+        </div>
+
+        <div class="col-md-9">
+            <table class="table table-borderless mb-0">
+                <tr>
+                    <th style="width: 180px;">NIP</th>
+                    <td>: {{ Auth::user()->nip }}</td>
+                </tr>
+                <tr>
+                    <th>Nama</th>
+                    <td>: {{ Auth::user()->name }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>: {{ Auth::user()->email }}</td>
+                </tr>
+                <tr>
+                    <th>Jabatan/Departemen</th>
+                    <td>: {{ Auth::user()->jobPosition->name ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Tanggal Bergabung</th>
+                    <td>: {{ Auth::user()->join_date }}</td>
+                </tr>
+            </table>
+        </div>
     </div>
+</div>
 
     <div class="card-footer d-flex justify-content-between">
         <a href="{{ route('profile.edit') }}" class="btn btn-primary">

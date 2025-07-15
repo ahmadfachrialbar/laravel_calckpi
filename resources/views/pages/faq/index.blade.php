@@ -57,6 +57,7 @@
 @role('karyawan')
 <div class="container">
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Panduan Penggunaan Website Calculating KPI</h1>
+    <hr class="sidebar-divider">
 
     @forelse($faqs as $faq)
     <div class="card mb-4 shadow-sm">

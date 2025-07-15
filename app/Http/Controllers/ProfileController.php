@@ -35,8 +35,8 @@ public function update(Request $request)
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email,' . $user->id,
         'job_position_id' => 'required|exists:job_positions,id',
-        /* 'role' => 'required|in:admin,karyawan', */
         'join_date' => 'required|date',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
     ]);
 
     $data = $request->only([
@@ -44,7 +44,6 @@ public function update(Request $request)
         'name',
         'email',
         'job_position_id',
-        /* 'role', */
         'join_date'
     ]);
 
@@ -52,8 +51,26 @@ public function update(Request $request)
         $data['password'] = bcrypt($request->password);
     }
 
+    if ($request->hasFile('photo')) {
+        $file = $request->file('photo');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/profile'), $filename);
+
+        // Hapus foto lama kalau bukan default
+        if ($user->photo && $user->photo != 'defaultProfile.png') {
+            $oldPath = public_path('uploads/profile/' . $user->photo);
+            if (file_exists($oldPath)) {
+                unlink($oldPath);
+            }
+        }
+
+        $data['photo'] = $filename;
+    }
+
     $user->update($data);
 
-    return redirect()->route('profile.index')->with('success', 'Profil berhasil diperbarui');
+    notify()->success('Berhasil menambahkan foto profile', 'Sukses');
+
+    return redirect()->route('profile.index');
 }
 }

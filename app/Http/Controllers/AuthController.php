@@ -27,6 +27,8 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
+            notify()->success('Welcome.. Login berhasil', 'Sukses');
+
             return redirect()->intended('dashboard');
         }
 
@@ -65,8 +67,8 @@ class AuthController extends Controller
 
         $user->save();
         $user->assignRole('karyawan');
-
-        return redirect('/')->with('success', 'Registrasi berhasil, silakan masuk.');
+        notify()->success('Registrasi berhasil, SIlahkan Login ', 'Sukses');
+        return redirect('/');
     }
 
     public function logout(Request $request)

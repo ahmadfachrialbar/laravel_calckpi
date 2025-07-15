@@ -21,26 +21,12 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('pages.user.create');
+        $jobPositions = JobPosition::all();
+        $user = new \App\Models\User();
+
+        return view('pages.user.create', compact('jobPositions', 'user'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'nip' => 'required|string|max:20|unique:users',
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|email|unique:users',
-    //         'password' => 'required|string|min:8|',
-    //         'jabatan' => 'required|string|max:100',
-    //         'departemen' => 'required|string|max:100',
-    //         'role' => 'required|string|max:50',
-    //         'join_date' => 'required|date',
-
-    //     ]);
-
-    //     User::create($validated);
-    //     return redirect('/user')->with('success', 'Data user berhasil ditambahkan');
-    // }
 
     public function storeMultiple(Request $request)
     {
@@ -57,8 +43,8 @@ class UserController extends Controller
                 'join_date' => $userData['join_date'],
             ]);
         }
-
-        return redirect()->route('user.index')->with('success', 'Data karyawan berhasil ditambahkan!');
+        notify()->success('Data karyawan berhasil ditambahkan', 'Sukses');
+        return redirect()->route('user.index');
     }
 
     public function edit($id)
@@ -104,16 +90,17 @@ class UserController extends Controller
             return back()->with('error', 'Tidak ada data yang diubah.');
         }
 
-        return redirect()->route('user.index')->with('success', 'Data berhasil diperbarui');
+        notify()->success('Data karyawan berhasil diperbarui', 'Sukses');
+        return redirect()->route('user.index');
     }
 
 
 
     public function show($id)
     {
-        $user = user::findOrFail($id);
+        $users = User::all();
         return view('pages.user.show', [
-            'user' => $user,
+            'users' => $users,
         ]);
     }
 
@@ -122,6 +109,8 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect('/user')->with('success', 'User berhasil dihapus');
+
+        notify()->success('Data karyawan berhasil dihapus', 'Sukses');
+        return redirect('/user');
     }
 }

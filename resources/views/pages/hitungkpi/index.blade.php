@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="container">
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Hitung KPI</h1>
@@ -13,23 +14,14 @@
                 Jabatan/Departemen :  {{ auth()->user()->jobPosition->name ?? '-' }}
             </p>
         </div>
-        <div class="col-md-4 text-md-end text-right mt-3 mt-md-0">
-            <form method="POST" action="{{ route('hitungkpi.store') }}">
-                @csrf
-                <button type="submit" class="btn btn-secondary">
-                    Hitung
-                </button>
-            </form>
-        </div>
     </div>
 
-
     @if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     @if(auth()->user()->hasRole('karyawan'))
-    <form action="{{ route('hitungkpi.store') }}" method="POST">
+    <form action="{{ route('hitungkpi.store') }}" method="POST" id="form-kpi">
         @csrf
         <div class="table-responsive">
             <table class="table table-bordered">
@@ -37,7 +29,7 @@
                     <tr>
                         <th>No</th>
                         <th>Nama KPI</th>
-                        <th>Penjelasan</th>
+                        <th>Deskripsi</th>
                         <th>Target</th>
                         <th>Bobot</th>
                         <th>Weightages</th>
@@ -49,103 +41,65 @@
                 <tbody>
                     @foreach($kpis as $index => $kpi)
                     @php
-                    $record = $records->firstWhere('kpimetrics_id', $kpi->id);
-                    $simulasi = old("kpi.$index.simulasi_penambahan");
-                    $achievement = $simulasi ? number_format(($simulasi / $kpi->target), 2) : '-';
-                    $score = $simulasi ? number_format(($simulasi / $kpi->target) * $kpi->weightages, 2) : '-';
+                        $record = $records[$kpi->id] ?? null;
+                        $simulasi = $record->simulasi_penambahan ?? old("kpi.$index.simulasi_penambahan");
                     @endphp
                     <tr class="text-center align-middle">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $kpi->nama_kpi }}</td>
                         <td>{{ $kpi->penjelasan_sederhana }}</td>
-                        <td>{{ $kpi->target }}</td>
-                        <td>{{ $kpi->bobot }}</td>
-                        <td>{{ $kpi->weightages }}</td>
+                        <td class="target">{{ $kpi->target }}%</td>
+                        <td class="bobot">{{ $kpi->bobot }}%</td>
+                        <td class="weightages">{{ $kpi->weightages }}%</td>
                         <td>
                             <input type="hidden" name="kpi[{{ $index }}][metric_id]" value="{{ $kpi->id }}">
-                            <input type="number" name="kpi[{{ $index }}][simulasi_penambahan]" class="form-control text-center" step="0.01" value="{{ $simulasi }}">
+                            <input type="number"
+                                name="kpi[{{ $index }}][simulasi_penambahan]"
+                                class="form-control text-center simulasi"
+                                step="0.01"
+                                value="{{ $simulasi }}">
                         </td>
-                        <td>{{ $achievement }}</td>
-                        <td>{{ $score }}</td>
+                        <td class="achievement">-</td>
+                        <td class="score">-</td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-
-
+        <button type="submit" class="btn btn-primary mt-3">Simpan & Hitung</button>
     </form>
-
-    <hr>
-    <h4>Riwayat Perhitungan Anda</h4>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped text-center">
-            <thead class="thead-light">
-                <tr>
-                    <th>Nama KPI</th>
-                    <th>Simulasi</th>
-                    <th>Achievement</th>
-                    <th>Weightages</th>
-                    <th>Score</th>
-                    <th>Waktu</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($records as $record)
-                <tr>
-                    <td>{{ $record->kpiMetric->nama_kpi }}</td>
-                    <td>{{ $record->simulasi_penambahan }}</td>
-                    <td>{{ $record->achievement }}</td>
-                    <td>{{ $record->kpiMetric->weightages }}</td>
-                    <td>{{ $record->score }}</td>
-                    <td>{{ $record->created_at?->format('d-m-Y H:i') ?? '-' }}</td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6"><em>Belum ada riwayat</em></td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
     @endif
-
-    @role('admin')
-    <h4>Riwayat Perhitungan Semua Karyawan</h4>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped text-center">
-            <thead class="thead-light">
-                <tr>
-                    <th>Nama Karyawan</th>
-                    <th>Jabatan</th>
-                    <th>Nama KPI</th>
-                    <th>Simulasi</th>
-                    <th>Achievement</th>
-                    <th>Weightages</th>
-                    <th>Score</th>
-                    <th>Waktu</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($records as $record)
-                <tr>
-                    <td>{{ $record->user->name }}</td>
-                    <td>{{ $record->user->jobPosition->name ?? '-' }}</td>
-                    <td>{{ $record->kpiMetric->nama_kpi }}</td>
-                    <td>{{ $record->simulasi_penambahan }}</td>
-                    <td>{{ $record->achievement }}</td>
-                    <td>{{ $record->weightages }}</td>
-                    <td>{{ $record->score }}</td>
-                    <td>{{ $record->created_at?->format('d-m-Y H:i') ?? '-' }}</td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="8"><em>Belum ada riwayat</em></td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-    @endrole
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function hitungKPI(row) {
+            const simulasi = parseFloat(row.querySelector('.simulasi').value) || 0;
+            const target = parseFloat(row.querySelector('.target').textContent) || 1;
+            const bobot = parseFloat(row.querySelector('.bobot').textContent) || 0;
+            const weightages = parseFloat(row.querySelector('.weightages').textContent) || 0;
+
+            // Rumus sesuai Excel
+            const achievement = ((simulasi + bobot) / target) * 100;
+            const score = (achievement * weightages) / 100;
+
+            row.querySelector('.achievement').textContent = achievement.toFixed(2) + '%';
+            row.querySelector('.score').textContent = score.toFixed(2) + '%';
+        }
+
+        document.querySelectorAll('.simulasi').forEach(input => {
+            const row = input.closest('tr');
+
+            // Hitung otomatis saat halaman pertama kali load
+            hitungKPI(row);
+
+            // Hitung otomatis saat user mengetik
+            input.addEventListener('input', function () {
+                hitungKPI(row);
+            });
+        });
+    });
+</script>
 @endsection
