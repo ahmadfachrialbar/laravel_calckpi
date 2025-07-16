@@ -22,7 +22,7 @@
     </li>
     @endcan
 
-    
+
     @role('admin')
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    
+
     <li class="nav-item {{ request()->is('user') ? 'active' : '' }}">
         <a class="nav-link" href="/user">
             <i class="fas fa-fw fa-user"></i>
@@ -80,14 +80,22 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        FAQ
+        Pusat Bantuan
     </div>
 
+    <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('faq.index') }}">
-            <i class="fas fa-fw fa-book-open"></i>
-            <span>Panduan</span>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-question-circle"></i>
+            <span>Bantuan</span>
         </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Anda bingung???</h6>
+                <a class="collapse-item" href="{{ route('faq.index') }}">Panduan dan Kontak kami </a>
+            </div>
+        </div>
     </li>
 
     @role('karyawan')
@@ -101,13 +109,13 @@
 
     <li class="nav-item">
         <a class="nav-link" href="{{ route('laporan.index') }}">
-            <i class="fas fa-fw fa-book-open"></i>
+            <i class="fas fa-fw fa-chart-bar"></i>
             <span>Laporan</span>
         </a>
     </li>
     @endrole
 
-    
-    
+
+
 
 </ul>

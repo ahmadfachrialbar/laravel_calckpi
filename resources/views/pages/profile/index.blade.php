@@ -7,7 +7,7 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Informasi Akun</h6>
+        <h6 class="m-0 font-weight-bold ">Informasi Akun</h6>
     </div>
 
     <div class="card-body">
@@ -48,11 +48,11 @@
 </div>
 
     <div class="card-footer d-flex justify-content-between">
-        <a href="{{ route('profile.edit') }}" class="btn btn-primary">
+        <a href="{{ route('profile.edit') }}" class="btn btn-secondary">
     <i class="fas fa-edit mr-1"></i> Edit Profil
 </a>
 
-        <a class="btn btn-outline-danger" href="#" data-toggle="modal" data-target="#logoutModal">
+        <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#logoutModal">
             <i class="fas fa-sign-out-alt mr-1"></i> Logout
         </a>
     </div>

@@ -17,7 +17,7 @@
     
 }
 
-/* Overlay putih transparan agar teks tetap jelas */
+/* Background dashboard */
 .dashboard-bg::before {
     content: '';
     position: absolute;
@@ -36,18 +36,46 @@
     z-index: 2;
 }
 
+
 /* css untuk profile */
+.profile-picture-wrapper {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
 .profile-picture {
     width: 200px;
     height: 200px;
-    border-radius: 50%; 
-    object-fit: cover;  
-    display: block;     
-    margin: 0 auto;  
-    margin-top: 20px;  
-    border: 2px solid #888888; 
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #ddd;
 }
 
+.upload-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0,0,0,0.6);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.profile-picture-wrapper:hover .upload-overlay {
+    opacity: 1;
+}
+
+.upload-overlay button {
+    margin: 3px 0;
+    font-size: 13px;
+}
 
 .img-profile-navbar {
     width: 35px;

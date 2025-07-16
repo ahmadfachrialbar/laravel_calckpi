@@ -51,6 +51,8 @@ public function update(Request $request)
         $data['password'] = bcrypt($request->password);
     }
 
+    $photoDeleted = false;
+
     if ($request->hasFile('photo')) {
         $file = $request->file('photo');
         $filename = time() . '_' . $file->getClientOriginalName();
@@ -66,10 +68,29 @@ public function update(Request $request)
 
         $data['photo'] = $filename;
     }
+    
+    // Hapus foto kalau delete_photo di-set 1
+    if ($request->delete_photo == 1) {
+        if ($user->photo && $user->photo != 'defaultProfile.png') {
+            $oldPath = public_path('uploads/profile/' . $user->photo);
+            if (file_exists($oldPath)) {
+                unlink($oldPath);
+            }
+        }
+        $data['photo'] = null;
+        $photoDeleted = true;
+    }
 
     $user->update($data);
 
-    notify()->success('Berhasil menambahkan foto profile', 'Sukses');
+    // Tentukan pesan notifikasi berdasarkan aksi
+    if ($photoDeleted) {
+        notify()->success('Foto profile berhasil dihapus', 'Sukses');
+    } elseif ($request->hasFile('photo')) {
+        notify()->success('Data profile berhasil diperbarui', 'Sukses');
+    } else {
+        notify()->success('Data profile berhasil diperbarui', 'Sukses');
+    }
 
     return redirect()->route('profile.index');
 }

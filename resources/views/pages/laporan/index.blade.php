@@ -4,10 +4,20 @@
 <div class="container">
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Laporan Hasil Perhitungan KPI</h1>
     <hr class="sidebar-divider">
-    <p class="text-muted">
-        Nama: {{ $user->name }} ({{ $user->nip }}) <br>
-        Jabatan: {{ $user->jobPosition->name ?? '-' }}
-    </p>
+    <div class="card p-3 mb-3 shadow-sm border-0">
+        <div class="d-flex align-items-center mb-1">
+            <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">NIP</span>
+            <span class="text-dark">: {{ auth()->user()->nip }}</span>
+        </div>
+        <div class="d-flex align-items-center mb-1">
+            <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">Nama</span>
+            <span class="text-dark">: {{ auth()->user()->name }}</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">Jabatan/Dept</span>
+            <span class="text-dark">: {{ auth()->user()->jobPosition->name ?? '-' }}</span>
+        </div>
+    </div>
 
     @if($records->count() > 0)
     <div class="table-responsive">

@@ -5,19 +5,23 @@
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Hitung KPI</h1>
     <hr class="sidebar-divider">
 
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <p class="text-muted mb-0">
-                Nama :  {{ auth()->user()->name }} ({{ auth()->user()->nip }})
-            </p>
-            <p class="text-muted mb-0">
-                Jabatan/Departemen :  {{ auth()->user()->jobPosition->name ?? '-' }}
-            </p>
+    <div class="card p-3 mb-3 shadow-sm border-0">
+        <div class="d-flex align-items-center mb-1">
+            <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">NIP</span>
+            <span class="text-dark">: {{ auth()->user()->nip }}</span>
+        </div>
+        <div class="d-flex align-items-center mb-1">
+            <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">Nama</span>
+            <span class="text-dark">: {{ auth()->user()->name }}</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">Jabatan/Dept</span>
+            <span class="text-dark">: {{ auth()->user()->jobPosition->name ?? '-' }}</span>
         </div>
     </div>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+    <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     @if(auth()->user()->hasRole('karyawan'))
@@ -41,8 +45,8 @@
                 <tbody>
                     @foreach($kpis as $index => $kpi)
                     @php
-                        $record = $records[$kpi->id] ?? null;
-                        $simulasi = $record->simulasi_penambahan ?? old("kpi.$index.simulasi_penambahan");
+                    $record = $records[$kpi->id] ?? null;
+                    $simulasi = $record->simulasi_penambahan ?? old("kpi.$index.simulasi_penambahan");
                     @endphp
                     <tr class="text-center align-middle">
                         <td>{{ $index + 1 }}</td>
@@ -66,7 +70,7 @@
                 </tbody>
             </table>
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Simpan & Hitung</button>
+        <button type="submit" class="btn btn-secondary mt-3">Simpan & Hitung</button>
     </form>
     @endif
 </div>
@@ -74,7 +78,7 @@
 
 @section('scripts')
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         function hitungKPI(row) {
             const simulasi = parseFloat(row.querySelector('.simulasi').value) || 0;
             const target = parseFloat(row.querySelector('.target').textContent) || 1;
@@ -96,7 +100,7 @@
             hitungKPI(row);
 
             // Hitung otomatis saat user mengetik
-            input.addEventListener('input', function () {
+            input.addEventListener('input', function() {
                 hitungKPI(row);
             });
         });

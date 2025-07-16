@@ -12,11 +12,11 @@
 </div>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Data KPI</h6>
+        <h6 class="m-0 font-weight-bold">Data KPI</h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered table-hover bg-white">
+            <table class="table table-bordered table-hover bg-white" id="dataTableKpiAdmin" width="100%" cellspacing="0">
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
@@ -35,7 +35,6 @@
                     @php $no = 1; @endphp
 
                     {{-- KPI berdasarkan karyawan dan jabatannya --}}
-
                     @foreach ($karyawan as $user)
                     @php
                     $jobKpis = $user->jobPosition->kpiMetrics ?? collect();
@@ -63,7 +62,6 @@
                         <td>{{ $kpi->target }}%</td>
                         <td>{{ $kpi->bobot }}%</td>
                         <td>{{ $kpi->weightages }}%</td>
-
                         <td>
                             <div class="d-flex justify-content-center" style="gap: 0.5rem;">
                                 <!-- Tombol Lihat -->
@@ -74,7 +72,6 @@
                                 <a href="{{ route('kpimetrics.edit', $kpi->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-
                                 <!-- Tombol Hapus -->
                                 <form action="{{ route('kpimetrics.destroy', $kpi->id) }}" method="POST" style="display:inline;">
                                     @csrf
@@ -83,10 +80,8 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
-
                             </div>
                         </td>
-
                     </tr>
                     @endforeach
                     @endif
@@ -104,11 +99,17 @@
                         <td>{{ $kpi->cara_ukur }}</td>
                         <td>{{ $kpi->target }}</td>
                         <td>{{ $kpi->bobot }}</td>
+                        <td>{{ $kpi->weightages }}</td>
                         <td>
-                            <a href="{{ route('kpimetrics.edit', $kpi->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                            <form action="{{ route('kpimetrics.destroy', $kpi->id) }}" method="POST" class="d-inline">
-                                @csrf @method('DELETE')
-                                <button class="btn btn-sm btn-danger" onclick="return confirm('Hapus KPI ini?')">Hapus</button>
+                            <a href="{{ route('kpimetrics.edit', $kpi->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form action="{{ route('kpimetrics.destroy', $kpi->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-link p-0 text-danger" title="Hapus" onclick="return confirm('Hapus KPI ini?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -124,47 +125,102 @@
 @role('karyawan')
 <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Data KPI</h1>
 <hr class="sidebar-divider">
-
-<p class="text-muted mb-0">Nama : {{ auth()->user()->name }} ({{ auth()->user()->nip }})</p>
-<p class="text-muted mb-3">Jabatan/Departemen : {{ auth()->user()->jobPosition->name ?? '-' }}</p>
+<div class="card p-3 mb-3 shadow-sm border-0">
+    <div class="d-flex align-items-center mb-1">
+        <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">NIP</span>
+        <span class="text-dark">: {{ auth()->user()->nip }}</span>
+    </div>
+    <div class="d-flex align-items-center mb-1">
+        <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">Nama</span>
+        <span class="text-dark">: {{ auth()->user()->name }}</span>
+    </div>
+    <div class="d-flex align-items-center">
+        <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">Jabatan/Dept</span>
+        <span class="text-dark">: {{ auth()->user()->jobPosition->name ?? '-' }}</span>
+    </div>
+</div>
 
 <div class="card shadow mb-4">
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data KPI</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Nama KPI</th>
-                            <th>Deskripsi</th>
-                            <th>Parameter</th>
-                            <th>Target</th>
-                            <th>Actual</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($kpiMetrics as $kpi)
-                        <tr>
-                            <td>{{ $kpi->nama_kpi }}</td>
-                            <td>{{ $kpi->penjelasan_sederhana }}</td>
-                            <td>{{ $kpi->cara_ukur }}</td>
-                            <td>{{ $kpi->target }}</td>
-                            <td>{{ $kpi->bobot }}</td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="4"><i>Belum ada KPI</i></td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold">Data KPI</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTableKpiKaryawan" width="100%" cellspacing="0">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Nama KPI</th>
+                        <th>Deskripsi</th>
+                        <th>Parameter</th>
+                        <th>Target</th>
+                        <th>Actual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($kpiMetrics as $kpi)
+                    <tr>
+                        <td>{{ $kpi->nama_kpi }}</td>
+                        <td>{{ $kpi->penjelasan_sederhana }}</td>
+                        <td>{{ $kpi->cara_ukur }}</td>
+                        <td>{{ $kpi->target }}</td>
+                        <td>{{ $kpi->bobot }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="text-center"><i>Belum ada KPI</i></td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 @endrole
 
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (document.querySelector('#dataTableKpiAdmin')) {
+            $('#dataTableKpiAdmin').DataTable({
+                "ordering": true,
+                "searching": true,
+                "paging": true,
+                "info": true,
+                "language": {
+                    "search": "Cari Data:",
+                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                    "zeroRecords": "Tidak ditemukan data yang sesuai",
+                    "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    "infoEmpty": "Menampilkan 0 data",
+                    "infoFiltered": "(difilter dari _MAX_ total data)"
+                },
+                "order": [
+                    [0, "asc"]
+                ]
+            });
+        }
+
+        if (document.querySelector('#dataTableKpiKaryawan')) {
+            $('#dataTableKpiKaryawan').DataTable({
+                "ordering": true,
+                "searching": true,
+                "paging": true,
+                "info": true,
+                "language": {
+                    "search": "Cari Data:",
+                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                    "zeroRecords": "Tidak ditemukan data yang sesuai",
+                    "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    "infoEmpty": "Menampilkan 0 data",
+                    "infoFiltered": "(difilter dari _MAX_ total data)"
+                },
+                "order": [
+                    [0, "asc"]
+                ]
+            });
+        }
+    });
+</script>
+@endpush

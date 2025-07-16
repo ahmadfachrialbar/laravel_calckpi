@@ -7,13 +7,14 @@
     @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Riwayat</h6>
+            <h6 class="m-0 font-weight-bold">Data Riwayat</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover bg-white">
+                <table class="table table-bordered table-hover bg-white" id="dataTable" width="100%" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
                             <th>No</th>
@@ -43,11 +44,9 @@
                             <td>{{ $record->score }}</td>
                             <td>{{ $record->created_at->format('d-m-Y H:i') }}</td>
                             <td>
-                                <!-- Tombol Edit -->
                                 <a href="{{ route('kpirecords.edit', $record->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <!-- Tombol Hapus -->
                                 <form action="{{ route('kpirecords.destroy', $record->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -69,3 +68,26 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+$(document).ready(function () {
+    $('#dataTable').DataTable({
+        "ordering": true,
+        "searching": true,
+        "paging": true,
+        "info": true,
+        "language": {
+            "search": "Cari Data:",
+            "lengthMenu": "Tampilkan _MENU_ data per halaman",
+            "zeroRecords": "Tidak ditemukan data yang sesuai",
+            "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            "infoEmpty": "Menampilkan 0 data",
+            "infoFiltered": "(difilter dari _MAX_ total data)"
+        },
+        // Optional: atur default urutan berdasarkan kolom Waktu (kolom ke-9)
+        "order": [[9, "desc"]]
+    });
+});
+</script>
+@endpush

@@ -89,7 +89,10 @@ Route::middleware(['auth', 'role:admin|karyawan'])->group(function () {
 
 });
 
+// ROute untuk laporan
 Route::middleware(['role:karyawan'])->group(function () {
     Route::get('/laporan', [HitungkpiController::class, 'laporan'])->name('laporan.index');
     Route::get('/laporan/download', [HitungkpiController::class, 'download'])->name('laporan.download');
 });
+
+

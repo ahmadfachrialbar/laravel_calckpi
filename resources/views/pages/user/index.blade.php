@@ -3,15 +3,16 @@
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Data Karyawan</h1>
-    <a href="{{route('user.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm"><i
-            class="fas fa-plus fa-sm text-white-50"></i> Tambah Data</a>
+    <a href="{{route('user.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
+    </a>
 </div>
 <hr class="divider">
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Data Karyawan</h6>
+        <h6 class="m-0 font-weight-bold">Data Karyawan</h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -33,19 +34,13 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->jobPosition->name ?? '-' }}</td>
                         <td>
-                            <!-- Aksi -->
                             <div class="d-flex justify-content-center" style="gap: 0.5rem;">
-                                <!-- Tombol Lihat -->
                                 <a href="{{ route('user.show', ['id' => $user->id]) }}" class="btn btn-link p-0 text-info" title="Lihat KPI">
                                     <i class="fas fa-eye"></i>
                                 </a>
-
-                                <!-- Tombol Edit -->
                                 <a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-link p-0 text-primary" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-
-                                <!-- Tombol Hapus -->
                                 <form action="{{ route('user.destroy', $user->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -55,7 +50,6 @@
                                 </form>
                             </div>
                         </td>
-
                     </tr>
                     @endforeach
                 </tbody>
@@ -63,6 +57,25 @@
         </div>
     </div>
 </div>
-</div>
-<!-- End of Main Content -->
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "ordering": true,
+            "searching": true,
+            "paging": true,
+            "info": true,
+            "language": {
+                "search": "Cari Data:",
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Tidak ditemukan data yang sesuai",
+                "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                "infoEmpty": "Menampilkan 0 data",
+                "infoFiltered": "(difilter dari _MAX_ total data)"
+            }
+        });
+    });
+</script>
+@endpush

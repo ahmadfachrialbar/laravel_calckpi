@@ -17,13 +17,26 @@
     @csrf
     @method('PUT')
     <!-- Upload Foto -->
-    <div class="form-group">
-        <label for="photo">Foto Profil</label><br>
-        @if($user->photo)
-            <img src="{{ asset('uploads/profile/'.$user->photo) }}" alt="Foto Profil" width="150" class="mb-2">
-        @endif
-        <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
+    <div class="form-group text-center">
+        <label>Foto Profil</label><br>
+        <div class="profile-picture-wrapper">
+            <img src="{{ asset('uploads/profile/' . ($user->photo ?? 'defaultProfile.png')) }}" 
+                alt="Foto Profil" 
+                class="profile-picture">
+            <div class="upload-overlay">
+                <button type="button" class="btn btn-light btn-sm mb-2" onclick="document.getElementById('photo').click()">
+                    <i class="fas fa-upload"></i> Upload
+                </button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removePhoto()">
+                    <i class="fas fa-trash"></i> Remove
+                </button>
+            </div>
+        </div>
+        <input type="file" class="form-control d-none" name="photo" id="photo" accept="image/*">
+        <input type="hidden" name="delete_photo" id="delete_photo" value="0">
     </div>
+
+
     <div class="form-group">
         <label for="nip">NIP</label>
         <input type="text" class="form-control" id="nip" name="nip" value="{{ $user->nip }}" required>
@@ -66,4 +79,25 @@
     <button type="submit" class="btn btn-primary">Simpan</button>
     <a href="{{ route('profile.index') }}" class="btn btn-secondary">Kembali</a>
 </form>
+
+<script>
+    // Saat file input berubah (upload foto)
+    document.getElementById('photo').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.querySelector('.profile-picture').src = e.target.result;
+                document.getElementById('delete_photo').value = 0; // Reset delete kalau sebelumnya dihapus
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function removePhoto() {
+        document.getElementById('delete_photo').value = 1;
+        document.querySelector('.profile-picture').src = "{{ asset('uploads/profile/defaultProfile.png') }}";
+        document.getElementById('photo').value = ""; // reset input file
+    }
+</script>
 @endsection

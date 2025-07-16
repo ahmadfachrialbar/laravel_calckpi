@@ -62,8 +62,8 @@
     @forelse($faqs as $faq)
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
-            <h4 class="card-title mb-3 text-primary">
-                <i class="fas fa-book-open mr-2"></i>{{ $faq->judul }}
+            <h4 class="card-title mb-1 text-primary">
+                <i class="fas fa-book-open mr-3"></i>{{ $faq->judul }}
             </h4>
 
             <div class="card-text mb-3" style="white-space: pre-line;">
