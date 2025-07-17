@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User; // Pastikan model User sudah dibuat
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Models\JobPosition; // Pastikan model JobPosition sudah dibuat
+use App\Models\JobPosition;
+
 
 
 
@@ -33,7 +34,7 @@ class UserController extends Controller
         $data = $request->input('users');
 
         foreach ($data as $userData) {
-            \App\Models\User::create([
+            $user = User::create([
                 'nip' => $userData['nip'],
                 'name' => $userData['name'],
                 'email' => $userData['email'],
@@ -42,10 +43,16 @@ class UserController extends Controller
                 'role' => $userData['role'],
                 'join_date' => $userData['join_date'],
             ]);
+
+            // ✅ Tambahkan assignRole per user yang baru dibuat
+            $user->assignRole($userData['role']);
+            // atau jika semua pasti karyawan, bisa langsung: $user->assignRole('karyawan');
         }
+
         notify()->success('Data karyawan berhasil ditambahkan', 'Sukses');
         return redirect()->route('user.index');
     }
+
 
     public function edit($id)
     {

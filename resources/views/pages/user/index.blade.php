@@ -19,7 +19,7 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead class="thead-light">
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>NIP</th>
                         <th>Nama</th>
                         <th>Jabatan/Departemen</th>
@@ -27,9 +27,10 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php $no = 1; @endphp
                     @foreach($users as $user)
                     <tr>
-                        <td>{{ $user->id }}</td>
+                        <td>{{ $no++ }}</td>
                         <td>{{ $user->nip }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->jobPosition->name ?? '-' }}</td>

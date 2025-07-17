@@ -17,9 +17,15 @@ class HitungkpiController extends Controller
         $user = Auth::user();
 
         // Ambil KPI dari jabatan user
-        $kpis = $user->jobPosition?->kpiMetrics ?? collect();
+        $jobKpis = $user->jobPosition?->kpiMetrics ?? collect();
 
-        // Ambil riwayat KPI terbaru per KPI (hanya 1 record terakhir per KPI)
+        // Ambil KPI yang langsung ditugaskan ke user (personal KPI)
+        $userKpis = $user->kpiMetrics ?? collect();
+
+        // Gabungkan keduanya agar muncul semua KPI (jabatan + personal)
+        $kpis = $jobKpis->merge($userKpis);
+
+        // Ambil riwayat KPI terbaru per KPI (hanya record terakhir per KPI)
         $records = KpiRecord::where('user_id', $user->id)
             ->with('kpiMetric')
             ->latest()
@@ -27,9 +33,11 @@ class HitungkpiController extends Controller
             ->groupBy('kpimetrics_id')
             ->map(fn($items) => $items->first());
 
-        return view('pages.hitungkpi.index', compact('kpis', 'records', 'user'));
-    }
+        // ✅ Hitung total score hanya dari record terbaru per KPI
+        $totalScore = $records->sum('score');
 
+        return view('pages.hitungkpi.index', compact('kpis', 'records', 'user', 'totalScore'));
+    }
 
     public function store(Request $request)
     {
@@ -42,37 +50,40 @@ class HitungkpiController extends Controller
         foreach ($request->kpi as $item) {
             $kpiMetric = KpiMetrics::find($item['metric_id']);
 
-            if ($kpiMetric && $user->job_position_id == $kpiMetric->job_position_id) {
+            if (
+                $kpiMetric &&
+                (
+                    $user->job_position_id == $kpiMetric->job_position_id ||
+                    $user->kpiMetrics->contains('id', $kpiMetric->id)
+                )
+            ) {
                 $simulasi = floatval($item['simulasi_penambahan']);
-                $bobot = floatval($kpiMetric['bobot']);
+                $bobot = floatval($kpiMetric->bobot);
                 $target = floatval($kpiMetric->target) ?: 1;
                 $weightages = floatval($kpiMetric->weightages);
 
-                // ✅ Rumus sesuai Excel
+                // Rumus Perhitungan
                 $achievement = (($simulasi + $bobot) / $target) * 100;
                 $score = ($achievement * $weightages) / 100;
 
-                // Simpan ke database (dalam bentuk angka 2 desimal)
+                // ✅ Simpan sebagai float (bukan string)
                 KpiRecord::create([
                     'user_id' => $user->id,
                     'kpimetrics_id' => $kpiMetric->id,
-                    'simulasi_penambahan' => $simulasi,
-                    'achievement' => number_format($achievement, 2), // contoh: 110.00
-                    'score' => number_format($score, 2),             // contoh: 11.00
+                    'simulasi_penambahan' => round($simulasi, 2),
+                    'achievement' => round($achievement, 2),
+                    'score' => round($score, 2),
                 ]);
             }
         }
 
         notify()->success('Berhasil Menghitung', 'Sukses');
-
         return redirect()->back();
     }
 
     public function laporan()
     {
         $user = Auth::user();
-
-        // Ambil riwayat perhitungan KPI user yang login
         $records = KpiRecord::where('user_id', $user->id)
             ->with('kpiMetric')
             ->latest()
@@ -84,13 +95,11 @@ class HitungkpiController extends Controller
     public function download()
     {
         $user = Auth::user();
-
         $records = KpiRecord::where('user_id', $user->id)
             ->with('kpiMetric')
             ->latest()
             ->get();
 
-        // Buat spreadsheet
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -118,11 +127,94 @@ class HitungkpiController extends Controller
             $row++;
         }
 
-        // Buat file download
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan_KPI_' . $user->name . '.xlsx';
 
-        // Return sebagai response download
+        return new StreamedResponse(function () use ($writer) {
+            $writer->save('php://output');
+        }, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => "attachment;filename=\"$filename\"",
+            'Cache-Control' => 'max-age=0',
+        ]);
+    }
+
+    public function laporanAdmin()
+    {
+        $karyawan = \App\Models\User::role('karyawan')
+            ->with(['jobPosition', 'kpiRecords'])
+            ->get()
+            ->map(function ($user) {
+                $totalScore = $user->kpiRecords
+                    ->groupBy('kpimetrics_id')
+                    ->map(fn($items) => $items->sortByDesc('created_at')->first())
+                    ->sum('score');
+
+                if ($totalScore == 0) {
+                    $indikator = 'Belum Hitung';
+                } elseif ($totalScore < 60) {
+                    $indikator = 'Buruk';
+                } elseif ($totalScore <= 80) {
+                    $indikator = 'Cukup';
+                } else {
+                    $indikator = 'Baik';
+                }
+
+
+                return (object) [
+                    'nip' => $user->nip,
+                    'name' => $user->name,
+                    'job' => $user->jobPosition->name ?? '-',
+                    'total_score' => $totalScore,
+                    'indikator' => $indikator
+                ];
+            });
+
+        return view('pages.laporan.index', compact('karyawan'));
+    }
+
+    public function downloadLaporanAdmin()
+    {
+        $karyawan = \App\Models\User::role('karyawan')
+            ->with(['jobPosition', 'kpiRecords'])
+            ->get()
+            ->map(function ($user) {
+                $totalScore = $user->kpiRecords
+                    ->groupBy('kpimetrics_id')
+                    ->map(fn($items) => $items->sortByDesc('created_at')->first())
+                    ->sum('score');
+
+                $indikator = $totalScore >= 75 ? 'Baik' : 'Buruk';
+
+                return (object) [
+                    'nip' => $user->nip,
+                    'name' => $user->name,
+                    'job' => $user->jobPosition->name ?? '-',
+                    'total_score' => $totalScore,
+                    'indikator' => $indikator
+                ];
+            });
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->fromArray(['NIP', 'Nama', 'Jabatan/Dept', 'Total Score', 'Indikator'], null, 'A1');
+
+        $row = 2;
+        foreach ($karyawan as $data) {
+            $sheet->fromArray([
+                $data->nip,
+                $data->name,
+                $data->job,
+                $data->total_score,
+                $data->indikator
+            ], null, 'A' . $row);
+            $row++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Laporan_KPI_Admin.xlsx';
+
         return new StreamedResponse(function () use ($writer) {
             $writer->save('php://output');
         }, 200, [

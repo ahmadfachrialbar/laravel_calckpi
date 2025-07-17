@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Models\JobPosition;
 
+
 class KpimetricController extends Controller
 {
     public function index()
@@ -28,10 +29,14 @@ class KpimetricController extends Controller
         }
 
         if ($user->hasRole('karyawan')) {
-            $kpiMetrics = $user->jobPosition?->kpiMetrics ?? collect();
+            $jobKpis = $user->jobPosition->kpiMetrics ?? collect();
+            $userKpis = $user->kpiMetrics ?? collect();
+
+            // Gabungkan KPI dari jabatan dan KPI khusus user
+            $kpiMetrics = $jobKpis->merge($userKpis);
+
             return view('pages.kpimetrics.index', compact('kpiMetrics'));
         }
-
         abort(403);
     }
 
@@ -115,7 +120,7 @@ class KpimetricController extends Controller
 
     public function show()
     {
-        
+
         $user = Auth()->user();
 
         if ($user->hasRole('admin')) {

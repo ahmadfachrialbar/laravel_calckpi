@@ -15,6 +15,6 @@ class JobPosition extends Model
 
     public function kpiMetrics()
     {
-        return $this->hasMany(KpiMetrics::class);
+        return $this->hasMany(KpiMetrics::class,  'job_position_id');
     }
 }

@@ -14,7 +14,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
-    
+
     protected $table = 'users';
     protected $guarded = [];
 
@@ -38,6 +38,11 @@ class User extends Authenticatable
     public function kpiMetrics()
     {
         return $this->hasMany(KpiMetrics::class);
+    }
+
+    public function kpiRecords()
+    {
+        return $this->hasMany(\App\Models\KpiRecord::class, 'user_id');
     }
 
     /**

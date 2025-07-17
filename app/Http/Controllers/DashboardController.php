@@ -2,34 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\KpiRecord;
+use App\Models\KpiMetrics;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Testing\Fluent\Concerns\Has;
-
 
 class DashboardController extends Controller
 {
-
     public function index()
     {
+        if (auth()->user()->hasRole('admin')) {
+            $totalKaryawan = User::count();
+            $totalKpi = KpiMetrics::count();
 
-        /** @var User $user */
-        $user = Auth::user();
+            // ✅ Data untuk diagram batang admin
+            $karyawanScores = User::with('jobPosition')
+                ->whereHas('roles', fn($q) => $q->where('name', 'karyawan'))
+                ->get()
+                ->map(function ($user) {
+                    $totalScore = KpiRecord::where('user_id', $user->id)->avg('score') ?? 0;
+                    return [
+                        'name' => $user->name,
+                        'jabatan' => $user->jobPosition->name ?? '-',
+                        'total_score' => round($totalScore, 2),
+                    ];
+                });
 
-        if ($user->hasRole('admin')) {
-            $totalKaryawan = \App\Models\User::role('karyawan')->count();
-            $totalKpi = \App\Models\Kpimetrics::count();
 
-            return view('pages.dashboard', compact('totalKaryawan', 'totalKpi', 'user'));
+
+            return view('pages.dashboard', [
+                'totalKaryawan' => $totalKaryawan,
+                'totalKpi' => $totalKpi,
+                'totalUserKpi' => null,
+                'totalScore' => null,
+                'recentKpi' => collect(),
+                'karyawanScores' => $karyawanScores,
+            ]);
         }
 
-        if ($user->hasRole('karyawan')) {
-            $userKpi = $user->jobPosition?->kpiMetrics ?? collect();
-            $totalUserKpi = $userKpi->count();
+        // ✅ Untuk karyawan (tanpa perubahan)
+        $userId = auth()->id();
+        $totalKpi = KpiMetrics::where('user_id', $userId)->count();
+        $totalUserKpi = KpiRecord::where('user_id', $userId)->count();
+        $totalScore = KpiRecord::where('user_id', $userId)->avg('score') ?? 0;
+        $recentKpi = KpiRecord::where('user_id', $userId)
+            ->with('kpiMetric')
+            ->latest()
+            ->take(5)
+            ->get();
 
-            return view('pages.dashboard', compact('totalUserKpi', 'user'));
-        }
-
-        abort(403);
+        return view('pages.dashboard', [
+            'totalKaryawan' => null,
+            'totalKpi' => $totalKpi,
+            'totalUserKpi' => $totalUserKpi,
+            'totalScore' => $totalScore,
+            'recentKpi' => $recentKpi,
+            'karyawanScores' => collect(), // biar tidak error di blade
+        ]);
     }
 }

@@ -22,17 +22,12 @@
     </li>
     @endcan
 
-
     @role('admin')
     <!-- Divider -->
     <hr class="sidebar-divider">
-    <!-- Heading -->
     <div class="sidebar-heading">
         Kelola Karyawan
     </div>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-
     <li class="nav-item {{ request()->is('user') ? 'active' : '' }}">
         <a class="nav-link" href="/user">
             <i class="fas fa-fw fa-user"></i>
@@ -43,12 +38,9 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider">
-
-    <!-- Heading -->
     <div class="sidebar-heading">
         Kelola KPI
     </div>
-
     @can('kpimetrics-view')
     <li class="nav-item {{ request()->is('kpimetrics*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('kpimetrics.index') }}">
@@ -77,13 +69,9 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider">
-
-    <!-- Heading -->
     <div class="sidebar-heading">
         Pusat Bantuan
     </div>
-
-    <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
@@ -93,20 +81,16 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Anda bingung???</h6>
-                <a class="collapse-item" href="{{ route('faq.index') }}">Panduan dan Kontak kami </a>
+                <a class="collapse-item" href="{{ route('faq.index') }}">Panduan dan Kontak kami</a>
             </div>
         </div>
     </li>
 
     @role('karyawan')
-    <!-- Divider -->
     <hr class="sidebar-divider">
-
-    <!-- Heading -->
     <div class="sidebar-heading">
         Reports
     </div>
-
     <li class="nav-item">
         <a class="nav-link" href="{{ route('laporan.index') }}">
             <i class="fas fa-fw fa-chart-bar"></i>
@@ -115,7 +99,23 @@
     </li>
     @endrole
 
+    @role('admin')
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading">
+        Reports
+    </div>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('laporan.admin') }}">
+            <i class="fas fa-fw fa-chart-bar"></i>
+            <span>Resume KPI</span>
+        </a>
+    </li>
+    @endrole
 
-
+    <!-- ✅ Footer Sidebar -->
+    <div class="sidebar-footer text-center mt-auto p-3" style="font-size: 0.75rem; color: rgba(255,255,255,0.7); border-top: 1px solid rgba(255,255,255,0.2);">
+        <span>&copy; {{ date('Y') }} KPI Calculating AB</span><br>
+        <span style="font-size: 0.7rem;">v1.0.0</span>
+    </div>
 
 </ul>

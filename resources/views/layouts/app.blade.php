@@ -56,8 +56,8 @@
                 </div>
                 <!-- /.container-fluid -->
 
+                <!-- footer -->
             </div>
-            @include('layouts.footer')
             <!-- End of Main Content -->
 
             <!-- Footer -->

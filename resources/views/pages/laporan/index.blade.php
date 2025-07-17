@@ -1,9 +1,11 @@
 @extends('layouts.app')
 @section('content')
 
+@role('karyawan')
 <div class="container">
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Laporan Hasil Perhitungan KPI</h1>
     <hr class="sidebar-divider">
+
     <div class="card p-3 mb-3 shadow-sm border-0">
         <div class="d-flex align-items-center mb-1">
             <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">NIP</span>
@@ -21,7 +23,7 @@
 
     @if($records->count() > 0)
     <div class="table-responsive">
-        <table class="table table-bordered table-striped text-center">
+        <table class="table table-bordered table-striped text-center" id="table-karyawan">
             <thead class="thead-light">
                 <tr>
                     <th>No</th>
@@ -56,6 +58,16 @@
             </tbody>
         </table>
     </div>
+
+    @php
+        $totalScore = $records->groupBy('kpimetrics_id')
+            ->map(fn($items) => $items->sortByDesc('created_at')->first())
+            ->sum('score');
+    @endphp
+
+    <div class="alert alert-info mt-3 text-right">
+        <strong>Total Score Anda:</strong> {{ number_format($totalScore, 2) }}%
+    </div>
     @else
     <div class="alert alert-info">
         Belum ada riwayat perhitungan KPI.
@@ -63,11 +75,94 @@
     @endif
 
     <a href="{{ route('hitungkpi.index') }}" class="btn btn-secondary mt-3">Kembali</a>
-    @role('karyawan')
-    <a href="{{ route('laporan.download') }}" class="btn btn-success fas fa-file-excel mt-3"> Download Excel</a>
-
-    @endrole
-
+    <a href="{{ route('laporan.download') }}" class="btn btn-success mt-3">
+        <i class="fas fa-file-excel"></i> Download Excel
+    </a>
 </div>
+@endrole
 
+@role('admin')
+<div class="container">
+    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Laporan KPI Seluruh Karyawan</h1>
+    <hr class="sidebar-divider">
+
+    @if($karyawan->count() > 0)
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped text-center" id="table-admin">
+            <thead class="thead-light">
+                <tr>
+                    <th>No</th>
+                    <th>NIP</th>
+                    <th>Nama</th>
+                    <th>Jabatan/Dept</th>
+                    <th>Total Score</th>
+                    <th>Indikator</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($karyawan as $index => $data)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $data->nip }}</td>
+                    <td>{{ $data->name }}</td>
+                    <td>{{ $data->job }}</td>
+                    <td>{{ number_format($data->total_score, 2) }}%</td>
+                    <td>
+                        <span class="badge badge-{{ $data->indikator == 'Baik' ? 'success' : ($data->indikator == 'Cukup' ? 'warning' : 'danger') }}">
+                            {{ $data->indikator }}
+                        </span>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    @else
+    <div class="alert alert-info">Belum ada data KPI.</div>
+    @endif
+
+    <a href="{{ route('laporan.admin.download') }}" class="btn btn-success mt-3">
+        <i class="fas fa-file-excel"></i> Download Excel
+    </a>
+</div>
+@endrole
+@endsection
+
+@section('scripts')
+{{-- ✅ Tambahkan DataTables --}}
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Untuk tabel karyawan
+    if ($('#table-karyawan').length) {
+        $('#table-karyawan').DataTable({
+            responsive: true,
+            paging: true,
+            searching: true,
+            ordering: true,
+            autoWidth: false,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json" // Bahasa Indonesia
+            }
+        });
+    }
+
+    // Untuk tabel admin
+    if ($('#table-admin').length) {
+        $('#table-admin').DataTable({
+            responsive: true,
+            paging: true,
+            searching: true,
+            ordering: true,
+            autoWidth: false,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
+            }
+        });
+    }
+});
+</script>
 @endsection

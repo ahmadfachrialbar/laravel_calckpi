@@ -29,7 +29,7 @@ class RolePermissionSeeder extends Seeder
         'hitungkpi' => [
             'view',
         ],
-        'kpirecords' => [
+        'kpirecord' => [
             'view',
             'edit',
             'update'
@@ -65,6 +65,7 @@ class RolePermissionSeeder extends Seeder
                 'users-view',
                 'kpimetrics-view',
                 'hitungkpi-view',
+                
             ]);
             
         $user = User::first();
