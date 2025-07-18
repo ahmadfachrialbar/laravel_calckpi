@@ -18,7 +18,7 @@
         @csrf
 
         <div class="form-group">
-            <label for="job_position_id">Jabatan</label>
+            <label for="job_position_id">Jabatan (Optional)</label>
             <select name="job_position_id" id="job_position_id" class="form-control">
                 <option value="">-- Pilih Jabatan --</option>
                 @foreach ($jobPositions as $position)
@@ -64,7 +64,7 @@
         </div>
 
         <div class="form-group">
-            <label for="bobot">Bobot (%)</label>
+            <label for="bobot">Actual (%)</label>
             <input type="number" name="bobot" id="bobot" class="form-control" value="{{ old('bobot') }}" required>
         </div>
 
@@ -73,8 +73,8 @@
             <input type="number" name="weightages" id="weightages" class="form-control" value="{{ old('weightages', $kpiMetric->weightages ?? '') }}" step="0.01" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Simpan</button>
-        <a href="{{ route('kpimetrics.index') }}" class="btn btn-secondary">Batal</a>
+        <button type="submit" class="btn btn-primary mb-4">Simpan</button>
+        <a href="{{ route('kpimetrics.index') }}" class="btn btn-secondary mb-4">Batal</a>
     </form>
 </div>
 @endsection

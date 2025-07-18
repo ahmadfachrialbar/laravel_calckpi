@@ -1,9 +1,10 @@
 @extends('layouts.app')
+
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Data Karyawan</h1>
-    <a href="{{route('user.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+    <a href="{{ route('user.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
     </a>
 </div>
@@ -36,19 +37,18 @@
                         <td>{{ $user->jobPosition->name ?? '-' }}</td>
                         <td>
                             <div class="d-flex justify-content-center" style="gap: 0.5rem;">
-                                <a href="{{ route('user.show', ['id' => $user->id]) }}" class="btn btn-link p-0 text-info" title="Lihat KPI">
+                                <a href="{{ route('user.show', ['id' => $user->id]) }}" class="btn btn-link p-0 text-info" title="Lihat">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-link p-0 text-primary" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('user.destroy', $user->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-link p-0 text-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <button type="button"
+                                    class="btn btn-link p-0 text-danger btn-delete"
+                                    data-id="{{ $user->id }}"
+                                    title="Hapus">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -58,25 +58,18 @@
         </div>
     </div>
 </div>
+
+<!-- Form delete untuk SweetAlert -->
+<form id="deleteForm" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function () {
-        $('#dataTable').DataTable({
-            "ordering": true,
-            "searching": true,
-            "paging": true,
-            "info": true,
-            "language": {
-                "search": "Cari Data:",
-                "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                "zeroRecords": "Tidak ditemukan data yang sesuai",
-                "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                "infoEmpty": "Menampilkan 0 data",
-                "infoFiltered": "(difilter dari _MAX_ total data)"
-            }
-        });
-    });
-</script>
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- File JS eksternal -->
+<script src="{{ asset('template/js/delete-confirmation.js') }}"></script>
 @endpush

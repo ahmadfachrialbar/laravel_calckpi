@@ -87,3 +87,45 @@
     border-radius: 50%;
     border: 2px solid #ddd;
 }
+
+/* Konten untuk font poppins */
+body, html {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* SweetAlert2 Responsif untuk Mobile */
+@media (max-width: 676px) {
+    .swal2-popup {
+        width: 75% !important;
+        padding: 0.5rem !important;
+    }
+
+    .swal2-title {
+        font-size: 1rem !important;
+    }
+
+    .swal2-html-container {
+        font-size: 0.8rem !important;
+        padding: 0.2rem !important;
+    }
+
+    .swal2-actions {
+        flex-direction: column !important;
+        gap: 0.2rem;
+    }
+
+    .swal2-confirm, .swal2-cancel {
+        width: 100% !important;
+    }
+}
+/* profile mobile */
+@media (max-width: 576px) {
+    .profile-picture-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+}
+
+

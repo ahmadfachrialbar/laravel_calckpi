@@ -28,8 +28,16 @@
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" name="users[0][password]" class="form-control" required>
+                        <div class="input-group">
+                            <input type="password" name="users[0][password]" id="password" class="form-control" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text" style="cursor:pointer;" onclick="togglePassword()">
+                                    <i class="fa fa-eye" id="togglePasswordIcon"></i>
+                                </span>
+                            </div>
+                        </div>
                     </div>
+                                        
                     <div class="form-group">
                         <label for="job_position_id">Jabatan</label>
                         <select name="job_position_id" class="form-control" required>
@@ -96,11 +104,15 @@
         </div>
         <div class="form-group">
             <label for="users[${i}][jabatan]">Jabatan</label>
-            <input type="text" name="users[${i}][jabatan]" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="users[${i}][departemen]">Departemen</label>
-            <input type="text" name="users[${i}][departemen]" class="form-control" required>
+            <select name="users[${i}][jabatan]" class="form-control" required>
+            <option value="">Pilih Jabatan</option>
+                            @foreach($jobPositions as $job)
+                            <option value="{{ $job->id }}"
+                                {{ (isset($user) && $user->job_position_id == $job->id) ? 'selected' : '' }}>
+                                {{ $job->name }}
+                            </option>
+                            @endforeach
+                            </select>
         </div>
         <div class="form-group">
             <label for="users[${i}][role]">Role</label>

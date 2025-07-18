@@ -74,8 +74,8 @@
     </div>
     @endif
 
-    <a href="{{ route('hitungkpi.index') }}" class="btn btn-secondary mt-3">Kembali</a>
-    <a href="{{ route('laporan.download') }}" class="btn btn-success mt-3">
+    <a href="{{ route('hitungkpi.index') }}" class="btn btn-secondary mt-3 mb-4">Kembali</a>
+    <a href="{{ route('laporan.download') }}" class="btn btn-success mt-3 mb-4">
         <i class="fas fa-file-excel"></i> Download Excel
     </a>
 </div>

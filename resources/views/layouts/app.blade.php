@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="{{ asset('template/css/custom.css') }}">
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 
 </head>

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="d-sm-flex align-items-center justify-content-between mb-3">
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Hitung KPI</h1>
     <hr class="sidebar-divider">
-
+</div>
     <div class="card p-3 mb-3 shadow-sm border-0">
         <div class="d-flex align-items-center mb-1">
             <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">NIP</span>

@@ -56,15 +56,21 @@
                 </div>
 
                 <!-- Pilih Jabatan -->
-                <div class="form-group">
-                    <label for="job_position_id">Pilih Jabatan/Departemen</label>
-                    <select name="job_position_id" id="job_position_id" class="form-control form-control-user" required>
-                        <option value="">-- Pilih Jabatan --</option>
-                        @foreach($jobPositions as $job)
-                        <option value="{{ $job->id }}">{{ $job->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <div class="form-group mt-2">
+                <select name="job_position_id"
+                    class="form-control form-control-lg rounded-pill pl-3 pr-2"
+                    style="font-size: 0.9rem; height: 48px;"
+                    required>
+                    <option value="">Pilih Jabatan</option>
+                    @foreach($jobPositions as $job)
+                    <option value="{{ $job->id }}"
+                        {{ (isset($user) && $user->job_position_id == $job->id) ? 'selected' : '' }}>
+                        {{ $job->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
 
                 <div class="form-group mb-3">
                     <input type="date" name="join_date" class="form-control form-control-user" required>
