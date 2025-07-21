@@ -105,9 +105,9 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $users = User::all();
+        $user = User::findOrFail($id);
         return view('pages.user.show', [
-            'users' => $users,
+            'user' => $user,
         ]);
     }
 

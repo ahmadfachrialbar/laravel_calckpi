@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -40,6 +41,49 @@ class FaqController extends Controller
         return redirect()->route('faq.index');
     }
 
+    public function edit($id)
+    {
+        $faq = Faq::findOrFail($id);
+        return view('pages.faq.edit', compact('faq')); // ✅ pastikan compact
+    }
+
+    public function update(Request $request, $id)
+    {
+        $faq = Faq::findOrFail($id);
+
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'isi' => 'required|string',
+            'pdf_path' => 'nullable|mimes:pdf|max:2048',
+        ]);
+
+        $data = $request->only(['judul', 'isi']);
+        if ($request->hasFile('pdf_path')) {
+            $data['pdf_path'] = $request->file('pdf_path')->store('faqs', 'public');
+        }
+
+        $faq->update($data);
+        notify()->success('Data panduan berhasil diperbarui', 'Sukses');
+        return redirect()->route('faq.index');
+    }
+
+
+    public function destroy($id)
+    {
+        $faq = Faq::findOrFail($id);
+
+        if ($faq->pdf_path && Storage::disk('public')->exists($faq->pdf_path)) {
+            Storage::disk('public')->delete($faq->pdf_path);
+        }
+
+        $faq->delete();
+
+        notify()->success('Data Panduan berhasil dihapus', 'Sukses');
+        return redirect()->route('faq.index');
+    }
+
+
+
     public function download($id)
     {
         $faq = Faq::findOrFail($id);
@@ -47,7 +91,7 @@ class FaqController extends Controller
         if (!$faq->pdf_path || !Storage::disk('public')->exists($faq->pdf_path)) {
             abort(404, 'File tidak ditemukan.');
         }
-        
+
         return Storage::disk('public')->download($faq->pdf_path);
     }
 }

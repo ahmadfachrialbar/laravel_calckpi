@@ -10,8 +10,10 @@
         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
     </a>
 </div>
+<hr class="divider">
+
 <div class="table-responsive">
-    <table class="table table-bordered table-hover bg-white">
+    <table class="table table-bordered table-hover bg-white" id="faqTable">
         <thead class="thead-light text-center">
             <tr>
                 <th>No</th>
@@ -36,12 +38,21 @@
                 </td>
                 <td class="text-center">
                     @if($faq->pdf_path)
-                    <a href="{{ route('faq.download', $faq->id) }}" class="btn btn-sm btn-outline-success">
+                    <a href="{{ route('faq.download', $faq->id) }}">
                         <i class="fas fa-download"> </i>
                     </a>
                     @else
                     <span class="text-muted">-</span>
                     @endif
+                    <a href="{{ route('faq.edit', $faq->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <button type="button"
+                        class="btn btn-link p-0 text-danger btn-delete"
+                        data-id="{{ $faq->id }}"
+                        title="Hapus">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </td>
             </tr>
             @empty
@@ -65,11 +76,9 @@
             <h4 class="card-title mb-1 text-primary">
                 <i class="fas fa-book-open mr-3"></i>{{ $faq->judul }}
             </h4>
-
             <div class="card-text mb-3" style="white-space: pre-line;">
                 {!! nl2br(e($faq->isi)) !!}
             </div>
-
             @if($faq->pdf_path)
             <a href="{{ route('faq.download', $faq->id) }}" class="btn btn-outline-success">
                 <i class="fas fa-file-download"></i> Unduh Panduan PDF
@@ -86,3 +95,16 @@
 @endrole
 
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#faqTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
+            },
+            "pageLength": 10
+        });
+    });
+</script>
+@endpush

@@ -1,26 +1,27 @@
+/* === Background Login === */
 .bg-login {
     height: 100vh;
-    background-image: url('../img/bg-loginRegister.png');
+    background-image: url("../img/bg-loginRegister.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-/* Background wrapper dengan gambar */
+/* === Dashboard Background Wrapper === */
 .dashboard-bg {
-    background: url('../img/bg-loginRegister.png') no-repeat center center;
+    background: url("../img/bg-loginRegister.png") no-repeat center center;
     background-size: cover;
-    min-height: calc(100vh - 40px); 
-    padding: 3rem 1rem 4rem 1rem; 
+    min-height: calc(100vh - 40px);
+    padding: 3rem 1rem 4rem 1rem;
     position: relative;
     border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-    margin-bottom: 30px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
 }
 
 /* Overlay transparan */
 .dashboard-bg::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -35,12 +36,10 @@
 .dashboard-content {
     position: relative;
     z-index: 2;
-    padding-bottom: 10rem; 
+    padding-bottom: 10rem;
 }
 
-
-
-/* css untuk profile */
+/* === Profile Picture === */
 .profile-picture-wrapper {
     position: relative;
     display: inline-block;
@@ -61,7 +60,7 @@
     left: 0;
     width: 200px;
     height: 200px;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
     border-radius: 50%;
     display: flex;
     flex-direction: column;
@@ -88,12 +87,13 @@
     border: 2px solid #ddd;
 }
 
-/* Konten untuk font poppins */
-body, html {
-    font-family: 'Poppins', sans-serif !important;
+/* === Font Global === */
+body,
+html {
+    font-family: "Poppins", sans-serif !important;
 }
 
-/* SweetAlert2 Responsif untuk Mobile */
+/* === SweetAlert2 Responsif untuk Mobile === */
 @media (max-width: 676px) {
     .swal2-popup {
         width: 75% !important;
@@ -114,11 +114,13 @@ body, html {
         gap: 0.2rem;
     }
 
-    .swal2-confirm, .swal2-cancel {
+    .swal2-confirm,
+    .swal2-cancel {
         width: 100% !important;
     }
 }
-/* profile mobile */
+
+/* === Profile Mobile === */
 @media (max-width: 576px) {
     .profile-picture-container {
         display: flex;
@@ -128,4 +130,123 @@ body, html {
     }
 }
 
+/* === SIDEBAR STYLING === */
 
+/* Sidebar tetap fixed di kiri */
+#accordionSidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    /* custom scrollbar */
+    overflow-y: auto;
+    overflow-x: hidden; 
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0) transparent;
+    
+    z-index: 1030;
+    width: 14rem;
+    border-radius: 0 30px 30px 0;
+    transition: all 0.3s ease-in-out;
+}
+
+
+/* Border-radius tetap muncul saat toggled / mobile */
+#accordionSidebar,
+#accordionSidebar.toggled,
+#accordionSidebar.mobile-open {
+    border-radius: 0 30px 30px 0 !important;
+}
+
+/* Konten menyesuaikan dengan sidebar */
+#content-wrapper {
+    margin-left: 14rem; /* sama dengan lebar sidebar */
+    transition: margin-left 0.5s ease;
+}
+
+/* Jika sidebar ditutup (toggled) */
+.sidebar.toggled + #content-wrapper {
+    margin-left: 6.5rem !important;
+}
+
+/* === Mobile View (≤ 768px) === */
+@media (max-width: 768px) {
+    /* Sidebar tersembunyi secara default */
+    #accordionSidebar {
+        position: fixed;
+        top: 0;
+        left: -7rem;
+        width: 7rem;
+        height: 100%;
+        background-color: #4e73df;
+        z-index: 1050;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+        transition: left 0.3s ease-in-out;
+    }
+
+    /* Sidebar muncul ketika diberi class mobile-open */
+    #accordionSidebar.mobile-open {
+        left: 0 !important;
+    }
+
+    /* Konten selalu full width di mobile */
+    #content-wrapper {
+        margin-left: 0 !important;
+        width: 100% !important;
+        transition: none !important;
+    }
+
+    /* Overlay transparan saat sidebar dibuka */
+    .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1049;
+        display: none;
+    }
+
+    .mobile-overlay.show {
+        display: block;
+    }
+
+    /* Atur item sidebar lebih ramping */
+    .sidebar .nav-item {
+        text-align: left;
+    }
+
+    .sidebar .nav-link {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .sidebar .sidebar-brand {
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+
+    /* Collapse menu di mobile */
+    .sidebar .collapse {
+        position: relative;
+        z-index: 1060;
+        background: #fff;
+    }
+
+    .collapse-inner {
+        background: #fff;
+        border-radius: 5px;
+    }
+}
+
+/* === Mobile Kecil (≤ 480px) === */
+@media (max-width: 480px) {
+    .sidebar .sidebar-brand-text {
+        font-size: 1rem;
+    }
+
+    .sidebar .nav-link span {
+        font-size: 0.85rem;
+    }
+}

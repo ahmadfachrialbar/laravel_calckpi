@@ -21,6 +21,7 @@ class KpiMetrics extends Model
         'weightages', 
         'user_id',             
         'job_position_id',
+        'kategori',
     ];
 
     public function user()

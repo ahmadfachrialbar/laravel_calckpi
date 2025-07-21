@@ -16,46 +16,50 @@
 <form action="{{ route('user.update', $user->id) }}" method="POST">
     @csrf
     @method('PUT')
-    <div class="form-group">
-        <label for="nip">NIP</label>
-        <input type="text" class="form-control" id="nip" name="nip" value="{{ $user->nip }}" required>
+    <div id="form-kpi-wrapper">
+        <div class="form-kpi border rounded p-3 mb-3">
+            <div class="form-group">
+                <label for="nip">NIP</label>
+                <input type="text" class="form-control" id="nip" name="nip" value="{{ $user->nip }}" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Nama</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah password">
+            </div>
+            <div>
+                <label for="job_position_id">Jabatan</label>
+                <select name="job_position_id" class="form-control" required>
+                    <option value="">Pilih Jabatan</option>
+                    @foreach($jobPositions as $job)
+                    <option value="{{ $job->id }}" {{ $user->job_position_id == $job->id ? 'selected' : '' }}>
+                        {{ $job->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select class="form-control" id="role" name="role" required>
+                    <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="karyawan" {{ $user->role == 'karyawan' ? 'selected' : '' }}>Karyawan</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="join_date">Tanggal Bergabung</label>
+                <input type="date" class="form-control" id="join_date" name="join_date" value="{{ $user->join_date }}" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mb-3">Simpan</button>
+        <a href="{{ route('user.index') }}" class="btn btn-secondary mb-3">Kembali</a>
     </div>
-    <div class="form-group">
-        <label for="name">Nama</label>
-        <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}" required>
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required>
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah password">
-    </div>
-    <div>
-        <label for="job_position_id">Jabatan</label>
-        <select name="job_position_id" class="form-control" required>
-            <option value="">Pilih Jabatan</option>
-            @foreach($jobPositions as $job)
-            <option value="{{ $job->id }}" {{ $user->job_position_id == $job->id ? 'selected' : '' }}>
-                {{ $job->name }}
-            </option>
-            @endforeach
-        </select>
-    </div>
-    
-    <div class="form-group">
-        <label for="role">Role</label>
-        <select class="form-control" id="role" name="role" required>
-            <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
-            <option value="karyawan" {{ $user->role == 'karyawan' ? 'selected' : '' }}>Karyawan</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="join_date">Tanggal Bergabung</label>
-        <input type="date" class="form-control" id="join_date" name="join_date" value="{{ $user->join_date }}" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Simpan</button>
-    <a href="{{ route('user.index') }}" class="btn btn-secondary">Kembali</a>
 </form>
 @endsection

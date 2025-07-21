@@ -76,8 +76,8 @@
         <label for="join_date">Tanggal Bergabung</label>
         <input type="date" class="form-control" id="join_date" name="join_date" value="{{ $user->join_date }}" required>
     </div>
-    <button type="submit" class="btn btn-primary">Simpan</button>
-    <a href="{{ route('profile.index') }}" class="btn btn-secondary">Kembali</a>
+    <button type="submit" class="btn btn-primary mb-4">Simpan</button>
+    <a href="{{ route('profile.index') }}" class="btn btn-secondary mb-4">Kembali</a>
 </form>
 
 <script>

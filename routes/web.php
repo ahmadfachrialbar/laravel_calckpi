@@ -75,11 +75,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     
 });
 
-// Route untuk FAQ
+// Route FAQ
 Route::get('/panduan', [FaqController::class, 'index'])->name('faq.index');
-Route::get('/panduan/create', [FaqController::class, 'create'])->name('faq.create'); // opsional, untuk admin
+Route::get('/panduan/create', [FaqController::class, 'create'])->name('faq.create');
 Route::post('/panduan', [FaqController::class, 'store'])->name('faq.store');
+Route::get('/panduan/{id}/edit', [FaqController::class, 'edit'])->name('faq.edit'); // ✅ GET untuk edit
+Route::put('/panduan/{id}', [FaqController::class, 'update'])->name('faq.update');  // ✅ PUT untuk update
+Route::delete('/panduan/{id}', [FaqController::class, 'destroy'])->name('faq.destroy');
 Route::get('/panduan/download/{id}', [FaqController::class, 'download'])->name('faq.download');
+
 
 //route untuk profile
 Route::middleware(['auth', 'role:admin|karyawan'])->group(function () {
@@ -97,6 +101,7 @@ Route::middleware(['role:karyawan'])->group(function () {
 Route::middleware(['role:admin'])->group(function () {
     Route::get('/laporan/admin', [App\Http\Controllers\HitungkpiController::class, 'laporanAdmin'])->name('laporan.admin');
     Route::get('/laporan/admin/download', [App\Http\Controllers\HitungkpiController::class, 'downloadLaporanAdmin'])->name('laporan.admin.download');
+    Route::get('/laporan/admin/show/{id}', [App\Http\Controllers\HitungkpiController::class, 'showLaporanAdmin'])->name('laporan.admin.show');
 });
 
 

@@ -12,7 +12,7 @@
                 </h1>
                 <p class="text-white mb-0">Selamat datang di Website Calculating KPI Karyawan PT Anugrah Beton Nusantara</p>
             </div>
-            <a href="#" class="btn btn-sm btn-secondary shadow-sm mt-3 mt-md-0">
+            <a href="{{ route('laporan.admin.download') }}" class="btn btn-sm btn-secondary shadow-sm mt-3 mt-md-0">
                 <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
             </a>
         </div>

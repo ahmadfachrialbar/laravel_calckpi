@@ -10,6 +10,8 @@
         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
     </a>
 </div>
+<hr class="divider">
+
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -29,6 +31,7 @@
                         <th>Target</th>
                         <th>Actual</th>
                         <th>Weightages</th>
+                        <th>Kategori</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -61,11 +64,9 @@
                             <td>{{ $kpi->target }}%</td>
                             <td>{{ $kpi->bobot }}%</td>
                             <td>{{ $kpi->weightages }}%</td>
+                            <td>{{ $kpi->kategori }}</td>
                             <td>
                                 <div class="d-flex justify-content-center" style="gap: 0.5rem;">
-                                    <a href="{{ route('kpimetrics.show', $kpi->id) }}" class="btn btn-link p-0 text-info" title="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
                                     <a href="{{ route('kpimetrics.edit', $kpi->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -93,6 +94,7 @@
                             <td>{{ $kpi->target }}</td>
                             <td>{{ $kpi->bobot }}</td>
                             <td>{{ $kpi->weightages }}</td>
+                            <td>{{ $kpi->kategori }}</td>
                             <td>
                                 <a href="{{ route('kpimetrics.edit', $kpi->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
                                     <i class="fas fa-edit"></i>
@@ -154,6 +156,7 @@
                         <th>Parameter</th>
                         <th>Target</th>
                         <th>Actual</th>
+                        <th>Kategori</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -164,6 +167,7 @@
                         <td>{{ $kpi->cara_ukur }}</td>
                         <td>{{ $kpi->target }}</td>
                         <td>{{ $kpi->bobot }}</td>
+                        <td>{{ $kpi->kategori }}</td>
                     </tr>
                     @empty
                     <tr>

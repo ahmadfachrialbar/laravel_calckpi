@@ -73,6 +73,15 @@
             <input type="number" name="weightages" id="weightages" class="form-control" value="{{ old('weightages', $kpiMetric->weightages ?? '') }}" step="0.01" required>
         </div>
 
+        <div class="form-group">
+            <label for="kategori">Kategori Perhitungan</label>
+            <select name="kategori" id="kategori" class="form-control" required>
+                <option value="up" {{ old('kategori') == 'up' ? 'selected' : '' }}>Up (Increase KPI : Semakin tinggi semakin baik)</option>
+                <option value="down" {{ old('kategori') == 'down' ? 'selected' : '' }}>Decrease KPI : Down (Semakin rendah semakin baik)</option>
+                <option value="zero" {{ old('kategori') == 'zero' ? 'selected' : '' }}>Zero (Zero Defect KPI: Idealnya 0)</option>
+            </select>
+        </div>
+
         <button type="submit" class="btn btn-primary mb-4">Simpan</button>
         <a href="{{ route('kpimetrics.index') }}" class="btn btn-secondary mb-4">Batal</a>
     </form>

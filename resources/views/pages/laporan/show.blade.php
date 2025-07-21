@@ -1,35 +1,48 @@
 @extends('layouts.app')
-
 @section('content')
+
+@role('admin')
+<!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-3">
-    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Riwayat Perhitungan KPI Karyawan</h1>
-
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Tutup">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    @endif
+    <h1 class="h3 mb-0 text-gray-700 font-weight-bold">Detail Laporan KPI: {{ $user->name }}</h1>
+    <a href="{{ route('laporan.admin') }}" class="btn btn-sm btn-secondary shadow-sm">
+        <i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali
+    </a>
 </div>
-<hr class="divider">
 
+<!-- Identitas User -->
+<div class="card p-3 mb-3 shadow-sm border-0">
+    <div class="d-flex align-items-center mb-1">
+        <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">NIP</span>
+        <span class="text-dark">: {{ $user->nip }}</span>
+    </div>
+    <div class="d-flex align-items-center mb-1">
+        <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">Nama</span>
+        <span class="text-dark">: {{ $user->name }}</span>
+    </div>
+    <div class="d-flex align-items-center">
+        <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">Jabatan/Dept</span>
+        <span class="text-dark">: {{ $user->jobPosition->name ?? '-' }}</span>
+    </div>
+</div>
 
+<!-- Tabel KPI -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold">Data Riwayat</h6>
+        <h6 class="m-0 font-weight-bold">Data KPI</h6>
     </div>
     <div class="card-body">
+        @if($records->count() > 0)
         <div class="table-responsive">
-            <table class="table table-bordered table-hover bg-white" id="dataTable" width="100%" cellspacing="0">
-                <thead class="thead-light">
+            <table class="table table-bordered table-hover table-striped bg-white " id="dataTableDetail" width="100%" cellspacing="0">
+                <thead class="thead-light text-center">
                     <tr>
                         <th>No</th>
-                        <th>Nama Karyawan</th>
-                        <th>Jabatan</th>
                         <th>Nama KPI</th>
+                        <th>Deskripsi</th>
+                        <th>Cara Ukur</th>
                         <th>Target</th>
+                        <th>Bobot</th>
                         <th>Simulasi</th>
                         <th>Achievement</th>
                         <th>Weightages</th>
@@ -39,17 +52,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($records as $index => $record)
+                    @foreach($records as $index => $record)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $record->user->name }}</td>
-                        <td>{{ $record->user->jobPosition->name ?? '-' }}</td>
-                        <td>{{ $record->kpiMetric->nama_kpi ?? '-' }}</td>
-                        <td>{{ $record->kpiMetric->target ?? '-' }}</td>
-                        <td>{{ $record->simulasi_penambahan }}</td>
-                        <td>{{ $record->achievement }}</td>
-                        <td>{{ $record->kpiMetric->weightages ?? '-' }}</td>
-                        <td>{{ $record->score }}</td>
+                        <td>{{ $record->kpiMetric->nama_kpi }}</td>
+                        <td>{{ $record->kpiMetric->penjelasan_sederhana }}</td>
+                        <td>{{ $record->kpiMetric->cara_ukur }}</td>
+                        <td>{{ $record->kpiMetric->target }}%</td>
+                        <td>{{ $record->kpiMetric->bobot }}%</td>
+                        <td>{{ $record->simulasi_penambahan }}%</td>
+                        <td>{{ $record->achievement }}%</td>
+                        <td>{{ $record->kpiMetric->weightages }}%</td>
+                        <td>{{ $record->score }}%</td>
                         <td>{{ $record->created_at->format('d-m-Y H:i') }}</td>
                         <td>
                             <button type="button"
@@ -60,14 +74,17 @@
                             </button>
                         </td>
                     </tr>
-                    @empty
-                    <tr>
-                        <td colspan="11" class="text-center"><em>Tidak ada data</em></td>
-                    </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
+
+        <div class="alert alert-info mt-3 text-right">
+            <strong>Total Score:</strong> {{ number_format($totalScore, 2) }}%
+        </div>
+        @else
+        <div class="alert alert-info">Belum ada riwayat KPI untuk karyawan ini.</div>
+        @endif
     </div>
 </div>
 
@@ -76,6 +93,7 @@
     @csrf
     @method('DELETE')
 </form>
+@endrole 
 @endsection
 
 @push('scripts')

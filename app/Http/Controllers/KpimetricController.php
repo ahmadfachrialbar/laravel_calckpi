@@ -77,6 +77,7 @@ class KpimetricController extends Controller
             'job_position_id' => 'nullable|exists:job_positions,id',
             'user_id' => 'nullable|exists:users,id',
             'weightages' => 'required|numeric|min:0',
+            'kategori' => 'required|in:up,down,zero',
         ]);
 
         // Pastikan minimal satu dari job_position_id atau user_id diisi
@@ -111,6 +112,7 @@ class KpimetricController extends Controller
             'target' => 'required|numeric',
             'bobot' => 'required|numeric',
             'weightages' => 'required|numeric|min:0',
+            'kategori' => 'required|in:up,down,zero',
         ]);
 
         $kpiMetric->update($request->all());

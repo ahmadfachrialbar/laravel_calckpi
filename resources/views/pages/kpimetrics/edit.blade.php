@@ -34,12 +34,18 @@
                 <label for="weightages">Weightages (%)</label>
                 <input type="number" name="weightages" id="weightages" class="form-control" value="{{ old('weightages', $kpiMetric->weightages ?? '') }}" step="0.01" required>
             </div>
+            <select name="kategori" id="kategori" class="form-control" required>
+                <option value="up" {{ $kpiMetric->kategori == 'up' ? 'selected' : '' }}>Up (Semakin tinggi semakin baik)</option>
+                <option value="down" {{ $kpiMetric->kategori == 'down' ? 'selected' : '' }}>Down (Semakin rendah semakin baik)</option>
+                <option value="zero" {{ $kpiMetric->kategori == 'zero' ? 'selected' : '' }}>Zero (Idealnya 0)</option>
+            </select>
+
 
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Simpan</button>
-    <button type="/kpiMetrics" class="btn btn-secondary" href="">Kembali</button>
+    <button type="submit" class="btn btn-primary mb-4">Simpan</button>
+    <button type="/kpiMetrics" class="btn btn-secondary mb-4" href="">Kembali</button>
 </form>
 </div>
 <!-- End of Main Content -->

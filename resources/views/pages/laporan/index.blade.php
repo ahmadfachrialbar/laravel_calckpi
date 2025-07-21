@@ -60,9 +60,9 @@
     </div>
 
     @php
-        $totalScore = $records->groupBy('kpimetrics_id')
-            ->map(fn($items) => $items->sortByDesc('created_at')->first())
-            ->sum('score');
+    $totalScore = $records->groupBy('kpimetrics_id')
+    ->map(fn($items) => $items->sortByDesc('created_at')->first())
+    ->sum('score');
     @endphp
 
     <div class="alert alert-info mt-3 text-right">
@@ -74,8 +74,8 @@
     </div>
     @endif
 
-    <a href="{{ route('hitungkpi.index') }}" class="btn btn-secondary mt-3 mb-4">Kembali</a>
-    <a href="{{ route('laporan.download') }}" class="btn btn-success mt-3 mb-4">
+    <a href="{{ route('hitungkpi.index') }}" class="btn btn-secondary mt-1 mb-4">Kembali</a>
+    <a href="{{ route('laporan.download') }}" class="btn btn-success mt-1 mb-4">
         <i class="fas fa-file-excel"></i> Download Excel
     </a>
 </div>
@@ -97,6 +97,7 @@
                     <th>Jabatan/Dept</th>
                     <th>Total Score</th>
                     <th>Indikator</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -111,6 +112,13 @@
                         <span class="badge badge-{{ $data->indikator == 'Baik' ? 'success' : ($data->indikator == 'Cukup' ? 'warning' : 'danger') }}">
                             {{ $data->indikator }}
                         </span>
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-center" style="gap: 0.5rem;">
+                            <a href="{{ route('laporan.admin.show', $data->id) }}" class="btn btn-link p-0 text-info" title="Lihat">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 @endforeach
@@ -135,34 +143,34 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Untuk tabel karyawan
-    if ($('#table-karyawan').length) {
-        $('#table-karyawan').DataTable({
-            responsive: true,
-            paging: true,
-            searching: true,
-            ordering: true,
-            autoWidth: false,
-            language: {
-                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json" // Bahasa Indonesia
-            }
-        });
-    }
+    document.addEventListener("DOMContentLoaded", function() {
+        // Untuk tabel karyawan
+        if ($('#table-karyawan').length) {
+            $('#table-karyawan').DataTable({
+                responsive: true,
+                paging: true,
+                searching: true,
+                ordering: true,
+                autoWidth: false,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json" // Bahasa Indonesia
+                }
+            });
+        }
 
-    // Untuk tabel admin
-    if ($('#table-admin').length) {
-        $('#table-admin').DataTable({
-            responsive: true,
-            paging: true,
-            searching: true,
-            ordering: true,
-            autoWidth: false,
-            language: {
-                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
-            }
-        });
-    }
-});
+        // Untuk tabel admin
+        if ($('#table-admin').length) {
+            $('#table-admin').DataTable({
+                responsive: true,
+                paging: true,
+                searching: true,
+                ordering: true,
+                autoWidth: false,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
+                }
+            });
+        }
+    });
 </script>
 @endsection

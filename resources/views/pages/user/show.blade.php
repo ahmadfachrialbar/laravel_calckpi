@@ -6,42 +6,60 @@
 </div>
 <hr class="divider">
 
-<!-- DataTales Example -->
+<!-- Employee Detail Table -->
 <div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Detail Data Karyawan</h6>
+    <div class="card-header py-3 bg-primary">
+        <h6 class="m-0 font-weight-bold text-white">Detail Karyawan</h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead class="thead-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>NIP</th>
-                        <th>Nama</th>
-                        <th>Password</th>
-                        <th>Jabatan/Departemen</th>
-                        <th>Role</th>
-                        <th>Tanggal Bergabung</th>
-                    </tr>
-                </thead>
+            <table class="table table-bordered" width="100%" cellspacing="0">
                 <tbody>
-                    @foreach($users as $user)
                     <tr>
+                        <th width="25%" class="bg-light">ID Karyawan</th>
                         <td>{{ $user->id }}</td>
-                        <td>{{ $user->nip }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ Str::limit($user->password, 10, '...') }}</td>
-                        <td>{{ $user->jobPosition->name ?? '-' }}</td>
-                        <td>{{ $user->role ?? '-' }}</td>
-                        <td>{{ $user->join_date }}</td>
                     </tr>
-                    @endforeach
+                    <tr>
+                        <th class="bg-light">NIP</th>
+                        <td>{{ $user->nip }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">Nama Lengkap</th>
+                        <td>{{ $user->name }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">Email</th>
+                        <td>{{ $user->email }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">Jabatan</th>
+                        <td>{{ $user->jobPosition->name ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">Role</th>
+                        <td>{{ ucfirst($user->role) ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">Tanggal Bergabung</th>
+                        <td>{{ \Carbon\Carbon::parse($user->join_date)->format('d F Y') }}</td>
+                    </tr>
+                    <!-- <tr>
+                        <th class="bg-light">Status</th>
+                        <td>
+                            <span class="badge badge-{{ $user->is_active ? 'success' : 'danger' }}">
+                                {{ $user->is_active ? 'Aktif' : 'Non-Aktif' }}
+                            </span>
+                        </td>
+                    </tr> -->
                 </tbody>
             </table>
+            
+            <div class="text-center mt-4">
+                <a href="{{ route('user.index') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Daftar
+                </a>
+            </div>
         </div>
     </div>
 </div>
-</div>
-<!-- End of Main Content -->
 @endsection

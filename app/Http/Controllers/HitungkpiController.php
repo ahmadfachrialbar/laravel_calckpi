@@ -61,12 +61,36 @@ class HitungkpiController extends Controller
                 $bobot = floatval($kpiMetric->bobot);
                 $target = floatval($kpiMetric->target) ?: 1;
                 $weightages = floatval($kpiMetric->weightages);
+                $kategori = $kpiMetric->kategori;
 
-                // Rumus Perhitungan
-                $achievement = (($simulasi + $bobot) / $target) * 100;
+                // Rumus perhitungan 
+                switch ($kategori) {
+                    case 'up': //  Semakin tinggi semakin baik (dibatasi max 100%)
+                        $achievement = (($bobot + $simulasi) / $target) * 100;
+                        if ($achievement > 100) {
+                            $achievement = 100;
+                        }
+                        break;
+                    case 'down': //  Semakin rendah semakin baik (dibatasi max 100%)
+                        $achievement = ($target / ($bobot + $simulasi)) * 100;
+                        if ($achievement > 100) {
+                            $achievement = 100;
+                        }
+                        break;
+
+                    case 'zero':
+                        $achievement = ((($bobot + $simulasi) / 4)) * 100; 
+                        break;
+
+
+                    default:
+                        $achievement = 0;
+                        break;
+                }
+
                 $score = ($achievement * $weightages) / 100;
 
-                // ✅ Simpan sebagai float (bukan string)
+                //Simpan ke database
                 KpiRecord::create([
                     'user_id' => $user->id,
                     'kpimetrics_id' => $kpiMetric->id,
@@ -80,6 +104,7 @@ class HitungkpiController extends Controller
         notify()->success('Berhasil Menghitung', 'Sukses');
         return redirect()->back();
     }
+
 
     public function laporan()
     {
@@ -162,6 +187,7 @@ class HitungkpiController extends Controller
 
 
                 return (object) [
+                    'id' => $user->id,
                     'nip' => $user->nip,
                     'name' => $user->name,
                     'job' => $user->jobPosition->name ?? '-',
@@ -187,6 +213,7 @@ class HitungkpiController extends Controller
                 $indikator = $totalScore >= 75 ? 'Baik' : 'Buruk';
 
                 return (object) [
+                    'id' => $user->id,
                     'nip' => $user->nip,
                     'name' => $user->name,
                     'job' => $user->jobPosition->name ?? '-',
@@ -223,4 +250,23 @@ class HitungkpiController extends Controller
             'Cache-Control' => 'max-age=0',
         ]);
     }
+
+    public function showLaporanAdmin($id)
+    {
+        $user = \App\Models\User::with('jobPosition')->findOrFail($id);
+
+        $records = \App\Models\KpiRecord::where('user_id', $user->id)
+            ->with('kpiMetric')
+            ->latest()
+            ->get();
+
+        // Hitung total score hanya dari record terbaru per KPI
+        $latestRecords = $records->groupBy('kpimetrics_id')
+            ->map(fn($items) => $items->sortByDesc('created_at')->first());
+
+        $totalScore = $latestRecords->sum('score');
+
+        return view('pages.laporan.show', compact('user', 'records', 'totalScore'));
+    }
+
 }

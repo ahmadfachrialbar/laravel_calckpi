@@ -16,31 +16,31 @@ class KpiRecordController extends Controller
         return view('pages.kpirecords.index', compact('records'));
     }
 
-    // Form edit weightages & achievement (oleh admin)
-    public function edit($id)
-    {
-        $record = KpiRecord::with(['user', 'kpiMetric'])->findOrFail($id);
-        return view('pages.kpirecords.edit', compact('record'));
-    }
+    // // Form edit weightages & achievement (oleh admin)
+    // public function edit($id)
+    // {
+    //     $record = KpiRecord::with(['user', 'kpiMetric'])->findOrFail($id);
+    //     return view('pages.laporan.edit', compact('record'));
+    // }
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'achievement' => 'required|numeric|min:0',
-            'weightages' => 'required|numeric|min:0',
-        ]);
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'achievement' => 'required|numeric|min:0',
+    //         'weightages' => 'required|numeric|min:0',
+    //     ]);
 
-        $record = KpiRecord::findOrFail($id);
+    //     $record = KpiRecord::findOrFail($id);
 
-        $record->achievement = $request->achievement;
-        $record->weightages = $request->weightages;
-        $record->score = $request->achievement * $request->weightages;
+    //     $record->achievement = $request->achievement;
+    //     $record->weightages = $request->weightages;
+    //     $record->score = $request->achievement * $request->weightages;
 
-        $record->save();
+    //     $record->save();
 
-        notify()->success('Data KPI Record berhasil diperbarui', 'Sukses');
-        return redirect()->route('kpirecords.index');
-    }
+    //     notify()->success('Data KPI Record berhasil diperbarui', 'Sukses');
+    //     return redirect()->route('laporan.index');
+    // }
 
     public function destroy($id)
     {
