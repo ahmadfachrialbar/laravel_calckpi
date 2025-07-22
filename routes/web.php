@@ -66,14 +66,13 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Route kpirecords
-
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/kpirecords', [KpiRecordController::class, 'index'])->name('kpirecords.index');
-    Route::get('/kpirecords/{id}/edit', [KpiRecordController::class, 'edit'])->name('kpirecords.edit');
-    Route::put('/kpirecords/{id}', [KpiRecordController::class, 'update'])->name('kpirecords.update');
-    Route::delete('/kpirecords/{id}', [KpiRecordController::class, 'destroy'])->name('kpirecords.destroy');
-    
+    Route::get('/kpirecords', [\App\Http\Controllers\KpiRecordController::class, 'index'])
+        ->name('kpirecords.index');
+    Route::delete('/kpirecords/{id}', [\App\Http\Controllers\KpiRecordController::class, 'destroy'])
+        ->name('kpirecords.destroy');
 });
+
 
 // Route FAQ
 Route::get('/panduan', [FaqController::class, 'index'])->name('faq.index');
@@ -102,6 +101,16 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('/laporan/admin', [App\Http\Controllers\HitungkpiController::class, 'laporanAdmin'])->name('laporan.admin');
     Route::get('/laporan/admin/download', [App\Http\Controllers\HitungkpiController::class, 'downloadLaporanAdmin'])->name('laporan.admin.download');
     Route::get('/laporan/admin/show/{id}', [App\Http\Controllers\HitungkpiController::class, 'showLaporanAdmin'])->name('laporan.admin.show');
+});
+
+// route untuk kelola jabatan
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/jobpositions', [App\Http\Controllers\JobPositionController::class, 'index'])->name('jobpositions.index');
+    Route::get('/jobpositions/create', [App\Http\Controllers\JobPositionController::class, 'create'])->name('jobpositions.create');
+    Route::post('/jobpositions', [App\Http\Controllers\JobPositionController::class, 'store'])->name('jobpositions.store');
+    Route::get('/jobpositions/{id}/edit', [App\Http\Controllers\JobPositionController::class, 'edit'])->name('jobpositions.edit');
+    Route::put('/jobpositions/{id}', [App\Http\Controllers\JobPositionController::class, 'update'])->name('jobpositions.update');
+    Route::delete('/jobpositions/{id}', [App\Http\Controllers\JobPositionController::class, 'destroy'])->name('jobpositions.destroy');
 });
 
 

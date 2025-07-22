@@ -13,7 +13,7 @@
 <hr class="divider">
 
 <div class="table-responsive">
-    <table class="table table-bordered table-hover bg-white" id="faqTable">
+    <table class="table table-bordered table-hover bg-white" id="dataTable">
         <thead class="thead-light text-center">
             <tr>
                 <th>No</th>
@@ -97,14 +97,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        $('#faqTable').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
-            },
-            "pageLength": 10
-        });
-    });
-</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endpush

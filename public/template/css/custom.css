@@ -250,3 +250,15 @@ html {
         font-size: 0.85rem;
     }
 }
+
+/* Style agar teks di tabel center dan justify */
+.feedback-table th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.feedback-table td {
+    text-align: justify;
+    text-justify: inter-word;
+}
+

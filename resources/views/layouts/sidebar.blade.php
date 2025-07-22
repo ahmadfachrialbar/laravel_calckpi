@@ -117,7 +117,7 @@
     <div class="sidebar-heading">
         Reports
     </div>
-    <li class="nav-item {{ request()->is('laporan.admin') ? 'active' : '' }}">
+    <li class="nav-item {{ request()->is('laporan*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('laporan.admin') }}">
             <i class="fas fas fa-file-alt mr-2"></i>
             <span>Resume KPI</span>
@@ -125,10 +125,24 @@
     </li>
     @endrole
 
+    @role('admin')
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading">
+        KELOLA JABATAN
+    </div>
+    <li class="nav-item {{ request()->is('jobpositions*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('jobpositions.index') }}">
+            <i class="fas fa-users-cog mr-2"></i>
+            <span>Jabatan</span>
+        </a>
+    </li>
+    @endrole
+
     <!-- Footer Sidebar -->
     <div class="sidebar-footer text-center mt-auto p-3"
         style="font-size: 0.75rem; color: rgba(255,255,255,0.7); border-top: 1px solid rgba(255,255,255,0.2);">
-        <span>&copy; {{ date('Y') }} KPI Calculating AB</span><br>
+        <span>&copy; {{ date('Y') }} KPI Calculating PT BABN</span><br>
         <span style="font-size: 0.7rem;">v1.0.0</span>
     </div>
 </ul>

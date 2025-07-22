@@ -16,16 +16,10 @@ class HitungkpiController extends Controller
     {
         $user = Auth::user();
 
-        // Ambil KPI dari jabatan user
         $jobKpis = $user->jobPosition?->kpiMetrics ?? collect();
-
-        // Ambil KPI yang langsung ditugaskan ke user (personal KPI)
         $userKpis = $user->kpiMetrics ?? collect();
-
-        // Gabungkan keduanya agar muncul semua KPI (jabatan + personal)
         $kpis = $jobKpis->merge($userKpis);
 
-        // Ambil riwayat KPI terbaru per KPI (hanya record terakhir per KPI)
         $records = KpiRecord::where('user_id', $user->id)
             ->with('kpiMetric')
             ->latest()
@@ -33,7 +27,6 @@ class HitungkpiController extends Controller
             ->groupBy('kpimetrics_id')
             ->map(fn($items) => $items->first());
 
-        // ✅ Hitung total score hanya dari record terbaru per KPI
         $totalScore = $records->sum('score');
 
         return view('pages.hitungkpi.index', compact('kpis', 'records', 'user', 'totalScore'));
@@ -63,34 +56,31 @@ class HitungkpiController extends Controller
                 $weightages = floatval($kpiMetric->weightages);
                 $kategori = $kpiMetric->kategori;
 
-                // Rumus perhitungan 
                 switch ($kategori) {
-                    case 'up': //  Semakin tinggi semakin baik (dibatasi max 100%)
+                    case 'up':
                         $achievement = (($bobot + $simulasi) / $target) * 100;
-                        if ($achievement > 100) {
-                            $achievement = 100;
-                        }
+                        if ($achievement > 100) $achievement = 100;
                         break;
-                    case 'down': //  Semakin rendah semakin baik (dibatasi max 100%)
-                        $achievement = ($target / ($bobot + $simulasi)) * 100;
-                        if ($achievement > 100) {
-                            $achievement = 100;
-                        }
+                    case 'down':
+                        $achievement = (1 - ((($bobot + $simulasi) - $target) / $target)) * 100;
+                        if ($achievement > 100) $achievement = 100;
                         break;
-
                     case 'zero':
-                        $achievement = ((($bobot + $simulasi) / 4)) * 100; 
+                        $achievement = 100 - (($bobot + $simulasi) / 4) * 100;
+                        if ($achievement > 100) $achievement = 100;
+                        if ($achievement < 0) $achievement = 0;
                         break;
-
-
                     default:
                         $achievement = 0;
-                        break;
                 }
 
                 $score = ($achievement * $weightages) / 100;
 
-                //Simpan ke database
+                // Replace: hapus record lama sebelum simpan
+                KpiRecord::where('user_id', $user->id)
+                    ->where('kpimetrics_id', $kpiMetric->id)
+                    ->delete();
+
                 KpiRecord::create([
                     'user_id' => $user->id,
                     'kpimetrics_id' => $kpiMetric->id,
@@ -105,16 +95,55 @@ class HitungkpiController extends Controller
         return redirect()->back();
     }
 
-
     public function laporan()
     {
         $user = Auth::user();
+
         $records = KpiRecord::where('user_id', $user->id)
             ->with('kpiMetric')
-            ->latest()
-            ->get();
+            ->get()
+            ->groupBy('kpimetrics_id')
+            ->map(fn($items) => $items->sortByDesc('created_at')->first())
+            ->values();
 
-        return view('pages.laporan.index', compact('records', 'user'));
+        $totalScore = $records->sum('score');
+
+        return view('pages.laporan.index', compact('records', 'user', 'totalScore'));
+    }
+
+    public function laporanAdmin()
+    {
+        $karyawan = \App\Models\User::role('karyawan')
+            ->with(['jobPosition', 'kpiRecords'])
+            ->get()
+            ->map(function ($user) {
+                $latestRecords = $user->kpiRecords
+                    ->groupBy('kpimetrics_id')
+                    ->map(fn($items) => $items->sortByDesc('created_at')->first());
+
+                $totalScore = $latestRecords->sum('score');
+
+                if ($totalScore == 0) {
+                    $indikator = 'Belum Hitung';
+                } elseif ($totalScore < 60) {
+                    $indikator = 'Buruk';
+                } elseif ($totalScore <= 80) {
+                    $indikator = 'Cukup';
+                } else {
+                    $indikator = 'Baik';
+                }
+
+                return (object) [
+                    'id' => $user->id,
+                    'nip' => $user->nip,
+                    'name' => $user->name,
+                    'job' => $user->jobPosition->name ?? '-',
+                    'total_score' => $totalScore,
+                    'indikator' => $indikator
+                ];
+            });
+
+        return view('pages.laporan.admin', compact('karyawan'));
     }
 
     public function download()
@@ -162,41 +191,6 @@ class HitungkpiController extends Controller
             'Content-Disposition' => "attachment;filename=\"$filename\"",
             'Cache-Control' => 'max-age=0',
         ]);
-    }
-
-    public function laporanAdmin()
-    {
-        $karyawan = \App\Models\User::role('karyawan')
-            ->with(['jobPosition', 'kpiRecords'])
-            ->get()
-            ->map(function ($user) {
-                $totalScore = $user->kpiRecords
-                    ->groupBy('kpimetrics_id')
-                    ->map(fn($items) => $items->sortByDesc('created_at')->first())
-                    ->sum('score');
-
-                if ($totalScore == 0) {
-                    $indikator = 'Belum Hitung';
-                } elseif ($totalScore < 60) {
-                    $indikator = 'Buruk';
-                } elseif ($totalScore <= 80) {
-                    $indikator = 'Cukup';
-                } else {
-                    $indikator = 'Baik';
-                }
-
-
-                return (object) [
-                    'id' => $user->id,
-                    'nip' => $user->nip,
-                    'name' => $user->name,
-                    'job' => $user->jobPosition->name ?? '-',
-                    'total_score' => $totalScore,
-                    'indikator' => $indikator
-                ];
-            });
-
-        return view('pages.laporan.index', compact('karyawan'));
     }
 
     public function downloadLaporanAdmin()
@@ -268,5 +262,4 @@ class HitungkpiController extends Controller
 
         return view('pages.laporan.show', compact('user', 'records', 'totalScore'));
     }
-
 }

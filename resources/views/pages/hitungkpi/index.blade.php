@@ -24,54 +24,58 @@
 @if(auth()->user()->hasRole('karyawan'))
 <form action="{{ route('hitungkpi.store') }}" method="POST" id="form-kpi">
     @csrf
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead class="thead-light text-center">
-                <tr>
-                    <th>No</th>
-                    <th>Nama KPI</th>
-                    <th>Deskripsi</th>
-                    <th>Target</th>
-                    <th>Bobot</th>
-                    <th>Weightages</th>
-                    <th>Kategori</th>
-                    <th>Simulasi Penambahan</th>
-                    <th>Achievement</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($kpis as $index => $kpi)
-                @php
-                $record = $records[$kpi->id] ?? null;
-                $simulasi = $record->simulasi_penambahan ?? old("kpi.$index.simulasi_penambahan");
-                @endphp
-                <tr class="text-center align-middle">
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $kpi->nama_kpi }}</td>
-                    <td>{{ $kpi->penjelasan_sederhana }}</td>
-                    <td class="target">{{ $kpi->target }}</td>
-                    <td class="bobot">{{ $kpi->bobot }}</td>
-                    <td class="weightages">{{ $kpi->weightages }}</td>
-                    <td class="kategori">{{ $kpi->kategori }}</td>
-                    <td>
-                        <input type="hidden" name="kpi[{{ $index }}][metric_id]" value="{{ $kpi->id }}">
-                        <input type="number"
-                            name="kpi[{{ $index }}][simulasi_penambahan]"
-                            class="form-control text-center simulasi"
-                            step="0.01"
-                            value="{{ $simulasi }}">
-                    </td>
-                    <td class="achievement">{{ $record->achievement ?? '-' }}</td>
-                    <td class="score">{{ $record->score ?? '-' }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <div class="mt-3">
-            <div class="alert alert-info text-right">
-                <strong>Total Score Anda:</strong>
-                <span id="total-score">{{ number_format($totalScore, 2) }}</span>%
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered ">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama KPI</th>
+                            <th>Deskripsi</th>
+                            <th>Target</th>
+                            <th>Bobot</th>
+                            <th>Weightages</th>
+                            <th>Kategori</th>
+                            <th>Simulasi Penambahan</th>
+                            <th>Achievement</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($kpis as $index => $kpi)
+                        @php
+                        $record = $records[$kpi->id] ?? null;
+                        $simulasi = $record->simulasi_penambahan ?? old("kpi.$index.simulasi_penambahan");
+                        @endphp
+                        <tr class="text-center align-middle">
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $kpi->nama_kpi }}</td>
+                            <td>{{ $kpi->penjelasan_sederhana }}</td>
+                            <td class="target">{{ $kpi->target }}</td>
+                            <td class="bobot">{{ $kpi->bobot }}</td>
+                            <td class="weightages">{{ $kpi->weightages }}</td>
+                            <td class="kategori">{{ $kpi->kategori }}</td>
+                            <td>
+                                <input type="hidden" name="kpi[{{ $index }}][metric_id]" value="{{ $kpi->id }}">
+                                <input type="number"
+                                    name="kpi[{{ $index }}][simulasi_penambahan]"
+                                    class="form-control text-center simulasi"
+                                    step="0.01"
+                                    value="{{ $simulasi }}">
+                            </td>
+                            <td class="achievement">{{ $record->achievement ?? '-' }}</td>
+                            <td class="score">{{ $record->score ?? '-' }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="mt-3">
+                    <div class="alert alert-info text-right">
+                        <strong>Total Score Anda:</strong>
+                        <span id="total-score">{{ number_format($totalScore, 2) }}</span>%
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -79,6 +83,7 @@
 </form>
 @endif
 </div>
+
 @endsection
 
 @section('scripts')
@@ -94,27 +99,32 @@
             let achievement = 0;
 
             switch (kategori) {
-                case 'up': 
+                case 'up':
+                    // Sama seperti controller
                     achievement = ((bobot + simulasi) / target) * 100;
                     if (achievement > 100) achievement = 100;
                     break;
 
-                case 'down': 
-                    achievement = (target / (bobot + simulasi)) * 100;
+                case 'down':
+                    // Sama seperti controller
+                    achievement = (1 - (((bobot + simulasi) - target) / target)) * 100;
                     if (achievement > 100) achievement = 100;
                     break;
 
-                case 'zero': 
-                    achievement = (((bobot + simulasi) / 4)) * 100;
+                case 'zero':
+                    // Sama seperti controller
+                    achievement = 100 - ((bobot + simulasi) / 4) * 100;
+                    if (achievement > 100) achievement = 100;
+                    if (achievement < 0) achievement = 0;
                     break;
 
                 default:
                     achievement = 0;
             }
 
-
             const score = (achievement * weightages) / 100;
 
+            // Update tampilan tabel
             row.querySelector('.achievement').textContent = achievement.toFixed(2);
             row.querySelector('.score').textContent = score.toFixed(2);
 
@@ -129,16 +139,21 @@
             document.getElementById('total-score').textContent = total.toFixed(2);
         }
 
+        // Hitung pertama kali saat halaman dimuat
         document.querySelectorAll('.simulasi').forEach(input => {
             const row = input.closest('tr');
             hitungKPI(row);
+        });
+        updateTotalScore();
+
+        // Hitung ulang setiap kali user menginputkan nilai
+        document.querySelectorAll('.simulasi').forEach(input => {
+            const row = input.closest('tr');
             input.addEventListener('input', function() {
                 hitungKPI(row);
                 updateTotalScore();
             });
         });
-
-        updateTotalScore();
     });
 </script>
 @endsection

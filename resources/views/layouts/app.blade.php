@@ -36,7 +36,7 @@
     <!-- Page Wrapper -->
     <div id="wrapper" class="d-flex">
         <!-- Sidebar -->
-         
+
         @include('layouts.sidebar')
         <!-- End of Sidebar -->
 
@@ -115,13 +115,40 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('template/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('template/js/demo/chart-pie-demo.js') }}"></script>
-    
+
     <!-- jQuery dan DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-    
+
     <!-- untuk notifikasi -->
     @notifyJs
+
+    <script>
+        $(document).ready(function() {
+            if ($('#dataTable').length) {
+                if (!$.fn.DataTable.isDataTable('#dataTable')) {
+                    $('#dataTable').DataTable({
+                        ordering: true,
+                        searching: true,
+                        paging: true,
+                        info: true,
+                        responsive: true,
+                        language: {
+                            search: "Cari Data:",
+                            lengthMenu: "Tampilkan _MENU_ data per halaman",
+                            zeroRecords: "Tidak ditemukan data yang sesuai",
+                            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                            infoEmpty: "Menampilkan 0 data",
+                            infoFiltered: "(difilter dari _MAX_ total data)"
+                        },
+                        order: [
+                            [0, "asc"]
+                        ]
+                    });
+                }
+            }
+        });
+    </script>
 
 
     @yield('scripts')

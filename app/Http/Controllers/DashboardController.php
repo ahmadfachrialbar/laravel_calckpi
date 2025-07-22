@@ -15,20 +15,22 @@ class DashboardController extends Controller
             $totalKaryawan = User::count();
             $totalKpi = KpiMetrics::count();
 
-            // ✅ Data untuk diagram batang admin
-            $karyawanScores = User::with('jobPosition')
-                ->whereHas('roles', fn($q) => $q->where('name', 'karyawan'))
+            // ✅ Logika disamakan dengan laporanAdmin di HitungkpiController
+            $karyawanScores = User::role('karyawan')
+                ->with(['jobPosition', 'kpiRecords'])
                 ->get()
                 ->map(function ($user) {
-                    $totalScore = KpiRecord::where('user_id', $user->id)->avg('score') ?? 0;
+                    $totalScore = $user->kpiRecords
+                        ->groupBy('kpimetrics_id')
+                        ->map(fn($items) => $items->sortByDesc('created_at')->first())
+                        ->sum('score');
+
                     return [
                         'name' => $user->name,
                         'jabatan' => $user->jobPosition->name ?? '-',
                         'total_score' => round($totalScore, 2),
                     ];
                 });
-
-
 
             return view('pages.dashboard', [
                 'totalKaryawan' => $totalKaryawan,
@@ -44,7 +46,13 @@ class DashboardController extends Controller
         $userId = auth()->id();
         $totalKpi = KpiMetrics::where('user_id', $userId)->count();
         $totalUserKpi = KpiRecord::where('user_id', $userId)->count();
-        $totalScore = KpiRecord::where('user_id', $userId)->avg('score') ?? 0;
+        $totalScore = KpiRecord::where('user_id', $userId)
+            ->get()
+            ->groupBy('kpimetrics_id')
+            ->map(fn($items) => $items->sortByDesc('created_at')->first())
+            ->sum('score');
+
+
         $recentKpi = KpiRecord::where('user_id', $userId)
             ->with('kpiMetric')
             ->latest()
@@ -57,7 +65,7 @@ class DashboardController extends Controller
             'totalUserKpi' => $totalUserKpi,
             'totalScore' => $totalScore,
             'recentKpi' => $recentKpi,
-            'karyawanScores' => collect(), // biar tidak error di blade
+            'karyawanScores' => collect(),
         ]);
     }
 }

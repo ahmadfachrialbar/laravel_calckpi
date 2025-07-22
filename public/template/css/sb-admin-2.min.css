@@ -1643,13 +1643,13 @@ pre code {
     background-color: rgba(0, 0, 0, 0.075);
 }
 .table .thead-dark th {
-    color: #fff;
-    background-color: #5a5c69;
+    color: #6c6e7e;
+    background-color: #EDF0F5;
     border-color: #6c6e7e;
 }
 .table .thead-light th {
-    color: #ffff;
-    background-color: #6e707e;
+    color: #6c6e7e;
+    background-color: #EDF0F5;
     border-color: #e3e6f0;
 }
 .table-dark {
