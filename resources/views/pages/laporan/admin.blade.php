@@ -45,7 +45,7 @@
                         </td>
                         <td>
                             <a href="{{ route('laporan.admin.show', $data->id) }}" class="btn btn-link p-0 text-info" title="Lihat">
-                                <i class="fas fa-eye"></i>
+                                <i class="fas fa-search-plus"></i>
                             </a>
                         </td>
                     </tr>
@@ -53,15 +53,15 @@
                 </tbody>
             </table>
         </div>
+        <a href="{{ route('laporan.admin.download') }}" class="btn btn-success mt-2">
+            <i class="fas fa-file-excel"></i> Download Excel
+        </a>
     </div>
 </div>
 @else
 <div class="alert alert-info">Belum ada data KPI.</div>
 @endif
 
-<a href="{{ route('laporan.admin.download') }}" class="btn btn-success mb-3">
-    <i class="fas fa-file-excel"></i> Download Excel
-</a>
 
 @endhasanyrole
 @endsection

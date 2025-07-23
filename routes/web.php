@@ -83,7 +83,7 @@ Route::get('/panduan/download/{id}', [FaqController::class, 'download'])->name('
 
 
 //route untuk profile
-Route::middleware(['auth', 'role:admin|karyawan'])->group(function () {
+Route::middleware(['auth', 'role:admin|karyawan|direksi'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');

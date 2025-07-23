@@ -41,7 +41,7 @@
                             </a>
 
                             <a href="{{ route('kpimetrics.show', $user->id) }}" class="btn btn-sm text-primary" title="Lihat KPI">
-                                <i class="fas fa-eye"></i>
+                                <i class="fas fa-search-plus"></i>
                             </a>
                         </td>
                     </tr>

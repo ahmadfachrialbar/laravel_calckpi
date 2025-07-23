@@ -39,7 +39,7 @@
                         <td>
                             <div class="d-flex justify-content-center" style="gap: 0.5rem;">
                                 <a href="{{ route('user.show', ['id' => $user->id]) }}" class="btn btn-link p-0 text-info" title="Lihat">
-                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-search-plus"></i>
                                 </a>
                                 @role('admin')
                                 <a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-link p-0 text-primary" title="Edit">
