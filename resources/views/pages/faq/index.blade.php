@@ -5,97 +5,144 @@
 @role('admin')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-2">
-    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Data Panduan Website</h1>
+    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Kelola Panduan dan Kontak</h1>
     <a href="{{ route('faq.create') }}" class="btn btn-sm btn-secondary shadow-sm">
         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
     </a>
 </div>
 <hr class="divider">
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold">Data panduan dan kontak kami</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover bg-white" id="dataTable">
+                <thead class="thead-light text-center">
+                    <tr>
+                        <th>No</th>
+                        <th>Judul Panduan</th>
+                        <th>Isi Singkat</th>
+                        <th>PDF</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($faqs as $index => $faq)
+                    <tr>
+                        <td class="text-center">{{ $index + 1 }}</td>
+                        <td>{{ $faq->judul }}</td>
+                        <td>{{ Str::limit(strip_tags($faq->isi), 100, '...') }}</td>
+                        <td class="text-center">
+                            @if($faq->pdf_path)
+                            <i class="fas fa-file-pdf text-danger"></i>
+                            @else
+                            <span class="text-muted">Tidak tersedia</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if($faq->pdf_path)
+                            <a href="{{ route('faq.download', $faq->id) }}" title="Download PDF">
+                                <i class="fas fa-download mr-1"></i>
+                            </a>
+                            @else
+                            <span class="text-muted">-</span>
+                            @endif
 
-<div class="table-responsive">
-    <table class="table table-bordered table-hover bg-white" id="dataTable">
-        <thead class="thead-light text-center">
-            <tr>
-                <th>No</th>
-                <th>Judul Panduan</th>
-                <th>Isi Singkat</th>
-                <th>PDF</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($faqs as $index => $faq)
-            <tr>
-                <td class="text-center">{{ $index + 1 }}</td>
-                <td>{{ $faq->judul }}</td>
-                <td>{{ Str::limit(strip_tags($faq->isi), 100, '...') }}</td>
-                <td class="text-center">
-                    @if($faq->pdf_path)
-                    <i class="fas fa-file-pdf text-danger"></i>
-                    @else
-                    <span class="text-muted">Tidak tersedia</span>
-                    @endif
-                </td>
-                <td class="text-center">
-                    @if($faq->pdf_path)
-                    <a href="{{ route('faq.download', $faq->id) }}">
-                        <i class="fas fa-download"> </i>
-                    </a>
-                    @else
-                    <span class="text-muted">-</span>
-                    @endif
-                    <a href="{{ route('faq.edit', $faq->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                    <button type="button"
-                        class="btn btn-link p-0 text-danger btn-delete"
-                        data-id="{{ $faq->id }}"
-                        title="Hapus">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="5" class="text-center"><em>Belum ada panduan yang tersedia.</em></td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
+                            <a href="{{ route('faq.edit', $faq->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+
+                            <button type="button"
+                                class="btn btn-link p-0 text-danger btn-delete"
+                                data-id="{{ $faq->id }}"
+                                data-name="{{ $faq->judul }}"
+                                title="Hapus">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="text-center"><em>Belum ada panduan yang tersedia.</em></td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 @endrole
 
 @role('karyawan')
-<div class="container">
-    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Panduan Penggunaan Website Calculating KPI</h1>
-    <hr class="sidebar-divider">
+<h1 class="h3 mb-2 text-gray-700 font-weight-bold">Panduan Penggunaan Website Calculating KPI</h1>
+<hr class="sidebar-divider">
 
-    @forelse($faqs as $faq)
-    <div class="card mb-4 shadow-sm">
-        <div class="card-body">
-            <h4 class="card-title mb-1 text-primary">
-                <i class="fas fa-book-open mr-3"></i>{{ $faq->judul }}
-            </h4>
-            <div class="card-text mb-3" style="white-space: pre-line;">
-                {!! nl2br(e($faq->isi)) !!}
-            </div>
-            @if($faq->pdf_path)
-            <a href="{{ route('faq.download', $faq->id) }}" class="btn btn-outline-success">
-                <i class="fas fa-file-download"></i> Unduh Panduan PDF
-            </a>
-            @endif
+@forelse($faqs as $faq)
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <h4 class="card-title mb-1 text-primary">
+            <i class="fas fa-book-open mr-3"></i>{{ $faq->judul }}
+        </h4>
+        <div class="card-text mb-3" style="white-space: pre-line;">
+            {!! nl2br(e($faq->isi)) !!}
         </div>
+        @if($faq->pdf_path)
+        <a href="{{ route('faq.download', $faq->id) }}" class="btn btn-outline-success">
+            <i class="fas fa-file-download"></i> Unduh Panduan PDF
+        </a>
+        @endif
     </div>
-    @empty
-    <div class="alert alert-info">
-        Belum ada panduan yang tersedia.
-    </div>
-    @endforelse
 </div>
+@empty
+<div class="alert alert-info">
+    Belum ada panduan yang tersedia.
+</div>
+@endforelse
 @endrole
 
+<!-- Form delete untuk SweetAlert -->
+<form id="deleteForm" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
 @endsection
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteButtons = document.querySelectorAll('.btn-delete');
+        const deleteForm = document.getElementById('deleteForm');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const name = this.dataset.name;
+
+                Swal.fire({
+                    title: 'Yakin ingin menghapus?',
+                    text: `Panduan "${name}" akan dihapus permanen.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e74c3c',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal',
+                    customClass: {
+                        confirmButton: 'btn btn-danger',
+                        cancelButton: 'btn btn-secondary'
+                    },
+                    buttonsStyling: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteForm.setAttribute('action', `/faq/${id}`);
+                        deleteForm.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 @endpush

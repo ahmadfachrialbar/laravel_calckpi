@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+@hasanyrole('admin|direksi')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Data Karyawan</h1>
+    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Kelola Data Karyawan</h1>
     <a href="{{ route('user.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
     </a>
@@ -40,6 +41,7 @@
                                 <a href="{{ route('user.show', ['id' => $user->id]) }}" class="btn btn-link p-0 text-info" title="Lihat">
                                     <i class="fas fa-eye"></i>
                                 </a>
+                                @role('admin')
                                 <a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-link p-0 text-primary" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
@@ -49,6 +51,7 @@
                                     title="Hapus">
                                     <i class="fas fa-trash"></i>
                                 </button>
+                                @endrole
                             </div>
                         </td>
                     </tr>
@@ -64,6 +67,7 @@
     @csrf
     @method('DELETE')
 </form>
+@endhasanyrole
 @endsection
 
 @push('scripts')

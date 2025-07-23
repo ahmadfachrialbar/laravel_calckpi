@@ -2,7 +2,7 @@
 @section('content')
 
 @role('karyawan')
-<div class="container">
+
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Laporan Hasil Perhitungan KPI</h1>
     <hr class="sidebar-divider">
 
@@ -60,21 +60,19 @@
                     </tbody>
                 </table>
             </div>
+            <div class="alert alert-info mt-3 text-right">
+                <strong>Total Score Anda:</strong> {{ number_format($totalScore, 2) }}%
+            </div>
+            @else
+            <div class="alert alert-info">Belum ada riwayat perhitungan KPI.</div>
+            @endif
+        
+            <a href="{{ route('hitungkpi.index') }}" class="btn btn-secondary mt-1">Kembali</a>
+            <a href="{{ route('laporan.download') }}" class="btn btn-success mt-1">
+                <i class="fas fa-file-excel"></i> Download Excel
+            </a>
         </div>
     </div>
-
-    <div class="alert alert-info mt-3 text-right">
-        <strong>Total Score Anda:</strong> {{ number_format($totalScore, 2) }}%
-    </div>
-    @else
-    <div class="alert alert-info">Belum ada riwayat perhitungan KPI.</div>
-    @endif
-
-    <a href="{{ route('hitungkpi.index') }}" class="btn btn-secondary mt-1 mb-4">Kembali</a>
-    <a href="{{ route('laporan.download') }}" class="btn btn-success mt-1 mb-4">
-        <i class="fas fa-file-excel"></i> Download Excel
-    </a>
-</div>
 @endrole
 
 {{-- Admin juga bisa melihat laporan di index.blade, jika mau --}}

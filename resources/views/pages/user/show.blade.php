@@ -53,12 +53,7 @@
                     </tr> -->
                 </tbody>
             </table>
-            
-            <div class="text-center mt-4">
-                <a href="{{ route('user.index') }}" class="btn btn-primary">
-                    <i class="fas fa-arrow-left"></i> Kembali ke Daftar
-                </a>
-            </div>
+            <a href="{{ route('user.index') }}" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>

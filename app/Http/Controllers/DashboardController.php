@@ -11,11 +11,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        if (auth()->user()->hasRole('admin')) {
+        if (auth()->user()->hasAnyRole(['admin', 'direksi'])) {
             $totalKaryawan = User::count();
             $totalKpi = KpiMetrics::count();
 
-            // ✅ Logika disamakan dengan laporanAdmin di HitungkpiController
+            // Logika disamakan dengan laporanAdmin di HitungkpiController
             $karyawanScores = User::role('karyawan')
                 ->with(['jobPosition', 'kpiRecords'])
                 ->get()
@@ -42,7 +42,7 @@ class DashboardController extends Controller
             ]);
         }
 
-        // ✅ Untuk karyawan (tanpa perubahan)
+        // Untuk karyawan (tanpa perubahan)
         $userId = auth()->id();
         $totalKpi = KpiMetrics::where('user_id', $userId)->count();
         $totalUserKpi = KpiRecord::where('user_id', $userId)->count();

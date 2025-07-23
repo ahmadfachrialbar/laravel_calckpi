@@ -1,14 +1,12 @@
 @extends('layouts.app')
 @section('content')
 
-@role('admin')
+@hasanyrole('admin|direksi')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-3">
     <h1 class="h3 mb-0 text-gray-700 font-weight-bold">Detail Laporan KPI: {{ $user->name }}</h1>
-    <a href="{{ route('laporan.admin') }}" class="btn btn-sm btn-secondary shadow-sm">
-        <i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali
-    </a>
 </div>
+<hr class="divider">
 
 <!-- Identitas User -->
 <div class="card p-3 mb-3 shadow-sm border-0">
@@ -40,15 +38,18 @@
                         <th>No</th>
                         <th>Nama KPI</th>
                         <th>Deskripsi</th>
-                        <th>Cara Ukur</th>
+                        <th>Parameter</th>
                         <th>Target</th>
-                        <th>Bobot</th>
+                        <th>Actual</th>
+                        <th>Kategori</th>
                         <th>Simulasi</th>
                         <th>Achievement</th>
                         <th>Weightages</th>
                         <th>Score</th>
                         <th>Waktu</th>
+                        @role('admin')
                         <th>Aksi</th>
+                        @endrole
                     </tr>
                 </thead>
                 <tbody>
@@ -60,11 +61,13 @@
                         <td>{{ $record->kpiMetric->cara_ukur }}</td>
                         <td>{{ $record->kpiMetric->target }}%</td>
                         <td>{{ $record->kpiMetric->bobot }}%</td>
+                        <td>{{ $record->kpiMetric->kategori }}</td>
                         <td>{{ $record->simulasi_penambahan }}%</td>
                         <td>{{ $record->achievement }}%</td>
                         <td>{{ $record->kpiMetric->weightages }}%</td>
                         <td>{{ $record->score }}%</td>
                         <td>{{ $record->created_at->format('d-m-Y H:i') }}</td>
+                        @role('admin')
                         <td>
                             <button type="button"
                                 class="btn btn-link p-0 text-danger btn-delete"
@@ -73,6 +76,7 @@
                                 <i class="fas fa-trash"></i>
                             </button>
                         </td>
+                        @endrole
                     </tr>
                     @endforeach
                 </tbody>
@@ -85,6 +89,7 @@
         @else
         <div class="alert alert-info">Belum ada riwayat KPI untuk karyawan ini.</div>
         @endif
+        <a href="{{ route('laporan.admin') }}" class="btn btn-secondary ">Kembali</a>
     </div>
 </div>
 
@@ -93,7 +98,7 @@
     @csrf
     @method('DELETE')
 </form>
-@endrole 
+@endhasanyrole 
 @endsection
 
 @push('scripts')

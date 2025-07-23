@@ -24,7 +24,7 @@
     </li>
     @endcan
 
-    @role('admin')
+    @hasanyrole('admin|direksi')
     <!-- Divider -->
     <hr class="sidebar-divider">
     <div class="sidebar-heading">
@@ -36,21 +36,32 @@
             <span>Data Karyawan</span>
         </a>
     </li>
-    @endrole
+    @endhasanyrole
 
+    @role('admin')
     <!-- Divider -->
     <hr class="sidebar-divider">
     <div class="sidebar-heading">
         Kelola KPI
     </div>
-    @can('kpimetrics-view')
+    @endrole
+
+    @role('karyawan')
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading">
+        Perhitungan KPI
+    </div>
+    @endrole
+    
+    @hasanyrole('admin|karyawan')
     <li class="nav-item {{ request()->is('kpimetrics*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('kpimetrics.index') }}">
             <i class="fas fa-fw fa-key mr-2"></i>
             <span>Data KPI</span>
         </a>
     </li>
-    @endcan
+    @endhasanyrole
 
     @role('karyawan')
     <li class="nav-item {{ request()->is('hitungkpi*') ? 'active' : '' }}">
@@ -84,20 +95,7 @@
     </li>
     @endrole
 
-    @role('karyawan')
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-    <div class="sidebar-heading">
-        <i class=""></i> Pusat Bantuan
-    </div>
-    <li class="nav-item {{ request()->is('panduan*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('faq.index') }}">
-            <i class="fas fa-fw fa-book-open mr-2"></i>
-            <span>Panduan & Kontak Kami</span>
-        </a>
-    </li>
-    @endrole
-
+    
     @role('karyawan')
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -111,8 +109,8 @@
         </a>
     </li>
     @endrole
-
-    @role('admin')
+    
+    @hasanyrole('admin|direksi')
     <hr class="sidebar-divider">
     <div class="sidebar-heading">
         Reports
@@ -121,6 +119,20 @@
         <a class="nav-link" href="{{ route('laporan.admin') }}">
             <i class="fas fas fa-file-alt mr-2"></i>
             <span>Resume KPI</span>
+        </a>
+    </li>
+    @endhasanyrole
+    
+    @role('karyawan')
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading">
+        <i class=""></i> Pusat Bantuan
+    </div>
+    <li class="nav-item {{ request()->is('panduan*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('faq.index') }}">
+            <i class="fas fa-fw fa-book-open mr-2"></i>
+            <span>Panduan & Kontak Kami</span>
         </a>
     </li>
     @endrole

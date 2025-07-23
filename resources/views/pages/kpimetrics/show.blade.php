@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 text-gray-700 font-weight-bold">Detail KPI </h1>
+    <h1 class="h3 text-gray-700 font-weight-bold">Kelola Detail KPI </h1>
 </div>
 <hr>
 <div class="card p-3 mb-3 shadow-sm border-0">
@@ -23,11 +23,11 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold">Daftar KPI yang Telah Diinputkan</h6>
+        <h6 class="m-0 font-weight-bold">Daftar KPI</h6>
     </div>
     <div class="card-body">
         @if($kpiMetrics->isEmpty())
-            <div class="text-center text-muted">Belum ada data KPI yang diinputkan.</div>
+        <div class="text-center text-muted">Belum ada data KPI yang diinputkan.</div>
         @else
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -56,15 +56,15 @@
                         <td>{{ $kpi->bobot }}%</td>
                         <td>{{ $kpi->weightages }}%</td>
                         <td>
-                            <a href="{{ route('kpimetrics.edit', $kpi->id) }}" class="btn btn-sm text-primary" title="Edit">
+                            <a href="{{ route('kpimetrics.edit', $kpi->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <button type="button"
-                                    class="btn btn-link p-0 text-danger btn-delete"
-                                    data-id="{{ $kpi->id }}"
-                                    title="Hapus">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                class="btn btn-link p-0 text-danger btn-delete"
+                                data-id="{{ $kpi->id }}"
+                                title="Hapus">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                     @endforeach
@@ -72,6 +72,7 @@
             </table>
         </div>
         @endif
+        <a href="{{ route('kpimetrics.index') }}" class="btn btn-secondary mt-3">Kembali</a>
     </div>
 </div>
 <!-- Form delete untuk SweetAlert -->
@@ -87,32 +88,32 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-$(document).ready(function () {
-    $('.btn-delete').on('click', function () {
-        const recordId = $(this).data('id');
+    $(document).ready(function() {
+        $('.btn-delete').on('click', function() {
+            const recordId = $(this).data('id');
 
-        Swal.fire({
-            title: 'Yakin ingin menghapus?',
-            text: "Data yang dihapus tidak bisa dikembalikan!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#e74a3b',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal',  
-            customClass: {
-                confirmButton: 'btn btn-danger',
-                cancelButton: 'btn btn-secondary'
-            },
-            buttonsStyling: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const form = $('#deleteForm');
-                form.attr('action', '/kpimetrics/delete/' + recordId);
-                form.submit();
-            }
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Data yang dihapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e74a3b',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    confirmButton: 'btn btn-danger',
+                    cancelButton: 'btn btn-secondary'
+                },
+                buttonsStyling: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = $('#deleteForm');
+                    form.attr('action', '/kpimetrics/delete/' + recordId);
+                    form.submit();
+                }
+            });
         });
     });
-});
 </script>
 @endpush

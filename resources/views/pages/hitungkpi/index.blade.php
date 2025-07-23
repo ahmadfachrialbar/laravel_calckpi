@@ -5,6 +5,7 @@
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Hitung KPI</h1>
     <hr class="sidebar-divider">
 </div>
+<hr class="divider">
 
 <div class="card p-3 mb-3 shadow-sm border-0">
     <div class="d-flex align-items-center mb-1">
@@ -77,9 +78,9 @@
                     </div>
                 </div>
             </div>
+            <button type="submit" class="btn btn-secondary mt-3">Simpan & Hitung</button>
         </div>
     </div>
-    <button type="submit" class="btn btn-secondary mt-3 mb-4">Simpan & Hitung</button>
 </form>
 @endif
 </div>

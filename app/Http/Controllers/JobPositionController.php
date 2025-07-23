@@ -26,7 +26,8 @@ class JobPositionController extends Controller
 
         JobPosition::create(['name' => $request->name]);
 
-        return redirect()->route('jobpositions.index')->with('success', 'Jabatan berhasil ditambahkan.');
+        notify()->success('Data jabatan/Dept berhasil ditambahkan', 'Sukses');
+        return redirect()->route('jobpositions.index');
     }
 
     public function edit($id)
@@ -45,7 +46,8 @@ class JobPositionController extends Controller
 
         $position->update(['name' => $request->name]);
 
-        return redirect()->route('jobpositions.index')->with('success', 'Jabatan berhasil diperbarui.');
+         notify()->success('Data jabatan/Dept berhasil diperbarui', 'Sukses');
+        return redirect()->route('jobpositions.index');
     }
 
     public function destroy($id)
@@ -53,6 +55,7 @@ class JobPositionController extends Controller
         $position = JobPosition::findOrFail($id);
         $position->delete();
 
-        return redirect()->route('jobpositions.index')->with('success', 'Jabatan berhasil dihapus.');
+        notify()->success('Data jabatan/Dept berhasil dihapus', 'Sukses');
+        return redirect()->route('jobpositions.index');
     }
 }

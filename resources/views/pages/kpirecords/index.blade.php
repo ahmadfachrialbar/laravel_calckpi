@@ -28,7 +28,9 @@
                         <th>Nama Karyawan</th>
                         <th>Jabatan</th>
                         <th>Nama KPI</th>
+                        <th>Kategori</th>
                         <th>Target</th>
+                        <th>Actual</th>
                         <th>Simulasi</th>
                         <th>Achievement</th>
                         <th>Weightages</th>
@@ -44,7 +46,9 @@
                         <td>{{ $record->user->name }}</td>
                         <td>{{ $record->user->jobPosition->name ?? '-' }}</td>
                         <td>{{ $record->kpiMetric->nama_kpi ?? '-' }}</td>
+                        <td>{{ $record->kpiMetric->kategori ?? '-' }}</td>
                         <td>{{ $record->kpiMetric->target ?? '-' }}%</td>
+                        <td>{{ $record->kpiMetric->bobot ?? '-' }}%</td>
                         <td>{{ $record->simulasi_penambahan }}%</td>
                         <td>{{ number_format($record->achievement, 2) }}%</td>
                         <td>{{ $record->kpiMetric->weightages ?? '-' }}%</td>

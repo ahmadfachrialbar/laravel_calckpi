@@ -18,7 +18,7 @@
         </div>
 
         {{-- Statistik Card --}}
-        @role('admin')
+        @hasanyrole('admin|direksi')
         <div class="row">
             <div class="col-xl-6 col-md-6 mb-4">
                 <div class="card border-left-info shadow h-100 py-2">
@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        @endrole
+        @endhasanyrole
 
         @role('karyawan')
         <div class="row">
@@ -44,7 +44,7 @@
         </div>
         @endrole
 
-        @role('admin')
+        @hasanyrole('admin|direksi')
         <div class="row">
             <div class="col-xl-12 col-md-12 mb-4">
                 <div class="card shadow h-100 py-2">
@@ -55,12 +55,12 @@
                 </div>
             </div>
         </div>
-        @endrole
+        @endhasanyrole
     </div>
 </div>
 @endsection
 
-@role('admin')
+@hasanyrole('admin|direksi')
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const ctx = document.getElementById("karyawanScoreChart").getContext("2d");
@@ -92,4 +92,4 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
-@endrole
+@endhasanyrole

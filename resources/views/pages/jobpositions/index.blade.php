@@ -2,8 +2,8 @@
 
 @section('content')
 <!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Data Jabatan / Departemen</h1>
+<div class="d-sm-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Kelola Data Jabatan / Departemen</h1>
     <a href="{{ route('jobpositions.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jabatan
     </a>
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             Swal.fire({
                 title: 'Yakin ingin menghapus?',
-                text: Jabatan "${name}" akan dihapus permanen.,
+                text: `Jabatan "${name}" akan dihapus permanen.`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#e74c3c',
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 buttonsStyling: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    deleteForm.setAttribute('action', /jobpositions/${id});
+                    deleteForm.setAttribute('action', `/jobpositions/${id}`);
                     deleteForm.submit();
                 }
             });

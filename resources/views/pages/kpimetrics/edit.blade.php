@@ -2,14 +2,17 @@
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Edit data</h1>
+    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Edit data KPI</h1>
 </div>
 <!-- form -->
 <form action="{{ route('kpimetrics.update', $kpiMetric->id) }}" method="POST">
     @csrf
     @method('PUT')
-    <div id="form-kpi-wrapper">
-        <div class="form-kpi border rounded p-3 mb-3">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">Edit Data Karyawan</h6>
+        </div>
+        <div class="form-kpi border rounded p-3">
             <div class="form-group">
                 <label>Nama KPI</label>
                 <input type="text" class="form-control" id="nama_kpi" name="nama_kpi" value="{{ $kpiMetric->nama_kpi }}" required>
@@ -41,11 +44,12 @@
             </select>
 
 
+            <button type="submit" class="btn btn-primary mt-3">Simpan</button>
+            <button type="/kpiMetrics" class="btn btn-secondary mt-3" href="">Kembali</button>
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-4">Simpan</button>
-    <button type="/kpiMetrics" class="btn btn-secondary mb-4" href="">Kembali</button>
+
 </form>
 </div>
 <!-- End of Main Content -->

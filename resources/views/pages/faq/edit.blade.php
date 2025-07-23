@@ -1,13 +1,18 @@
 @extends('layouts.app')
 @section('content')
 
-<h1 class="h3 mb-4 text-gray-700">Edit Panduan</h1>
-
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Kelola data Panduan/Kontak</h1>
+</div>
+<hr class="divider">
 <form action="{{ route('faq.update', $faq->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
-    <div id="form-faq-wrapper">
-        <div class="form-faq border rounded p-3 mb-3">
+    <div class="card shadow mb-3">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">Edit Data Panduan /Kontak</h6>
+        </div>
+        <div class="form-kpi border rounded p-3">
             <div class="form-group">
                 <label for="judul">Judul</label>
                 <input type="text" class="form-control" id="judul" name="judul" value="{{ old('judul', $faq->judul) }}" required>
@@ -23,9 +28,9 @@
                 <input type="file" class="form-control" name="pdf_path" id="pdf_path">
             </div>
 
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <a href="{{ route('faq.index') }}" class="btn btn-secondary">Kembali</a>
         </div>
-        <button type="submit" class="btn btn-primary">Simpan</button>
-        <a href="{{ route('faq.index') }}" class="btn btn-secondary">Kembali</a>
     </div>
 </form>
 
