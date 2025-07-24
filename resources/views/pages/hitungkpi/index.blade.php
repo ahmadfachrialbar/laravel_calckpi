@@ -32,12 +32,12 @@
                     <thead class="thead-light text-center">
                         <tr>
                             <th>No</th>
-                            <th>Nama KPI</th>
+                            <th style="min-width: 200px;">Nama KPI</th>
                             <th>Deskripsi</th>
-                            <th>Target</th>
-                            <th>Bobot</th>
-                            <th>Weightages</th>
                             <th>Kategori</th>
+                            <th>Target</th>
+                            <th>Actual</th>
+                            <th>Weightages</th>
                             <th>Simulasi Penambahan</th>
                             <th>Achievement</th>
                             <th>Score</th>
@@ -46,17 +46,17 @@
                     <tbody>
                         @foreach($kpis as $index => $kpi)
                         @php
-                        $record = $records[$kpi->id] ?? null;
-                        $simulasi = $record->simulasi_penambahan ?? old("kpi.$index.simulasi_penambahan");
+                            $record = $records[$kpi->id] ?? null;
+                            $simulasi = $record->simulasi_penambahan ?? old("kpi.$index.simulasi_penambahan");
                         @endphp
                         <tr class="text-center align-middle">
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $kpi->nama_kpi }}</td>
-                            <td>{{ $kpi->penjelasan_sederhana }}</td>
-                            <td class="target">{{ $kpi->target }}</td>
-                            <td class="bobot">{{ $kpi->bobot }}</td>
-                            <td class="weightages">{{ $kpi->weightages }}</td>
+                            <td style="text-align: justify;">{{ $kpi->nama_kpi }}</td>
+                            <td style="text-align: justify;">{{ $kpi->penjelasan_sederhana }}</td>
                             <td class="kategori">{{ $kpi->kategori }}</td>
+                            <td class="target">{{ $kpi->target }}%</td>
+                            <td class="bobot">{{ $kpi->bobot }}%</td>
+                            <td class="weightages">{{ $kpi->weightages }}%</td>
                             <td>
                                 <input type="hidden" name="kpi[{{ $index }}][metric_id]" value="{{ $kpi->id }}">
                                 <input type="number"
@@ -65,11 +65,17 @@
                                     step="0.01"
                                     value="{{ $simulasi }}">
                             </td>
-                            <td class="achievement">{{ $record->achievement ?? '-' }}</td>
-                            <td class="score">{{ $record->score ?? '-' }}</td>
+                            <td class="achievement">
+                                {{ isset($record->achievement) ? number_format($record->achievement, 2) . '%' : '-' }}
+                            </td>
+                            <td class="score">
+                                {{ isset($record->score) ? number_format($record->score, 2) . '%' : '-' }}
+                            </td>
+
                         </tr>
                         @endforeach
                     </tbody>
+
                 </table>
                 <div class="mt-3">
                     <div class="alert alert-info text-right">
@@ -126,8 +132,9 @@
             const score = (achievement * weightages) / 100;
 
             // Update tampilan tabel
-            row.querySelector('.achievement').textContent = achievement.toFixed(2);
-            row.querySelector('.score').textContent = score.toFixed(2);
+            row.querySelector('.achievement').textContent = achievement.toFixed(2) + '%';
+            row.querySelector('.score').textContent = score.toFixed(2) + '%';
+
 
             return score;
         }

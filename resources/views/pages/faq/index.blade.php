@@ -49,12 +49,12 @@
                             <span class="text-muted">-</span>
                             @endif
 
-                            <a href="{{ route('faq.edit', $faq->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
+                            <a href="{{ route('faq.edit', $faq->id) }}" class="btn btn-link p-0 text-primary mx-2" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
 
                             <button type="button"
-                                class="btn btn-link p-0 text-danger btn-delete"
+                                class="btn btn-link p-0 text-danger btn-delete max-2"
                                 data-id="{{ $faq->id }}"
                                 data-name="{{ $faq->judul }}"
                                 title="Hapus">

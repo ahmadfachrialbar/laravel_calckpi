@@ -10,7 +10,7 @@
 <div class="card shadow mb-4">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center" id="dataTable">
+            <table class="table table-bordered table-hover " id="dataTable">
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
@@ -22,13 +22,13 @@
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-center">
                     @foreach($karyawan as $index => $data)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $data->nip }}</td>
-                        <td>{{ $data->name }}</td>
-                        <td>{{ $data->job }}</td>
+                        <td >{{ $index + 1 }}</td>
+                        <td >{{ $data->nip }}</td>
+                        <td class="text-left">{{ $data->name }}</td>
+                        <td class="text-left">{{ $data->job }}</td>
                         <td>{{ number_format($data->total_score, 2) }}%</td>
                         <td>
                             @php
@@ -43,7 +43,7 @@
                                 {{ $data->indikator }}
                             </span>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <a href="{{ route('laporan.admin.show', $data->id) }}" class="btn btn-link p-0 text-info" title="Lihat">
                                 <i class="fas fa-search-plus"></i>
                             </a>

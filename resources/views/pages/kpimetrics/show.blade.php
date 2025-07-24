@@ -2,9 +2,10 @@
 
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 text-gray-700 font-weight-bold">Kelola Detail KPI </h1>
+    <h1 class="h3 text-gray-700 font-weight-bold">Kelola Detail KPI</h1>
 </div>
 <hr>
+
 <div class="card p-3 mb-3 shadow-sm border-0">
     <div class="d-flex align-items-center mb-1">
         <span class="text-muted font-weight-bold mr-2" style="min-width: 120px;">NIP</span>
@@ -20,23 +21,22 @@
     </div>
 </div>
 
-
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold">Daftar KPI</h6>
     </div>
     <div class="card-body">
         @if($kpiMetrics->isEmpty())
-        <div class="text-center text-muted">Belum ada data KPI yang diinputkan.</div>
+            <div class="text-center text-muted">Belum ada data KPI yang diinputkan.</div>
         @else
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTableFull" width="100%" cellspacing="0">
-                <thead class="thead-light">
+                <thead class="thead-light text-center">
                     <tr>
                         <th>No</th>
-                        <th>Nama KPI</th>
-                        <th>Penjelasan</th>
-                        <th>Cara Ukur</th>
+                        <th style="min-width: 180px;">Nama KPI</th>
+                        <th style="min-width: 220px;">Deskripsi</th>
+                        <th style="min-width: 200px;">Cara Ukur</th>
                         <th>Kategori</th>
                         <th>Target</th>
                         <th>Actual</th>
@@ -47,22 +47,19 @@
                 <tbody>
                     @foreach($kpiMetrics as $index => $kpi)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $kpi->nama_kpi }}</td>
-                        <td>{{ $kpi->penjelasan_sederhana }}</td>
-                        <td>{{ $kpi->cara_ukur }}</td>
-                        <td>{{ ucfirst($kpi->kategori) }}</td>
-                        <td>{{ $kpi->target }}%</td>
-                        <td>{{ $kpi->bobot }}%</td>
-                        <td>{{ $kpi->weightages }}%</td>
-                        <td>
+                        <td class="text-center">{{ $index + 1 }}</td>
+                        <td style="text-align: justify;">{{ $kpi->nama_kpi }}</td>
+                        <td style="text-align: justify;">{{ $kpi->penjelasan_sederhana }}</td>
+                        <td style="text-align: justify;">{{ $kpi->cara_ukur }}</td>
+                        <td class="text-center">{{ ucfirst($kpi->kategori) }}</td>
+                        <td class="text-center">{{ $kpi->target }}%</td>
+                        <td class="text-center">{{ $kpi->bobot }}%</td>
+                        <td class="text-center">{{ $kpi->weightages }}%</td>
+                        <td class="text-center">
                             <a href="{{ route('kpimetrics.edit', $kpi->id) }}" class="btn btn-link p-0 text-primary" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <button type="button"
-                                class="btn btn-link p-0 text-danger btn-delete"
-                                data-id="{{ $kpi->id }}"
-                                title="Hapus">
+                            <button type="button" class="btn btn-link p-0 text-danger btn-delete" data-id="{{ $kpi->id }}" title="Hapus">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </td>
@@ -75,12 +72,12 @@
         <a href="{{ route('kpimetrics.index') }}" class="btn btn-secondary mt-3">Kembali</a>
     </div>
 </div>
+
 <!-- Form delete untuk SweetAlert -->
 <form id="deleteForm" method="POST" style="display: none;">
     @csrf
     @method('DELETE')
 </form>
-
 @endsection
 
 @push('scripts')
@@ -89,11 +86,10 @@
 
 <script>
     $(document).ready(function() {
-        
         $('#dataTableFull').DataTable({
             scrollX: true,
             language: {
-                search : "Cari Data :"
+                search: "Cari Data :"
             }
         });
 

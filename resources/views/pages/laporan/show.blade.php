@@ -33,35 +33,35 @@
         @if($records->count() > 0)
         <div class="table-responsive">
             <table class="table table-bordered table-hover table-striped bg-white " id="dataTableDetail" width="100%" cellspacing="0">
-                <thead class="thead-light text-center">
+                <thead class="thead-light">
                     <tr>
                         <th>No</th>
-                        <th>Nama KPI</th>
-                        <th>Penjelasan</th>
+                        <th style="min-width: 300px;">Nama KPI</th>
+                        <th style="min-width: 200px;">Penjelasan</th>
                         <th>Parameter</th>
+                        <th>Kategori</th>
                         <th>Target</th>
                         <th>Actual</th>
-                        <th>Kategori</th>
                         <th>Simulasi</th>
                         <th>Achievement</th>
                         <th>Weightages</th>
-                        <th>Score</th>
-                        <th>Waktu</th>
+                        <th style="min-width: 100px;">Score</th>
+                        <th style="min-width: 155px;">Waktu</th>
                         @role('admin')
                         <th>Aksi</th>
                         @endrole
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-center">
                     @foreach($records as $index => $record)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $record->kpiMetric->nama_kpi }}</td>
-                        <td>{{ $record->kpiMetric->penjelasan_sederhana }}</td>
-                        <td>{{ $record->kpiMetric->cara_ukur }}</td>
+                        <td class="text-left" >{{ $record->kpiMetric->nama_kpi }}</td>
+                        <td class="text-left" >{{ $record->kpiMetric->penjelasan_sederhana }}</td>
+                        <td class="text-left" >{{ $record->kpiMetric->cara_ukur }}</td>
+                        <td>{{ $record->kpiMetric->kategori }}</td>
                         <td>{{ $record->kpiMetric->target }}%</td>
                         <td>{{ $record->kpiMetric->bobot }}%</td>
-                        <td>{{ $record->kpiMetric->kategori }}</td>
                         <td>{{ $record->simulasi_penambahan }}%</td>
                         <td>{{ $record->achievement }}%</td>
                         <td>{{ $record->kpiMetric->weightages }}%</td>

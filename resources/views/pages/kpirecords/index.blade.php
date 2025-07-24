@@ -21,31 +21,31 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered table-hover bg-white text-center" id="dataTableFull" width="100%" cellspacing="0" style="min-width: 1200px;">
+            <table class="table table-bordered table-hover bg-white" id="dataTableFull" width="100%" cellspacing="0" style="min-width: 1200px;">
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
-                        <th>Nama Karyawan</th>
+                        <th style="min-width: 200px;">Nama</th>
                         <th>Jabatan</th>
-                        <th>Nama KPI</th>
+                        <th style="min-width: 200px;">Nama KPI</th>
                         <th>Kategori</th>
                         <th>Target</th>
                         <th>Actual</th>
                         <th>Simulasi</th>
                         <th>Achievement</th>
                         <th>Weightages</th>
-                        <th>Score</th>
-                        <th>Waktu</th>
+                        <th style="min-width: 80px;">Score</th>
+                        <th style="min-width: 100px;">Waktu</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-center">
                     @forelse ($records as $index => $record)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $record->user->name }}</td>
-                        <td>{{ $record->user->jobPosition->name ?? '-' }}</td>
-                        <td>{{ $record->kpiMetric->nama_kpi ?? '-' }}</td>
+                        <td class="text-left">{{ $record->user->name }}</td>
+                        <td class="text-left">{{ $record->user->jobPosition->name ?? '-' }}</td>
+                        <td class="text-left">{{ $record->kpiMetric->nama_kpi ?? '-' }}</td>
                         <td>{{ $record->kpiMetric->kategori ?? '-' }}</td>
                         <td>{{ $record->kpiMetric->target ?? '-' }}%</td>
                         <td>{{ $record->kpiMetric->bobot ?? '-' }}%</td>

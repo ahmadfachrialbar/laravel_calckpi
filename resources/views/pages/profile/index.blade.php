@@ -33,7 +33,7 @@
                 <div class="table-responsive">
                     <table class="table table-borderless mb-0">
                         <tr>
-                            <th class="text-nowrap">NIP</th>
+                            <th width="25%" class="text-nowrap">NIP</th>
                             <td>: {{ Auth::user()->nip }}</td>
                         </tr>
                         <tr>

@@ -15,12 +15,12 @@
         <div class="table-responsive">
             <table class="table table-bordered" width="100%" cellspacing="0">
                 <tbody>
-                    <tr>
+                    <!-- <tr>
                         <th width="25%" class="bg-light">ID Karyawan</th>
                         <td>{{ $user->id }}</td>
-                    </tr>
+                    </tr> -->
                     <tr>
-                        <th class="bg-light">NIP</th>
+                        <th width="25%" class="bg-light">NIP</th>
                         <td>{{ $user->nip }}</td>
                     </tr>
                     <tr>

@@ -16,10 +16,10 @@
     <div class="card-body">
         <div class="table-responsive">
             <!-- Ubah ID di sini -->
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead class="thead-light text-center">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-light">
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>NIP</th>
                         <th>Nama</th>
                         <th>Jabatan/Departemen</th>
@@ -30,11 +30,11 @@
                 <tbody>
                     @foreach($karyawan as $index => $user)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $user->nip }}</td>
+                        <td class="text-center">{{ $index + 1 }}</td>
+                        <td class="text-center">{{ $user->nip }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->jobPosition->name ?? '-' }}</td>
-                        <td>{{ $user->created_at->format('d-m-Y') }}</td>
+                        <td class="text-center">{{ $user->created_at->format('d-m-Y') }}</td>
                         <td class="text-center">
                             <a href="{{ route('kpimetrics.create', ['user_id' => $user->id]) }}" class="btn btn-sm text-success" title="Tambah KPI">
                                 <i class="fas fa-plus"></i>
@@ -80,31 +80,36 @@
         <div class="table-responsive">
             <table class="table table-bordered feedback-table" id="dataTable" width="100%" cellspacing="0">
                 <thead class="thead-light">
-                    <tr>
-                        <th>Nama KPI</th>
-                        <th>Deskripsi</th>
-                        <th>Parameter</th>
+                    <tr class="text-center">
+                        <th>No</th>
+                        <th style="min-width: 200px; text-align: justify;">Nama KPI</th>
+                        <th style="max-width: 350px; text-align: justify;">Deskripsi</th>
+                        <th style="text-align: justify;">Parameter</th>
+                        <th>Kategori</th>
                         <th>Target</th>
                         <th>Actual</th>
-                        <th>Kategori</th>
+                        <th>Weightages</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($kpiMetrics as $kpi)
+                    @forelse ($kpiMetrics as $index => $kpi)
                     <tr>
-                        <td>{{ $kpi->nama_kpi }}</td>
-                        <td>{{ $kpi->penjelasan_sederhana }}</td>
-                        <td>{{ $kpi->cara_ukur }}</td>
-                        <td>{{ $kpi->target }}</td>
-                        <td>{{ $kpi->bobot }}</td>
-                        <td>{{ $kpi->kategori }}</td>
+                        <td class="text-center">{{ $index + 1 }}</td>
+                        <td style="text-align: justify;">{{ $kpi->nama_kpi }}</td>
+                        <td style="text-align: justify;">{{ $kpi->penjelasan_sederhana }}</td>
+                        <td style="text-align: justify;">{{ $kpi->cara_ukur }}</td>
+                        <td class="text-center">{{ $kpi->kategori }}</td>
+                        <td class="text-center">{{ $kpi->target }}</td>
+                        <td class="text-center">{{ $kpi->bobot }}</td>
+                        <td class="text-center weightages">{{ $kpi->weightages }}%</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center"><i>Belum ada KPI</i></td>
+                        <td colspan="8" class="text-center"><i>Belum ada KPI</i></td>
                     </tr>
                     @endforelse
                 </tbody>
+
             </table>
         </div>
     </div>

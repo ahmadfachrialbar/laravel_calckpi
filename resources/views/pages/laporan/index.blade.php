@@ -29,9 +29,10 @@
                     <thead class="thead-light">
                         <tr>
                             <th>No</th>
-                            <th>Nama KPI</th>
-                            <th>Deskripsi</th>
-                            <th>Cara Ukur</th>
+                            <th style="min-width: 200px;">Nama KPI</th>
+                            <th style="max-width: 350px;">Deskripsi</th>
+                            <th style="min-width: 200px;">Cara Ukur</th>
+                            <th>Kategori</th>
                             <th>Target</th>
                             <th>Bobot</th>
                             <th>Simulasi Penambahan</th>
@@ -45,9 +46,10 @@
                         @foreach($records as $index => $record)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $record->kpiMetric->nama_kpi }}</td>
-                            <td>{{ $record->kpiMetric->penjelasan_sederhana }}</td>
-                            <td>{{ $record->kpiMetric->cara_ukur }}</td>
+                            <td style="text-align: justify;">{{ $record->kpiMetric->nama_kpi }}</td>
+                            <td style="text-align: justify;">{{ $record->kpiMetric->penjelasan_sederhana }}</td>
+                            <td style="text-align: justify;">{{ $record->kpiMetric->cara_ukur }}</td>
+                            <td>{{ $record->kpiMetric->kategori }}</td>
                             <td>{{ $record->kpiMetric->target }}%</td>
                             <td>{{ $record->kpiMetric->bobot }}%</td>
                             <td>{{ $record->simulasi_penambahan }}%</td>

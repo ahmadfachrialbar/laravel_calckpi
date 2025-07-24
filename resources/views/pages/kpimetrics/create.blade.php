@@ -60,7 +60,7 @@ $selectedUser = $users->firstWhere('id', $selectedUserId);
             </div>
 
             <div class="form-group">
-                <label for="penjelasan_sederhana">Penjelasan Sederhana</label>
+                <label for="penjelasan_sederhana">Deskripsi</label>
                 <textarea name="penjelasan_sederhana" id="penjelasan_sederhana" class="form-control" rows="3" required>{{ old('penjelasan_sederhana') }}</textarea>
             </div>
 

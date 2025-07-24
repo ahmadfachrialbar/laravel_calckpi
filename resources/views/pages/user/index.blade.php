@@ -6,7 +6,7 @@
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Kelola Data Karyawan</h1>
     <a href="{{ route('user.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
-        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
+        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Karyawan
     </a>
 </div>
 <hr class="divider">
@@ -32,21 +32,21 @@
                     @php $no = 1; @endphp
                     @foreach($users as $user)
                     <tr>
-                        <td>{{ $no++ }}</td>
-                        <td>{{ $user->nip }}</td>
+                        <td class= "text-center">{{ $no++ }}</td>
+                        <td class= "text-center">{{ $user->nip }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->jobPosition->name ?? '-' }}</td>
                         <td>
-                            <div class="d-flex justify-content-center" style="gap: 0.5rem;">
-                                <a href="{{ route('user.show', ['id' => $user->id]) }}" class="btn btn-link p-0 text-info" title="Lihat">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <a href="{{ route('user.show', ['id' => $user->id]) }}" class="btn btn-link p-0 text-info mx-2" title="Lihat">
                                     <i class="fas fa-search-plus"></i>
                                 </a>
                                 @role('admin')
-                                <a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-link p-0 text-primary" title="Edit">
+                                <a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-link p-0 text-primary mx-2" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <button type="button"
-                                    class="btn btn-link p-0 text-danger btn-delete"
+                                    class="btn btn-link p-0 text-danger btn-delete mx-2"
                                     data-id="{{ $user->id }}"
                                     title="Hapus">
                                     <i class="fas fa-trash"></i>
@@ -54,6 +54,7 @@
                                 @endrole
                             </div>
                         </td>
+
                     </tr>
                     @endforeach
                 </tbody>
