@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KpimetricController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\HitungkpiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KpiRecordController;
@@ -110,6 +111,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/jobpositions/{id}', [App\Http\Controllers\JobPositionController::class, 'update'])->name('jobpositions.update');
     Route::delete('/jobpositions/{id}', [App\Http\Controllers\JobPositionController::class, 'destroy'])->name('jobpositions.destroy');
 });
+
+// Route untuk AI
+Route::middleware(['auth'])->group(function () {
+    Route::get('/chatbot', function () {
+        return view('pages.AI.chatbot');
+    })->name('chatbot.index');
+
+    Route::post('/chatbot/send', [ChatbotController::class, 'send'])->name('chatbot.send');
+});
+
 
 
 

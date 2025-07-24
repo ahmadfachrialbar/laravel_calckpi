@@ -37,7 +37,7 @@
                     <tr>
                         <th>No</th>
                         <th>Nama KPI</th>
-                        <th>Deskripsi</th>
+                        <th>Penjelasan</th>
                         <th>Parameter</th>
                         <th>Target</th>
                         <th>Actual</th>

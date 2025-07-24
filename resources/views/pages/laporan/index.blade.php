@@ -25,7 +25,7 @@
     <div class="card shadow mb-4">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-striped text-center" id="dataTable">
+                <table class="table table-bordered table-striped text-center" id="dataTableFull">
                     <thead class="thead-light">
                         <tr>
                             <th>No</th>
@@ -81,4 +81,15 @@
 @push('scripts')
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#dataTableFull').DataTable({
+            scrollX: true,
+            language: {
+                search : "Cari Data :"
+            }
+        });
+    });
+</script>
 @endpush

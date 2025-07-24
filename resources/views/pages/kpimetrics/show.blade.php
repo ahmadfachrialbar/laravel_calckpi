@@ -30,7 +30,7 @@
         <div class="text-center text-muted">Belum ada data KPI yang diinputkan.</div>
         @else
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered" id="dataTableFull" width="100%" cellspacing="0">
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
@@ -89,6 +89,14 @@
 
 <script>
     $(document).ready(function() {
+        
+        $('#dataTableFull').DataTable({
+            scrollX: true,
+            language: {
+                search : "Cari Data :"
+            }
+        });
+
         $('.btn-delete').on('click', function() {
             const recordId = $(this).data('id');
 

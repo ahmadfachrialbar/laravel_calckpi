@@ -85,16 +85,16 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
     <div class="sidebar-heading">
-        Kelola Bantuan
+        KELOLA JABATAN
     </div>
-    <li class="nav-item {{ request()->is('panduan*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('faq.index') }}">
-            <i class="fas fa-book-open mr-2"></i>
-            <span>Panduan & Kontak Kami</span>
+    <li class="nav-item {{ request()->is('jobpositions*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('jobpositions.index') }}">
+            <i class="fas fa-users-cog mr-2"></i>
+            <span>Jabatan</span>
         </a>
     </li>
     @endrole
-
+    
     
     @role('karyawan')
     <!-- Divider -->
@@ -123,6 +123,22 @@
     </li>
     @endhasanyrole
     
+    
+
+    @role('admin')
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading">
+        Kelola Bantuan
+    </div>
+    <li class="nav-item {{ request()->is('panduan*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('faq.index') }}">
+            <i class="fas fa-book-open mr-2"></i>
+            <span>Panduan & Kontak Kami</span>
+        </a>
+    </li>
+    @endrole
+
     @role('karyawan')
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -133,20 +149,6 @@
         <a class="nav-link" href="{{ route('faq.index') }}">
             <i class="fas fa-fw fa-book-open mr-2"></i>
             <span>Panduan & Kontak Kami</span>
-        </a>
-    </li>
-    @endrole
-
-    @role('admin')
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-    <div class="sidebar-heading">
-        KELOLA JABATAN
-    </div>
-    <li class="nav-item {{ request()->is('jobpositions*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('jobpositions.index') }}">
-            <i class="fas fa-users-cog mr-2"></i>
-            <span>Jabatan</span>
         </a>
     </li>
     @endrole

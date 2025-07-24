@@ -10,7 +10,17 @@
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
         <div class="topbar-divider d-none d-sm-block"></div>
-        
+
+        <!-- ✅ Menu Chatbot AI -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('chatbot.index') }}">
+                <i class="fas fa-robot fa-sm fa-fw mr-1 text-primary"></i>
+                <span class="d-none d-lg-inline text-gray-600 small">Chatbot AI</span>
+            </a>
+        </li>
+
+        <div class="topbar-divider d-none d-sm-block"></div>
+
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">

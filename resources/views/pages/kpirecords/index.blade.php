@@ -21,7 +21,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered table-hover bg-white text-center" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered table-hover bg-white text-center" id="dataTableFull" width="100%" cellspacing="0" style="min-width: 1200px;">
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
@@ -86,28 +86,37 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    $('.btn-delete').on('click', function() {
-        const recordId = $(this).data('id');
-        Swal.fire({
-            title: 'Yakin ingin menghapus?',
-            text: "Data yang dihapus tidak bisa dikembalikan!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#e74a3b',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal',
-            customClass: {
-                confirmButton: 'btn btn-danger',
-                cancelButton: 'btn btn-secondary'
-            },
-            buttonsStyling: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const form = $('#deleteRecordForm');
-                form.attr('action', '/kpirecords/' + recordId);
-                form.submit();
+    $(document).ready(function(){
+        $('#dataTableFull').DataTable({
+            scrollX: true,
+            language: {
+                search : "Cari Data :"
             }
+        });
+    
+        $('.btn-delete').on('click', function() {
+            const recordId = $(this).data('id');
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Data yang dihapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e74a3b',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    confirmButton: 'btn btn-danger',
+                    cancelButton: 'btn btn-secondary'
+                },
+                buttonsStyling: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = $('#deleteRecordForm');
+                    form.attr('action', '/kpirecords/' + recordId);
+                    form.submit();
+                }
+            });
         });
     });
 </script>
