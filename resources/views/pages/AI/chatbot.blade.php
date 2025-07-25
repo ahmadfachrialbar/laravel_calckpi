@@ -29,16 +29,16 @@
         <div class="card shadow p-3">
             <h5 class="text-gray-700 font-weight-bold">ℹ️ Tentang Chatbot</h5>
             <p class="text-muted" style="font-size:14px;">
-                Chatbot ini menggunakan teknologi <strong>Gemini AI</strong> untuk membantu Anda memahami
+                Chatbot ini menggunakan teknologi <strong>AI</strong> untuk membantu Anda memahami
                 penggunaan website <strong>Calculating KPI PT Anugrah Beton Nusantara</strong>.
             </p>
             <p class="text-muted"><em>
-                Chatbot akan menjelaskan fitur sesuai peran (Karyawan, Admin, Direksi). Anda juga bisa bertanya hal umum ringan.
+                Perlu diketahui bahwa AI hanya menjawab pertanyaan seputar Website Calculating KPI, jika ada pertanyaan selain itu AI tidak akan menjawab
             </em></p>
         </div>
     </div>
 </div>
-<a href="{{ route('dashboard') }}" class="mt-3 btn btn-secondary">Kembali</a>
+<a href="{{ route('dashboard') }}" class="mt-3 btn btn-secondary mb-3">Kembali</a>
 
 <style>
     /* Styling chat bubble ala WhatsApp */

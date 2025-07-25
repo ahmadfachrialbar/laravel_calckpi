@@ -10,21 +10,35 @@
         <h6 class="m-0 font-weight-bold">Form tambah Data Karyawan</h6>
     </div>
     <div class="card-body">
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
         <form action="{{ route('user.storeMultiple') }}" method="POST">
             @csrf
             <div id="form-user-wrapper">
                 <div class="form-user border rounded p-3 mb-3">
                     <div class="form-group">
                         <label>NIP</label>
-                        <input type="text" name="users[0][nip]" class="form-control" required>
+                        <input type="text" name="users[0][nip]" class="form-control @error('users.0.nip') is-invalid @enderror" required value="{{ old('users.0.nip') }}">
+                        @error('users.0.nip')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
+
                     <div class="form-group">
                         <label>Nama</label>
-                        <input type="text" name="users[0][name]" class="form-control" required>
+                        <input type="text" name="users[0][name]" class="form-control" required value="{{ old('users.0.name') }}">
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" name="users[0][email]" class="form-control" required>
+                        <input type="text" name="users[0][email]" class="form-control @error('users.0.email') is-invalid @enderror" required value="{{ old('users.0.email') }}">
                     </div>
                     <div class="form-group">
                         <label>Password</label>

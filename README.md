@@ -1,61 +1,104 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📊 Calculating KPI PT Anugrah Beton Nusantara
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi **Calculating KPI** ini dirancang untuk memudahkan pengelolaan dan perhitungan **Key Performance Indicator (KPI)** karyawan di PT Anugrah Beton Nusantara.  
+Fitur utama mencakup **Pengelolaan Data Karyawan**, **Pengelolaan Data KPI**, **perhitungan KPI otomatis**, **pengelolaan data jabatan**, **laporan KPI lengkap**, hingga **chatbot panduan penggunaan aplikasi**.
+---
+🖼 Tampilan Aplikasi
+<p align="center"> <img src="public/screenshots/dashboard.png" alt="Dashboard" width="600"><br> <i> Tampilan Dashboard Admin</i> </p> <p align="center"> <img src="public/screenshots/menu.png" alt="Menu Utama" width="600"><br> <i>Tampilan Menu Utama</i> </p> </p> <p align="center"> <img src="public/screenshots/direksi.png" alt="Menu Resume" width="600"><br> <i>Tampilan Menu Resume</i> </p>
 
-## About Laravel
+---
+## 👨‍💻 **Dikembangkan Oleh**
+<p align="center"> <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" width="120" style="border-radius:50%;" alt="Foto Profil"> </p> <h3 align="center">Ahmad Fachri Albar</h3> <p align="center"> <b>Mahasiswa Program Studi Sistem Informasi</b><br> <b>Telkom University Purwokerto</b> </p> <p align="center"> <a href="https://github.com/ahmadfachrialbar" target="_blank"> <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/> </a> <a href="mailto:ahmadfachri846@gmail.com" target="_blank"> <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/> </a> <a href="https://www.linkedin.com/in/ahmad-fachri-albar-98a135273/" target="_blank"> <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/> </a> </p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 **Fitur Utama**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🔹 **Role dan Hak Akses**
+1. **Admin**
+   - CRUD data User, karyawan, jabatan, dan KPI metrics dan fitur lainnya.
+   - Melihat laporan KPI semua karyawan.
+   - Mengelola profil pribadi.
+2. **Karyawan**
+   - Menghitung KPI secara mandiri.
+   - Melihat laporan KPI pribadi.
+   - Mengedit profil.
+3. **Direksi**
+   - Melihat Data Karyawan dan laporan KPI semua karyawan (read-only).
+4. **Chatbot Panduan**
+   - Semua role dapat mengakses chatbot untuk panduan penggunaan aplikasi.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🗂 **Struktur Fitur yang Diuji (Whitebox Testing)**
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Semua controller telah diuji menggunakan **PHPUnit** dengan pendekatan **whitebox testing**.  
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🧪 **Hasil Pengujian**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Seluruh pengujian dilakukan menggunakan **PHPUnit** di Laravel.
 
-## Laravel Sponsors
+| Controller | Jumlah Test | Status |
+|------------|-------------|--------|
+| JobPositionController | 5 | ✅ Pass |
+| KpiMetricController | 7 | ✅ Pass |
+| HitungKpiController | 7 | ✅ Pass |
+| KpiRecordController | 2 | ✅ Pass |
+| ProfileController | 5 | ✅ Pass |
+| FaqController | 4 | ✅ Pass |
+| DashboardController | 3 | ✅ Pass |
+| ChatbotController | 3 | ✅ Pass |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Total: **36 test case** – **100% Passed ✅**
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🛠 **Instalasi dan Menjalankan Project**
 
-## Contributing
+### 1. Clone Repository
+```bash
+git clone https://github.com/ahmadfachrialbar/Calculating_KPI.git
+cd Calculating_KPI
+```
+### 2. Install Dependensi
+```bash
+composer install
+npm install && npm run dev
+```
+### 3. Salin .env
+```bash
+cp .env.example .env
+```
+### 4. Migrasi Database dan Seeder
+```bash
+php artisan migrate --seed
+```
+### 5. jalankan Server
+```bash
+php artisan serve
+Akses di http://localhost:8000
+```
+## 👨‍💻 **Teknologi yang Digunakan**
+1. **Framework & Bahasan Pemrograman**
+   - Laravel 10 (sebagai framework utama backend & frontend Blade)
+   - PHP 8.x (bahasa pemrograman)
+   - Blade Template Engine (untuk tampilan UI)
+2. **Database**
+   - Mysql.
+3. **Autentikasi & Role Management**
+   - Spatie Laravel Permission (untuk manajemen role: admin, karyawan, direksi)
+4. **Frontend & UI**
+   - Bootstrap
+   - Font Awesome & Icons
+   - SweetAlert2 / Notify
+   - DataTables
+   - Chart.js
+   - PhpSpreadsheet
+   - DOMPDF / Laravel Snappy 
+4. **Tools & Environment**
+   - Composer
+   - FonArtisan CLI
+   - Visual Studio Code
+   - Git dan Github
+   - XAMPP
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

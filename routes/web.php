@@ -59,9 +59,19 @@ Route::middleware(['role:admin'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/hitungkpi', [HitungKpiController::class, 'index'])
-        ->name('hitungkpi.index');
+    ->name('hitungkpi.index');
     Route::post('/hitungkpi', [HitungKpiController::class, 'store'])
-        ->name('hitungkpi.store');
+    ->name('hitungkpi.store');
+});
+// ROute untuk laporan karyawan dan admin
+Route::middleware(['role:karyawan'])->group(function () {
+    Route::get('/laporan', [HitungkpiController::class, 'laporan'])->name('laporan.index');
+    Route::get('/laporan/download', [HitungkpiController::class, 'download'])->name('laporan.download');
+});
+Route::middleware(['role:admin|direksi'])->group(function () {
+    Route::get('/laporan/admin', [App\Http\Controllers\HitungkpiController::class, 'laporanAdmin'])->name('laporan.admin');
+    Route::get('/laporan/admin/download', [App\Http\Controllers\HitungkpiController::class, 'downloadLaporanAdmin'])->name('laporan.admin.download');
+    Route::get('/laporan/admin/show/{id}', [App\Http\Controllers\HitungkpiController::class, 'showLaporanAdmin'])->name('laporan.admin.show');
 });
 
 // Route kpirecords
@@ -70,6 +80,7 @@ Route::middleware(['auth', 'role:admin|direksi'])->group(function () {
         ->name('kpirecords.index');
     Route::delete('/kpirecords/{id}', [\App\Http\Controllers\KpiRecordController::class, 'destroy'])
         ->name('kpirecords.destroy');
+        
 });
 
 
@@ -91,16 +102,6 @@ Route::middleware(['auth', 'role:admin|karyawan|direksi'])->group(function () {
 
 });
 
-// ROute untuk laporan karyawan dan admin
-Route::middleware(['role:karyawan'])->group(function () {
-    Route::get('/laporan', [HitungkpiController::class, 'laporan'])->name('laporan.index');
-    Route::get('/laporan/download', [HitungkpiController::class, 'download'])->name('laporan.download');
-});
-Route::middleware(['role:admin|direksi'])->group(function () {
-    Route::get('/laporan/admin', [App\Http\Controllers\HitungkpiController::class, 'laporanAdmin'])->name('laporan.admin');
-    Route::get('/laporan/admin/download', [App\Http\Controllers\HitungkpiController::class, 'downloadLaporanAdmin'])->name('laporan.admin.download');
-    Route::get('/laporan/admin/show/{id}', [App\Http\Controllers\HitungkpiController::class, 'showLaporanAdmin'])->name('laporan.admin.show');
-});
 
 // route untuk kelola jabatan
 Route::middleware(['auth', 'role:admin'])->group(function () {

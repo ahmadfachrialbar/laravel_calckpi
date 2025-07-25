@@ -38,24 +38,40 @@ class UserController extends Controller
     {
         $data = $request->input('users');
 
-        foreach ($data as $userData) {
+        foreach ($data as $index => $userData) {
+            // Cek apakah NIP sudah ada
+            if (User::where('nip', $userData['nip'])->exists()) {
+                return back()->withErrors([
+                    "users.{$index}.nip" => "NIP {$userData['nip']} sudah digunakan.",
+                ])->withInput();
+            }
+
+            // Cek apakah Email sudah ada
+            if (User::where('email', $userData['email'])->exists()) {
+                return back()->withErrors([
+                    "users.{$index}.email" => "Email {$userData['email']} sudah digunakan.",
+                ])->withInput();
+            }
+
+            // Jika validasi lolos, buat user
             $user = User::create([
                 'nip'              => $userData['nip'],
                 'name'             => $userData['name'],
                 'email'            => $userData['email'],
                 'password'         => bcrypt($userData['password']),
                 'job_position_id'  => $userData['job_position_id'] ?? null,
-                'role'             => $userData['role'], // admin, karyawan, direksi
+                'role'             => $userData['role'],
                 'join_date'        => $userData['join_date'],
             ]);
 
-            // ✅ Assign Role ke Spatie Permission
+            // Beri role menggunakan Spatie
             $user->assignRole($userData['role']);
         }
 
         notify()->success('Data karyawan berhasil ditambahkan', 'Sukses');
         return redirect()->route('user.index');
     }
+
 
     /**
      * Edit user
