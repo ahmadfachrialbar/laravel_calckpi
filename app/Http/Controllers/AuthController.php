@@ -46,9 +46,22 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validate = $request->validate([
-            'name' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'nip' => ['required', 'unique:users,nip'], // Pastikan NIP unik
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email'], // Pastikan Email unik
+            'password' => ['required', 'min:6'], // Minimal 6 karakter (opsional)
+            'job_position_id' => ['required', 'exists:job_positions,id'],
+            'join_date' => ['required', 'date'],
+        ], [
+            'nip.required' => 'NIP wajib diisi.',
+            'nip.unique' => 'NIP sudah terdaftar.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah terdaftar.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal 6 karakter.',
+            'job_position_id.required' => 'Jabatan wajib dipilih.',
+            'join_date.required' => 'Tanggal bergabung wajib diisi.',
         ]);
 
         $user = new User();
@@ -57,19 +70,17 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->job_position_id = $request->job_position_id;
+        
         $user->role = 'karyawan';
         $user->join_date = $request->join_date;
 
-        // Tambahkan logika ini untuk mengisi kolom jabatan
-        $jabatan = JobPosition::find($request->job_position_id);
-        
-        
-
         $user->save();
         $user->assignRole('karyawan');
-        notify()->success('Registrasi berhasil, SIlahkan Login ', 'Sukses');
+
+        notify()->success('Registrasi berhasil, Silahkan Login', 'Sukses');
         return redirect('/');
     }
+
 
     public function logout(Request $request)
     {
