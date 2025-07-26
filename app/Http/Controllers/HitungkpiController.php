@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KpiMetrics;
 use App\Models\KpiRecord;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -245,6 +246,62 @@ class HitungkpiController extends Controller
         ]);
     }
 
+    public function downloadLaporanDetail($id)
+    {
+        $user = User::with(['jobPosition', 'kpiRecords.kpiMetric'])->findOrFail($id);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // ✅ Header Kolom
+        $sheet->fromArray([
+            'No',
+            'Nama KPI',
+            'Penjelasan',
+            'Cara Ukur',
+            'Kategori',
+            'Target',
+            'Actual',
+            'Simulasi',
+            'Achievement',
+            'Weightages',
+            'Score',
+            'Waktu'
+        ], null, 'A1');
+
+        // ✅ Data KPI Records
+        $row = 2;
+        foreach ($user->kpiRecords as $index => $record) {
+            $sheet->fromArray([
+                $index + 1,
+                $record->kpiMetric->nama_kpi,
+                $record->kpiMetric->penjelasan_sederhana,
+                $record->kpiMetric->cara_ukur,
+                $record->kpiMetric->kategori,
+                $record->kpiMetric->target . '%',
+                $record->kpiMetric->bobot . '%',
+                $record->simulasi_penambahan . '%',
+                $record->achievement . '%',
+                $record->kpiMetric->weightages . '%',
+                $record->score . '%',
+                $record->created_at->format('d-m-Y H:i'),
+            ], null, 'A' . $row);
+
+            $row++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Laporan_KPI_Detail_' . $user->name . '.xlsx';
+
+        return new StreamedResponse(function () use ($writer) {
+            $writer->save('php://output');
+        }, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => "attachment;filename=\"$filename\"",
+            'Cache-Control' => 'max-age=0',
+        ]);
+    }
+    
     public function showLaporanAdmin($id)
     {
         $user = \App\Models\User::with('jobPosition')->findOrFail($id);

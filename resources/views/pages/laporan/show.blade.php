@@ -56,9 +56,9 @@
                     @foreach($records as $index => $record)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td class="text-left" >{{ $record->kpiMetric->nama_kpi }}</td>
-                        <td class="text-left" >{{ $record->kpiMetric->penjelasan_sederhana }}</td>
-                        <td class="text-left" >{{ $record->kpiMetric->cara_ukur }}</td>
+                        <td class="text-left">{{ $record->kpiMetric->nama_kpi }}</td>
+                        <td class="text-left">{{ $record->kpiMetric->penjelasan_sederhana }}</td>
+                        <td class="text-left">{{ $record->kpiMetric->cara_ukur }}</td>
                         <td>{{ $record->kpiMetric->kategori }}</td>
                         <td>{{ $record->kpiMetric->target }}%</td>
                         <td>{{ $record->kpiMetric->bobot }}%</td>
@@ -90,6 +90,10 @@
         <div class="alert alert-info">Belum ada riwayat KPI untuk karyawan ini.</div>
         @endif
         <a href="{{ route('laporan.admin') }}" class="btn btn-secondary ">Kembali</a>
+        <a href="{{ route('laporan.admin.download.detail', $user->id) }}" class="btn btn-success">
+            <i class="fas fa-file-excel"></i> Download Excel
+        </a>
+
     </div>
 </div>
 
@@ -98,7 +102,7 @@
     @csrf
     @method('DELETE')
 </form>
-@endhasanyrole 
+@endhasanyrole
 @endsection
 
 @push('scripts')
@@ -106,48 +110,50 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-$(document).ready(function () {
-    $('#dataTable').DataTable({
-        ordering: true,
-        searching: true,
-        paging: true,
-        info: true,
-        responsive: true,
-        language: {
-            search: "Cari Data:",
-            lengthMenu: "Tampilkan _MENU_ data per halaman",
-            zeroRecords: "Tidak ditemukan data yang sesuai",
-            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-            infoEmpty: "Menampilkan 0 data",
-            infoFiltered: "(difilter dari _MAX_ total data)"
-        },
-        order: [[9, "desc"]]
-    });
-
-    $('.btn-delete').on('click', function () {
-        const recordId = $(this).data('id');
-        Swal.fire({
-            title: 'Yakin ingin menghapus?',
-            text: "Data yang dihapus tidak bisa dikembalikan!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#e74a3b',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal',
-            customClass: {
-                confirmButton: 'btn btn-danger',
-                cancelButton: 'btn btn-secondary'
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            ordering: true,
+            searching: true,
+            paging: true,
+            info: true,
+            responsive: true,
+            language: {
+                search: "Cari Data:",
+                lengthMenu: "Tampilkan _MENU_ data per halaman",
+                zeroRecords: "Tidak ditemukan data yang sesuai",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                infoEmpty: "Menampilkan 0 data",
+                infoFiltered: "(difilter dari _MAX_ total data)"
             },
-            buttonsStyling: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const form = $('#deleteRecordForm');
-                form.attr('action', '/kpirecords/' + recordId);
-                form.submit();
-            }
+            order: [
+                [9, "desc"]
+            ]
+        });
+
+        $('.btn-delete').on('click', function() {
+            const recordId = $(this).data('id');
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Data yang dihapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e74a3b',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    confirmButton: 'btn btn-danger',
+                    cancelButton: 'btn btn-secondary'
+                },
+                buttonsStyling: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = $('#deleteRecordForm');
+                    form.attr('action', '/kpirecords/' + recordId);
+                    form.submit();
+                }
+            });
         });
     });
-});
 </script>
 @endpush

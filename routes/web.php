@@ -13,13 +13,15 @@ use App\Http\Controllers\ProfileController;
 
 
 // Route untuk auth
-Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [App\Http\Controllers\AuthController::class, 'authenticate'])->name('login.post');
+Route::middleware('guest')->group(function () {
+    Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [App\Http\Controllers\AuthController::class, 'authenticate'])->name('login.post');
+    Route::get('/register', [App\Http\Controllers\AuthController::class, 'registerView'])->name('register');
+    Route::post('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register.post');
+});
+
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout.post');
-Route::get('/register', [App\Http\Controllers\AuthController::class, 'registerView'])->name('register');
-Route::post('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register.post');
-
 
 Route::get('/dashboard', function () {
     return view('pages.dashboard');
@@ -43,7 +45,6 @@ Route::middleware(['role:admin|karyawan'])->group(function () {
     Route::get('/kpimetrics/show/{id}', [KpimetricController::class, 'show'])->name('kpimetrics.show');
     Route::get('/kpimetrics/create', [KpimetricController::class, 'create'])->name('kpimetrics.create');
     Route::post('/kpimetrics/store', [KpimetricController::class, 'store'])->name('kpimetrics.store');
-
 });
 
 // Khusus admin
@@ -59,9 +60,9 @@ Route::middleware(['role:admin'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/hitungkpi', [HitungKpiController::class, 'index'])
-    ->name('hitungkpi.index');
+        ->name('hitungkpi.index');
     Route::post('/hitungkpi', [HitungKpiController::class, 'store'])
-    ->name('hitungkpi.store');
+        ->name('hitungkpi.store');
 });
 // ROute untuk laporan karyawan dan admin
 Route::middleware(['role:karyawan'])->group(function () {
@@ -72,6 +73,7 @@ Route::middleware(['role:admin|direksi'])->group(function () {
     Route::get('/laporan/admin', [App\Http\Controllers\HitungkpiController::class, 'laporanAdmin'])->name('laporan.admin');
     Route::get('/laporan/admin/download', [App\Http\Controllers\HitungkpiController::class, 'downloadLaporanAdmin'])->name('laporan.admin.download');
     Route::get('/laporan/admin/show/{id}', [App\Http\Controllers\HitungkpiController::class, 'showLaporanAdmin'])->name('laporan.admin.show');
+    Route::get('/laporan/admin/download-detail/{id}', [HitungkpiController::class, 'downloadLaporanDetail'])->name('laporan.admin.download.detail');
 });
 
 // Route kpirecords
@@ -80,26 +82,25 @@ Route::middleware(['auth', 'role:admin|direksi'])->group(function () {
         ->name('kpirecords.index');
     Route::delete('/kpirecords/{id}', [\App\Http\Controllers\KpiRecordController::class, 'destroy'])
         ->name('kpirecords.destroy');
-        
 });
 
 
 // Route FAQ
 Route::get('/panduan', [FaqController::class, 'index'])->name('faq.index');
-Route::get('/panduan/create', [FaqController::class, 'create'])->name('faq.create');
-Route::post('/panduan', [FaqController::class, 'store'])->name('faq.store');
-Route::get('/panduan/{id}/edit', [FaqController::class, 'edit'])->name('faq.edit'); // ✅ GET untuk edit
-Route::put('/panduan/{id}', [FaqController::class, 'update'])->name('faq.update');  // ✅ PUT untuk update
-Route::delete('/panduan/{id}', [FaqController::class, 'destroy'])->name('faq.destroy');
 Route::get('/panduan/download/{id}', [FaqController::class, 'download'])->name('faq.download');
 
-
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/panduan/create', [FaqController::class, 'create'])->name('faq.create');
+    Route::post('/panduan', [FaqController::class, 'store'])->name('faq.store');
+    Route::get('/panduan/{id}/edit', [FaqController::class, 'edit'])->name('faq.edit'); // ✅ GET untuk edit
+    Route::put('/panduan/{id}', [FaqController::class, 'update'])->name('faq.update');  // ✅ PUT untuk update
+    Route::delete('/panduan/{id}', [FaqController::class, 'destroy'])->name('faq.destroy');
+});
 //route untuk profile
 Route::middleware(['auth', 'role:admin|karyawan|direksi'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-
 });
 
 
@@ -121,7 +122,3 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/chatbot/send', [ChatbotController::class, 'send'])->name('chatbot.send');
 });
-
-
-
-

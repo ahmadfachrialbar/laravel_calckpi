@@ -25,9 +25,9 @@
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
-                        <th style="min-width: 200px;">Nama</th>
+                        <th>Nama</th>
                         <th>Jabatan</th>
-                        <th style="min-width: 200px;">Nama KPI</th>
+                        <th>Nama KPI</th>
                         <th>Kategori</th>
                         <th>Target</th>
                         <th>Actual</th>
