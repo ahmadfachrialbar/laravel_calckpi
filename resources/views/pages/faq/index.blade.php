@@ -137,7 +137,7 @@
                     buttonsStyling: true
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        deleteForm.setAttribute('action', `/faq/${id}`);
+                        deleteForm.setAttribute('action', `/panduan/${id}`);
                         deleteForm.submit();
                     }
                 });

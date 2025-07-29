@@ -12,7 +12,7 @@ class JobPositionSeeder extends Seeder
      */
     public function run()
     {
-        $positions = ['GM/GM', 'Manager/IT', 'Kepala/Marketing', 'Staff/HRD', 'Supervisor/Marketing', 'Staff/Marketing', 'Supervisor/Accounting', 'Staff/Accounting'];
+        $positions = ['Admin', 'GM/GM', 'Manager/IT', 'Kepala/Marketing', 'Staff/HRD', 'Supervisor/Marketing', 'Staff/Marketing', 'Supervisor/Accounting', 'Staff/Accounting'];
 
         foreach ($positions as $pos) {
             \App\Models\JobPosition::firstOrCreate(['name' => $pos]);

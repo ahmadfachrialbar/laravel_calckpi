@@ -85,12 +85,13 @@ class KpimetricController extends Controller
             return back()->withErrors('Pilih salah satu: jabatan atau user.');
         }
 
-        KpiMetrics::create($validated);
+        // Simpan data KPI
+        $kpi = Kpimetrics::create($validated);
 
-        notify()->success('Data KPI berhasil ditambahkan', 'Sukses');
-
-        return redirect()->route('kpimetrics.index');
+        // Redirect ke halaman detail KPI karyawan setelah data disimpan
+        return redirect()->route('kpimetrics.show', $kpi->user_id);
     }
+
 
 
     public function edit($id)
@@ -116,9 +117,18 @@ class KpimetricController extends Controller
         ]);
 
         $kpiMetric->update($request->all());
-        notify()->success('Data KPI berhasil Diperbarui', 'Sukses');
+
+        notify()->success('Data KPI berhasil diperbarui', 'Sukses');
+
+        // Cek apakah KPI ini milik user
+        if ($kpiMetric->user_id) {
+            return redirect()->route('kpimetrics.show', $kpiMetric->user_id);
+        }
+
+        // Jika tidak, kembalikan ke index
         return redirect()->route('kpimetrics.index');
     }
+
 
     public function show($id)
     {

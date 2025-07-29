@@ -19,7 +19,7 @@ class Adminseeder extends Seeder
         'name' => 'Admin',
         'email' => 'admin@gmail.com',
         'password' => Hash::make('password'), // Gunakan Hash untuk password 
-        'job_position_id' => 9, 
+        'job_position_id' => 1, 
         'role' => 'admin',
         'join_date' => now(), 
     ])->assignRole('admin'); // Assign role admin ke user ini

@@ -41,8 +41,18 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-xl-6 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Score</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalScore, 2) }}%</div>
+                    </div>
+                </div>
+            </div>
         </div>
         @endrole
+
 
         @hasanyrole('admin|direksi')
         <div class="row">
@@ -62,34 +72,34 @@
 
 @hasanyrole('admin|direksi')
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const ctx = document.getElementById("karyawanScoreChart").getContext("2d");
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById("karyawanScoreChart").getContext("2d");
 
-    const karyawanNames = @json($karyawanScores->pluck('name'));
-    const karyawanScores = @json($karyawanScores->pluck('total_score'));
+        const karyawanNames = @json($karyawanScores->pluck('name'));
+        const karyawanScores = @json($karyawanScores->pluck('total_score'));
 
-    new Chart(ctx, {
-        type: "bar", // bisa diganti 'pie' atau 'line'
-        data: {
-            labels: karyawanNames,
-            datasets: [{
-                label: "Total Score (%)",
-                data: karyawanScores,
-                backgroundColor: "rgba(78, 115, 223, 0.5)",
-                borderColor: "rgba(78, 115, 223, 1)",
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100
+        new Chart(ctx, {
+            type: "bar", // bisa diganti 'pie' atau 'line'
+            data: {
+                labels: karyawanNames,
+                datasets: [{
+                    label: "Total Score (%)",
+                    data: karyawanScores,
+                    backgroundColor: "rgba(78, 115, 223, 0.5)",
+                    borderColor: "rgba(78, 115, 223, 1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
                 }
             }
-        }
+        });
     });
-});
 </script>
 @endhasanyrole
