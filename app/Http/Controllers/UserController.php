@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::whereNotIn('role', ['admin', 'direksi'])->get();
         return view('pages.user.index', [
             'users' => $users,
         ]);

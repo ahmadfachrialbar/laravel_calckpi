@@ -53,13 +53,18 @@
         </div>
         @endrole
 
-
         @hasanyrole('admin|direksi')
         <div class="row">
             <div class="col-xl-12 col-md-12 mb-4">
                 <div class="card shadow h-100 py-2">
                     <div class="card-body">
                         <h5 class="font-weight-bold text-primary">Grafik Score Seluruh Karyawan</h5>
+
+                        <div class="form-group">
+                            <label for="searchKaryawan">Cari Nama / Departemen:</label>
+                            <input type="text" id="searchKaryawan" class="form-control" placeholder="Masukkan nama atau departemen">
+                        </div>
+
                         <canvas id="karyawanScoreChart" height="100"></canvas>
                     </div>
                 </div>
@@ -72,19 +77,21 @@
 
 @hasanyrole('admin|direksi')
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const ctx = document.getElementById("karyawanScoreChart").getContext("2d");
 
-        const karyawanNames = @json($karyawanScores->pluck('name'));
-        const karyawanScores = @json($karyawanScores->pluck('total_score'));
+        const rawData = @json($karyawanScores);
+        const allNames = rawData.map(item => item.name);
+        const allJabatans = rawData.map(item => item.jabatan);
+        const allScores = rawData.map(item => item.total_score);
 
-        new Chart(ctx, {
-            type: "bar", // bisa diganti 'pie' atau 'line'
+        let chart = new Chart(ctx, {
+            type: "bar",
             data: {
-                labels: karyawanNames,
+                labels: allNames,
                 datasets: [{
                     label: "Total Score (%)",
-                    data: karyawanScores,
+                    data: allScores,
                     backgroundColor: "rgba(78, 115, 223, 0.5)",
                     borderColor: "rgba(78, 115, 223, 1)",
                     borderWidth: 1
@@ -99,6 +106,28 @@
                     }
                 }
             }
+        });
+
+        const searchInput = document.getElementById("searchKaryawan");
+        searchInput.addEventListener("input", function () {
+            const keyword = this.value.toLowerCase();
+
+            const filteredNames = [];
+            const filteredScores = [];
+
+            rawData.forEach(item => {
+                if (
+                    item.name.toLowerCase().includes(keyword) ||
+                    item.jabatan.toLowerCase().includes(keyword)
+                ) {
+                    filteredNames.push(item.name);
+                    filteredScores.push(item.total_score);
+                }
+            });
+
+            chart.data.labels = filteredNames;
+            chart.data.datasets[0].data = filteredScores;
+            chart.update();
         });
     });
 </script>

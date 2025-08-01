@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index()
     {
         if (auth()->user()->hasAnyRole(['admin', 'direksi'])) {
-            $totalKaryawan = User::count();
+            $totalKaryawan = User::whereNotIn('role', ['admin', 'direksi'])->count();
             $totalKpi = KpiMetrics::count();
 
             // Logika disamakan dengan laporanAdmin di HitungkpiController

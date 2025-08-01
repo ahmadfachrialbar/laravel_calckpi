@@ -5,9 +5,11 @@
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-2 text-gray-700 font-weight-bold">Kelola Data Karyawan</h1>
+    @role('admin')
     <a href="{{ route('user.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Karyawan
     </a>
+    @endrole
 </div>
 <hr class="divider">
 
