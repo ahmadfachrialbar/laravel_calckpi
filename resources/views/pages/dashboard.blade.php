@@ -66,6 +66,12 @@
                         </div>
 
                         <canvas id="karyawanScoreChart" height="100"></canvas>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <button id="prevPage" class="btn btn-outline-primary btn-sm">Prev</button>
+                            <span id="pageInfo">Page 1</span>
+                            <button id="nextPage" class="btn btn-outline-primary btn-sm">Next</button>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -81,19 +87,44 @@
         const ctx = document.getElementById("karyawanScoreChart").getContext("2d");
 
         const rawData = @json($karyawanScores);
-        const allNames = rawData.map(item => item.name);
-        const allJabatans = rawData.map(item => item.jabatan);
-        const allScores = rawData.map(item => item.total_score);
+        let currentPage = 0;
+        const itemsPerPage = 10;
 
-        let chart = new Chart(ctx, {
+        function getPageData(data, page) {
+            const start = page * itemsPerPage;
+            return data.slice(start, start + itemsPerPage);
+        }
+
+        function renderChart(dataSubset) {
+            const labels = dataSubset.map(item => item.name || 'Tidak diketahui');
+            const scores = dataSubset.map(item => {
+                const score = parseFloat(item.total_score);
+                return isNaN(score) || score < 0 ? 0 : score;
+            });
+
+            const backgroundColors = scores.map(score =>
+                score === 0 ? "rgba(255, 99, 132, 0.5)" : "rgba(78, 115, 223, 0.5)"
+            );
+            const borderColors = scores.map(score =>
+                score === 0 ? "rgba(255, 99, 132, 1)" : "rgba(78, 115, 223, 1)"
+            );
+
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = scores;
+            chart.data.datasets[0].backgroundColor = backgroundColors;
+            chart.data.datasets[0].borderColor = borderColors;
+            chart.update();
+        }
+
+        const chart = new Chart(ctx, {
             type: "bar",
             data: {
-                labels: allNames,
+                labels: [],
                 datasets: [{
                     label: "Total Score (%)",
-                    data: allScores,
-                    backgroundColor: "rgba(78, 115, 223, 0.5)",
-                    borderColor: "rgba(78, 115, 223, 1)",
+                    data: [],
+                    backgroundColor: [],
+                    borderColor: [],
                     borderWidth: 1
                 }]
             },
@@ -108,27 +139,41 @@
             }
         });
 
-        const searchInput = document.getElementById("searchKaryawan");
-        searchInput.addEventListener("input", function () {
-            const keyword = this.value.toLowerCase();
+        function updatePage() {
+            const filtered = getFilteredData();
+            const maxPage = Math.ceil(filtered.length / itemsPerPage);
+            currentPage = Math.max(0, Math.min(currentPage, maxPage - 1));
 
-            const filteredNames = [];
-            const filteredScores = [];
+            const pageData = getPageData(filtered, currentPage);
+            renderChart(pageData);
 
-            rawData.forEach(item => {
-                if (
-                    item.name.toLowerCase().includes(keyword) ||
-                    item.jabatan.toLowerCase().includes(keyword)
-                ) {
-                    filteredNames.push(item.name);
-                    filteredScores.push(item.total_score);
-                }
-            });
+            document.getElementById("pageInfo").textContent = `Page ${currentPage + 1} of ${maxPage}`;
+        }
 
-            chart.data.labels = filteredNames;
-            chart.data.datasets[0].data = filteredScores;
-            chart.update();
+        function getFilteredData() {
+            const keyword = document.getElementById("searchKaryawan").value.toLowerCase();
+            return rawData.filter(item =>
+                item.name.toLowerCase().includes(keyword) ||
+                item.jabatan.toLowerCase().includes(keyword)
+            );
+        }
+
+        document.getElementById("searchKaryawan").addEventListener("input", function () {
+            currentPage = 0;
+            updatePage();
         });
+
+        document.getElementById("prevPage").addEventListener("click", function () {
+            currentPage--;
+            updatePage();
+        });
+
+        document.getElementById("nextPage").addEventListener("click", function () {
+            currentPage++;
+            updatePage();
+        });
+
+        updatePage(); // initial render
     });
 </script>
 @endhasanyrole
