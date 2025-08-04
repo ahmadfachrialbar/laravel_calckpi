@@ -7,6 +7,7 @@ use App\Models\Kpimetrics;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Models\JobPosition;
+use Illuminate\Support\Facades\Validator;
 
 
 class KpimetricController extends Controller
@@ -92,6 +93,43 @@ class KpimetricController extends Controller
         return redirect()->route('kpimetrics.show', $kpi->user_id);
     }
 
+    public function storeMultiple(Request $request)
+    {
+        $data = $request->input('kpis');
+
+        foreach ($data as $index => $kpiData) {
+            // Validate each KPI entry
+            $validator = Validator::make($kpiData, [
+                'nama_kpi' => 'required|string|max:255',
+                'penjelasan_sederhana' => 'required|string|max:500',
+                'cara_ukur' => 'required|string|max:500',
+                'target' => 'required|numeric',
+                'bobot' => 'required|numeric',
+                'user_id' => 'required|exists:users,id',
+                'weightages' => 'required|numeric|min:0',
+                'kategori' => 'required|in:up,down,zero',
+            ]);
+
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput();
+            }
+
+            // Create KPI
+            Kpimetrics::create([
+                'nama_kpi' => $kpiData['nama_kpi'],
+                'penjelasan_sederhana' => $kpiData['penjelasan_sederhana'],
+                'cara_ukur' => $kpiData['cara_ukur'],
+                'target' => $kpiData['target'],
+                'bobot' => $kpiData['bobot'],
+                'user_id' => $kpiData['user_id'],
+                'weightages' => $kpiData['weightages'],
+                'kategori' => $kpiData['kategori'],
+            ]);
+        }
+
+        notify()->success('Data KPI berhasil ditambahkan', 'Sukses');
+        return redirect()->route('kpimetrics.index');
+    }
 
 
     public function edit($id)

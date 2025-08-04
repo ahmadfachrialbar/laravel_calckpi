@@ -52,6 +52,7 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('/kpimetrics/create', [KpimetricController::class, 'create'])->name('kpimetrics.create');
     Route::post('/kpimetrics/store', [KpimetricController::class, 'store'])->name('kpimetrics.store');
     Route::post('/kpimetrics/store', [KpimetricController::class, 'store'])->name('kpimetrics.store');
+    Route::post('/kpimetrics/store-multiple', [KpimetricController::class, 'storeMultiple'])->name('kpimetrics.storeMultiple');
     Route::get('/kpimetrics/edit/{id}', [KpimetricController::class, 'edit'])->name('kpimetrics.edit');
     Route::put('/kpimetrics/update/{id}', [KpimetricController::class, 'update'])->name('kpimetrics.update');
     Route::delete('/kpimetrics/delete/{id}', [KpimetricController::class, 'destroy'])->name('kpimetrics.destroy');

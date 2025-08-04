@@ -23,7 +23,12 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold">Daftar KPI</h6>
+        <div class="d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold">Daftar KPI</h6>
+            <a href="{{ route('kpimetrics.create', ['user_id' => $user->id]) }}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" title="Tambah KPI">
+                <i class="fas fa-plus fa-sm text-white-50"></i> Tambah KPI
+            </a>
+        </div>
     </div>
     <div class="card-body">
         @if($kpiMetrics->isEmpty())

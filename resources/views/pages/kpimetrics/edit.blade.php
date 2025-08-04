@@ -43,7 +43,6 @@
                 <option value="zero" {{ $kpiMetric->kategori == 'zero' ? 'selected' : '' }}>Zero (Idealnya 0)</option>
             </select>
 
-
             <button type="submit" class="btn btn-primary mt-3">Simpan</button>
             <button type="/kpiMetrics" class="btn btn-secondary mt-3" href="">Kembali</button>
         </div>
