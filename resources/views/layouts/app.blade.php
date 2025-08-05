@@ -112,6 +112,9 @@
     <!-- Page level plugins -->
     <script src="{{ asset('template/vendor/chart.js/Chart.min.js') }}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+
     <!-- Page level custom scripts -->
     <script src="{{ asset('template/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('template/js/demo/chart-pie-demo.js') }}"></script>

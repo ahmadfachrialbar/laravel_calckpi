@@ -28,14 +28,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-6 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total KPI</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalKpi ?? 0 }}</div>
-                    </div>
-                </div>
-            </div>
         </div>
         @endhasanyrole
 
@@ -73,16 +65,14 @@
                             <input type="text" id="searchKaryawan" class="form-control" placeholder="Masukkan nama atau departemen">
                         </div>
 
-                        <!-- Chart container with optimized dimensions -->
-                        <div id="chart-container" style="position: relative; height: 500px;">
-                            <canvas id="karyawanScoreChart"></canvas>
-                        </div>
+                        <canvas id="karyawanScoreChart" style="height:400px !important; max-height:400px !important; width:100%"></canvas>
 
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <button id="prevPage" class="btn btn-outline-primary btn-sm">Prev</button>
-                            <span id="pageInfo">Page 1 of 1</span>
+                            <span id="pageInfo">Page 1</span>
                             <button id="nextPage" class="btn btn-outline-primary btn-sm">Next</button>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -90,151 +80,16 @@
         @endhasanyrole
     </div>
 </div>
-
-<style>
-    /* Custom styling for the chart */
-    #chart-container {
-        height: 500px;
-        margin: 0 auto;
-    }
-    
-    #karyawanScoreChart {
-        width: 100% !important;
-        height: 100% !important;
-    }
-    
-    /* Card styling */
-    .card {
-        border-radius: 0.35rem;
-        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-    }
-    
-    /* Button styling */
-    .btn-outline-primary {
-        color: #4e73df;
-        border-color: #4e73df;
-    }
-    
-    .btn-outline-primary:hover {
-        background-color: #4e73df;
-        color: white;
-    }
-</style>
-
 @endsection
 
-@hasanyrole('admin|direksi')
-@section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@push('scripts')
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const ctx = document.getElementById("karyawanScoreChart").getContext("2d");
 
-    // Format data and ensure values are between 0-100
-    const rawData = @json($karyawanScores).map(item => ({
-        ...item,
-        total_score: Math.max(0, Math.min(100, parseFloat(item.total_score) || 0))
-    }));
-
+    const rawData = @json($karyawanScores);
     let currentPage = 0;
-    const itemsPerPage = 10; // Set exactly 10 items per page
-    let chartInstance = null;
-
-    // Chart initialization
-    function initializeChart() {
-        if (chartInstance) {
-            chartInstance.destroy();
-        }
-
-        chartInstance = new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: [],
-                datasets: [{
-                    label: "Total Score (%)",
-                    data: [],
-                    backgroundColor: "#4e73df",
-                    borderColor: "#4e73df",
-                    borderWidth: 1,
-                    borderRadius: 4,
-                    barThickness: 30 // Fixed bar thickness for 10 items
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: {
-                    duration: 0
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        min: 0,
-                        max: 100,
-                        grid: {
-                            drawBorder: false,
-                            color: "rgba(0, 0, 0, 0.1)"
-                        },
-                        ticks: {
-                            stepSize: 20,
-                            padding: 10,
-                            callback: function(value) {
-                                return value + '%';
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Total Score (%)',
-                            font: {
-                                weight: 'bold'
-                            }
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false,
-                            drawBorder: false
-                        },
-                        ticks: {
-                            maxRotation: 45,
-                            minRotation: 45,
-                            autoSkip: false
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: "#4e73df",
-                        titleFont: {
-                            weight: 'bold',
-                            size: 14
-                        },
-                        bodyFont: {
-                            size: 13
-                        },
-                        padding: 10,
-                        displayColors: false,
-                        callbacks: {
-                            label: function(context) {
-                                return 'Score: ' + context.parsed.y.toFixed(1) + '%';
-                            }
-                        }
-                    }
-                },
-                layout: {
-                    padding: {
-                        top: 15,
-                        right: 15,
-                        bottom: 15,
-                        left: 15
-                    }
-                }
-            }
-        });
-    }
+    const itemsPerPage = 10;
 
     function getPageData(data, page) {
         const start = page * itemsPerPage;
@@ -245,47 +100,91 @@ document.addEventListener("DOMContentLoaded", function () {
         const keyword = document.getElementById("searchKaryawan").value.toLowerCase();
         return rawData.filter(item =>
             item.name.toLowerCase().includes(keyword) ||
-            (item.jabatan && item.jabatan.toLowerCase().includes(keyword))
+            item.jabatan.toLowerCase().includes(keyword)
         );
     }
 
-    function updateChart(dataSubset) {
-        chartInstance.data.labels = dataSubset.map(item => item.name);
-        chartInstance.data.datasets[0].data = dataSubset.map(item => item.total_score);
-        chartInstance.update();
+    function renderChart(dataSubset) {
+        const labels = dataSubset.map(item => item.name || 'Tidak diketahui');
+        const scores = dataSubset.map(item => {
+            const score = parseFloat(item.total_score);
+            return isNaN(score) || score < 0 ? 0 : score;
+        });
+
+        const backgroundColors = scores.map(score =>
+            score === 0 ? "rgba(255, 99, 132, 0.5)" : "rgba(78, 115, 223, 0.5)"
+        );
+        const borderColors = scores.map(score =>
+            score === 0 ? "rgba(255, 99, 132, 1)" : "rgba(78, 115, 223, 1)"
+        );
+
+        // Hancurkan grafik sebelumnya (jika ada)
+        if (window.karyawanChartInstance) {
+            window.karyawanChartInstance.destroy();
+        }
+
+        window.karyawanChartInstance = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Total Score (%)",
+                    data: scores,
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            stepSize: 10,
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     }
 
     function updatePage() {
         const filtered = getFilteredData();
-        const maxPage = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+        const maxPage = Math.ceil(filtered.length / itemsPerPage);
         currentPage = Math.max(0, Math.min(currentPage, maxPage - 1));
-        
-        const pageData = getPageData(filtered, currentPage);
-        updateChart(pageData);
 
+        const pageData = getPageData(filtered, currentPage);
+        renderChart(pageData);
+
+        // Update teks halaman
         document.getElementById("pageInfo").textContent = `Page ${currentPage + 1} of ${maxPage}`;
+
+        // Aktif/nonaktif tombol prev/next
         document.getElementById("prevPage").disabled = currentPage === 0;
-        document.getElementById("nextPage").disabled = currentPage >= maxPage - 1 || maxPage === 1;
+        document.getElementById("nextPage").disabled = currentPage >= maxPage - 1;
     }
 
     // Event listeners
-    let searchTimeout;
-    document.getElementById("searchKaryawan").addEventListener("input", function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            currentPage = 0;
-            updatePage();
-        }, 300);
+    document.getElementById("searchKaryawan").addEventListener("input", function () {
+        currentPage = 0;
+        updatePage();
     });
 
-    document.getElementById("prevPage").addEventListener("click", function() {
+    document.getElementById("prevPage").addEventListener("click", function () {
         if (currentPage > 0) {
             currentPage--;
             updatePage();
         }
     });
 
-    document.getElementById("nextPage").addEventListener("click", function() {
+    document.getElementById("nextPage").addEventListener("click", function () {
         const filtered = getFilteredData();
         const maxPage = Math.ceil(filtered.length / itemsPerPage);
         if (currentPage < maxPage - 1) {
@@ -294,10 +193,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Initial render
-    initializeChart();
-    updatePage();
+    updatePage(); // first render
 });
 </script>
-@endsection
-@endhasanyrole
+@endpush

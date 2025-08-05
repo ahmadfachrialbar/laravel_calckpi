@@ -12,7 +12,7 @@ class ChatbotController extends Controller
         $question = $request->input('message');
 
         $prompt = "
-Anda adalah asisten panduan resmi untuk website 'Calculating KPI PT Anugrah Beton Nusantara'. 
+Anda adalah asisten panduan resmi untuk website 'Calculating KPI PT Bangun Anugrah Beton Nusantara'. 
 Tugas Anda adalah memberikan penjelasan yang jelas, rinci, dan membantu seputar penggunaan website ini. 
 Berikut cakupan yang harus Anda pahami:
 
@@ -39,7 +39,7 @@ Berikut cakupan yang harus Anda pahami:
 
 5. **Pertanyaan di Luar Konteks Website:**
    - Jika ada pertanyaan yang sangat di luar topik (misalnya tentang gosip, politik, atau hal yang tidak ada hubungannya), jawab dengan sopan:
-     'Maaf, saya hanya fokus membantu menjelaskan penggunaan website Calculating KPI PT Anugrah Beton Nusantara.'
+     'Maaf, saya hanya fokus membantu menjelaskan penggunaan website Calculating KPI PT Bangun Anugrah Beton Nusantara.'
 
 Jawablah pertanyaan pengguna dengan singkat namun sejelas mungkin dengan bahasa yang mudah dipahami.
         

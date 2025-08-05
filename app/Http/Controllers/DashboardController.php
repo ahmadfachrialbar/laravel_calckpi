@@ -15,6 +15,7 @@ class DashboardController extends Controller
             $totalKaryawan = User::whereNotIn('role', ['admin', 'direksi'])->count();
             $totalKpi = KpiMetrics::count();
 
+            // Logika disamakan dengan laporanAdmin di HitungkpiController
             $karyawanScores = User::role('karyawan')
                 ->with(['jobPosition', 'kpiRecords'])
                 ->get()
@@ -24,19 +25,19 @@ class DashboardController extends Controller
                         ->map(fn($items) => $items->sortByDesc('created_at')->first())
                         ->sum('score');
 
-                    // Pastikan nilai antara 0-100
-                    $finalScore = max(0, min(100, $totalScore));
-
                     return [
                         'name' => $user->name,
                         'jabatan' => $user->jobPosition->name ?? '-',
-                        'total_score' => (float)number_format($finalScore, 2), // Konversi ke float dengan 2 desimal
+                        'total_score' => round($totalScore, 2),
                     ];
                 });
 
             return view('pages.dashboard', [
                 'totalKaryawan' => $totalKaryawan,
                 'totalKpi' => $totalKpi,
+                'totalUserKpi' => null,
+                'totalScore' => null,
+                'recentKpi' => collect(),
                 'karyawanScores' => $karyawanScores,
             ]);
         }
