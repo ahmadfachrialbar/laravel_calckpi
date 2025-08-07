@@ -8,7 +8,7 @@
         <!-- Kolom Kiri - Hidden on mobile -->
         <div class="col-md-6 d-none d-md-flex flex-column align-items-center justify-content-center p-3 p-md-4" style="background-color: rgba(255, 192, 203, 0.85);">
             <h3 class="font-weight-bold text-center text-white">Selamat Datang!</h3>
-            <p class="font-weight-bold text-center text-white">di Key Performance Indicator</p>
+            <p class="font-weight-bold text-center text-white">di Calculating KPI PT BABN</p>
             <img src="{{ asset('template/img/anugrahBeton.png') }}" class="mt-2 img-fluid" style="max-height: 250px; width: auto; object-fit: contain;" alt="Ilustrasi AB">
         </div>
 

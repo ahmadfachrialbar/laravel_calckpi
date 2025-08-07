@@ -9,7 +9,7 @@
         <div class="col-md-6 text-white d-flex flex-column align-items-center justify-content-center p-3 p-md-4" style="background-color: rgba(255, 192, 203, 0.85);">
             <div class="text-center mb-3 mb-md-4">
                 <h3 class="font-weight-bold">Selamat Datang!</h3>
-                <p class="font-weight-bold mb-0">Di Key Performance Indicator</p>
+                <p class="font-weight-bold mb-0">di Calculating KPI PT BABN</p>
             </div>
             <img src="{{ asset('template/img/anugrahBeton.png') }}" class="img-fluid d-md-block" style="max-height: 250px; max-width: 45%; height: auto; object-fit: contain;" alt="Ilustrasi AB">
         </div>
